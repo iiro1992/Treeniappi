@@ -1,0 +1,2546 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>400M Pro</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="400M Pro">
+<meta name="theme-color" content="#0a0c10">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0c10;--sf:#13161d;--s2:#1c2030;--bd:#252a38;--tx:#e8eaf0;--mu:#5a6080;--bl:#3b82f6;--bld:#1e3a5f;--gn:#22c55e;--gnd:#14532d;--rd:#ef4444;--rdd:#7f1d1d;--or:#f97316;--ord:#7c2d12;--yw:#eab308;--ywd:#713f12;--pu:#a855f7;--pud:#4c1d95;--ac:#00d4ff;--acd:#0c4a6e}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px;min-height:100vh;overflow-x:hidden}
+.hdr{background:linear-gradient(135deg,#0d1117,#1a2035);border-bottom:1px solid var(--bd);padding:11px 16px 7px;position:sticky;top:0;z-index:100}
+.hdr h1{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:var(--ac);line-height:1}
+.hdr .sub{font-size:10px;color:var(--mu);letter-spacing:1px;text-transform:uppercase;margin-top:2px;display:flex;align-items:center;gap:6px}
+.sdot{width:7px;height:7px;border-radius:50%;background:var(--mu);flex-shrink:0;transition:background .3s}
+.sdot.ok{background:var(--gn)}.sdot.sy{background:var(--yw);animation:pulse 1s infinite}.sdot.er{background:var(--rd)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.tabs{display:flex;background:var(--sf);border-bottom:1px solid var(--bd);overflow-x:auto;scrollbar-width:none;position:sticky;top:55px;z-index:99}
+.tabs::-webkit-scrollbar{display:none}
+.tb{flex:0 0 auto;padding:10px 13px;background:none;border:none;color:var(--mu);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap}
+.tb.active{color:var(--ac);border-bottom-color:var(--ac)}
+.sec{display:none;padding:13px}.sec.active{display:block}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:13px;margin-bottom:11px}
+.ct{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;color:var(--mu);margin-bottom:9px}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:11px}
+.sb{background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:9px;text-align:center}
+.sb .v{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;line-height:1}
+.sb .l{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
+.sb.bl .v{color:var(--bl)}.sb.gn .v{color:var(--gn)}.sb.or .v{color:var(--or)}.sb.pu .v{color:var(--pu)}.sb.ac .v{color:var(--ac)}.sb.rd .v{color:var(--rd)}
+.ab{border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:12px;font-weight:500;display:flex;align-items:flex-start;gap:8px}
+.ab .ic{font-size:15px;flex-shrink:0;margin-top:1px}
+.aw{background:#2a1f0a;border:1px solid var(--or);color:#fed7aa}
+.ag{background:#0a2015;border:1px solid var(--gn);color:#bbf7d0}
+.ai{background:#0a1a2a;border:1px solid var(--bl);color:#bfdbfe}
+.ad{background:#2a0a0a;border:1px solid var(--rd);color:#fecaca}
+.tc{background:linear-gradient(135deg,var(--acd),#0f172a);border:1px solid var(--ac);border-radius:14px;padding:15px;margin-bottom:11px}
+.tc .dt{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:3px;color:var(--ac)}
+.tc .dd{font-size:11px;color:#94a3b8;margin-top:3px}
+.nc{background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:13px;margin-bottom:11px}
+.nc .nct{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:var(--mu);margin-bottom:9px}
+.ner{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--bd)}
+.ner:last-child{border-bottom:none}
+.nen{font-weight:600;font-size:12px}
+.ns{font-family:'DM Mono',monospace;font-size:10px;padding:3px 7px;border-radius:5px}
+.su{background:var(--gnd);color:var(--gn)}.ss{background:var(--s2);color:var(--mu);border:1px solid var(--bd)}.sd{background:var(--rdd);color:var(--rd)}
+.ws{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;margin-bottom:11px}
+.ws::-webkit-scrollbar{display:none}
+.dc{flex:0 0 auto;width:38px;border-radius:7px;padding:6px 3px;text-align:center;font-size:9px;font-weight:600;border:1px solid var(--bd);background:var(--s2);color:var(--mu)}
+.dc .ci{font-size:14px;display:block;margin:2px 0}
+.dc.done{background:var(--gnd);border-color:var(--gn);color:var(--gn)}
+.dc.today{background:var(--acd);border-color:var(--ac);color:var(--ac)}
+.pbw{margin-bottom:10px}
+.pbl{display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px}
+.pbl .n{font-weight:600}.pbl .m{color:var(--mu);font-family:'DM Mono',monospace}
+.pbt{height:6px;background:var(--s2);border-radius:99px;overflow:hidden}
+.pbf{height:100%;border-radius:99px;transition:width .5s ease}
+.fg{margin-bottom:11px}
+.fl{display:block;font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.fi,.fs,.fta{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:9px 11px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border-color .2s;-webkit-appearance:none}
+.fi:focus,.fs:focus,.fta:focus{border-color:var(--ac)}
+.fta{min-height:65px;resize:none}
+.sr{display:grid;grid-template-columns:30px 1fr 1fr 30px;gap:5px;align-items:center;margin-bottom:5px}
+.sn{width:30px;height:38px;border-radius:6px;background:var(--s2);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:10px;color:var(--mu)}
+.so{width:30px;height:38px;border-radius:6px;background:none;border:1px solid var(--bd);color:var(--mu);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.so.done{background:var(--gnd);border-color:var(--gn);color:var(--gn)}
+.so.fail{background:var(--rdd);border-color:var(--rd);color:var(--rd)}
+.btn{display:block;width:100%;padding:12px;border-radius:10px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.5px;transition:all .15s;text-align:center}
+.btn:active{transform:scale(.97)}
+.bp{background:var(--ac);color:#000}.bs{background:var(--s2);color:var(--tx);border:1px solid var(--bd)}
+.bd2{background:var(--rdd);color:var(--rd);border:1px solid var(--rd)}.bg{background:var(--gnd);color:var(--gn);border:1px solid var(--gn)}
+.bsm{display:inline-block;width:auto;padding:7px 11px;font-size:11px;border-radius:7px}
+.xi{background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:11px;margin-bottom:7px;cursor:pointer;transition:border-color .2s}
+.xi.sv{border-color:var(--gn)}
+.xn{font-weight:600;font-size:13px;margin-bottom:2px}
+.xt{font-size:10px;color:var(--mu);font-family:'DM Mono',monospace}
+.xp{font-size:10px;margin-top:4px;padding:2px 6px;border-radius:4px;display:inline-block}
+.rg{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.rb{padding:8px 3px;border-radius:7px;border:1px solid var(--bd);background:var(--s2);color:var(--mu);font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;cursor:pointer;text-align:center;transition:all .15s}
+.rb .rd2{font-family:'DM Sans',sans-serif;font-size:8px;display:block;margin-top:1px;letter-spacing:0}
+.rb.r6{background:#14532d;border-color:#22c55e;color:#22c55e}.rb.r7{background:#14532d;border-color:#4ade80;color:#4ade80}
+.rb.r8{background:var(--ywd);border-color:var(--yw);color:var(--yw)}.rb.r9{background:var(--ord);border-color:var(--or);color:var(--or)}
+.rb.r10{background:var(--rdd);border-color:var(--rd);color:var(--rd)}
+.ag2{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.ab2{padding:11px 5px;border-radius:9px;border:1px solid var(--bd);background:var(--s2);color:var(--mu);font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;cursor:pointer;text-align:center;transition:all .15s}
+.ab2 .ai2{font-size:20px;display:block;margin-bottom:3px}
+.ab2.sel{background:var(--bld);border-color:var(--bl);color:var(--bl)}
+.niw{display:flex;align-items:center;border:1px solid var(--bd);border-radius:8px;overflow:hidden}
+.nb{width:38px;height:40px;background:var(--s2);border:none;color:var(--tx);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nb:active{background:var(--bd)}
+.nd{flex:1;text-align:center;font-family:'DM Mono',monospace;font-size:15px;font-weight:500;color:var(--tx);background:var(--s2);border:none;padding:0 5px;height:40px;line-height:40px;outline:none}
+.snk{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--tx);color:var(--bg);padding:9px 16px;border-radius:8px;font-weight:600;font-size:12px;transition:transform .3s;z-index:300;white-space:nowrap}
+.snk.show{transform:translateX(-50%) translateY(0)}
+.tag{display:inline-block;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:600}
+.tbl{background:var(--bld);color:var(--bl)}.tgn{background:var(--gnd);color:var(--gn)}.tor{background:var(--ord);color:var(--or)}.tgy{background:var(--s2);color:var(--mu)}.tpu{background:var(--pud);color:var(--pu)}.trd{background:var(--rdd);color:var(--rd)}
+.hi{padding:11px 0;border-bottom:1px solid var(--bd)}
+.hi:last-child{border-bottom:none}
+.hh{display:flex;gap:9px;align-items:flex-start;cursor:pointer}
+.hd{font-family:'DM Mono',monospace;font-size:10px;color:var(--mu);min-width:34px;text-align:center;padding-top:2px}
+.hb{flex:1;min-width:0}
+.ht{font-weight:600;font-size:12px;display:flex;justify-content:space-between;align-items:center}
+.hdet{font-size:11px;color:var(--mu);margin-top:2px}
+.hx{display:none;padding:9px 0 3px 43px}
+.hx.open{display:block}
+.er2{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px}
+.ef label{display:block;font-size:10px;color:var(--mu);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.bwr{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bd);font-size:11px}
+.bwr:last-child{border-bottom:none}
+.atb{flex:0 0 auto;padding:7px 13px;border-radius:20px;border:1px solid var(--bd);background:var(--s2);color:var(--mu);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s}
+.atb.active{background:var(--acd);border-color:var(--ac);color:var(--ac)}
+.atab{display:none}.atab.active{display:block}
+.ld{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:500;gap:12px}
+.sp{width:34px;height:34px;border:3px solid var(--bd);border-top-color:var(--ac);border-radius:50%;animation:spin .8s linear infinite}
+
+/* ── SET ROW WITH TAP COMPLETE ── */
+.sr{display:grid;grid-template-columns:28px 1fr 1fr 72px;gap:5px;align-items:center;background:var(--s2);border:1px solid var(--bd);border-radius:9px;padding:3px;margin-bottom:6px;transition:border-color .2s,background .2s}
+.sr.row-ok{border-color:var(--gn);background:#0d1f12}
+.sr.row-fail{border-color:var(--rd);background:#1a0d0d}
+.sn{width:28px;height:40px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:10px;color:var(--mu)}
+.sr-btns{display:flex;gap:3px}
+.sr-ok{width:34px;height:40px;border-radius:7px;border:1px solid var(--gnd);background:var(--gnd);color:var(--gn);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.sr-ok.on{background:var(--gn);color:#000;border-color:var(--gn)}
+.sr-no{width:34px;height:40px;border-radius:7px;border:1px solid var(--rdd);background:var(--rdd);color:var(--rd);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.sr-no.on{background:var(--rd);color:#fff;border-color:var(--rd)}
+
+/* ── SUMMARY SHEET ── */
+.sum-ov{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:500;display:flex;align-items:flex-end;animation:fadeIn .2s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.sum-sh{width:100%;background:var(--sf);border-radius:20px 20px 0 0;padding:18px 15px 36px;border-top:1px solid var(--bd);max-height:90vh;overflow-y:auto}
+.sum-handle{width:40px;height:4px;background:var(--bd);border-radius:99px;margin:0 auto 14px}
+.sum-ttl{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--tx);margin-bottom:4px}
+.sum-sub{font-size:11px;color:var(--mu);margin-bottom:14px}
+.sum-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--bd)}
+.sum-row:last-of-type{border-bottom:none}
+.sum-left .sum-ex{font-weight:600;font-size:13px}
+.sum-left .sum-detail{font-size:11px;color:var(--mu);margin-top:2px}
+.sum-right{text-align:right}
+.sum-kg{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--ac);line-height:1}
+.sum-sets{font-size:10px;color:var(--mu);margin-top:1px}
+.sum-score{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.sum-sc-box{background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:10px;text-align:center}
+.sum-sc-val{font-family:'Bebas Neue',sans-serif;font-size:22px;line-height:1}
+.sum-sc-lbl{font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+
+/* ── HISTORY SEARCH ── */
+.hsrch{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:10px 14px 10px 38px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;margin-bottom:10px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235a6080' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:12px center}
+.hsrch:focus{border-color:var(--ac)}
+.hfltrs{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;margin-bottom:10px;scrollbar-width:none}
+.hfltrs::-webkit-scrollbar{display:none}
+.hfbtn{flex:0 0 auto;padding:5px 11px;border-radius:20px;border:1px solid var(--bd);background:var(--s2);color:var(--mu);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap}
+.hfbtn.on{background:var(--acd);border-color:var(--ac);color:var(--ac)}
+
+/* ── WORKOUT VIEW (AitoFit style) ── */
+.wv-ex{background:var(--sf);border:1px solid var(--bd);border-radius:13px;margin-bottom:10px;overflow:hidden}
+.wv-ex.wv-done{border-color:var(--gn)}.wv-ex.wv-partial{border-color:var(--yw)}
+.wv-header{display:flex;align-items:center;gap:9px;padding:11px 13px;cursor:pointer;user-select:none}
+.wv-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;background:var(--s2);color:var(--mu)}
+.wv-done .wv-num{background:var(--gnd);color:var(--gn)}.wv-partial .wv-num{background:var(--ywd);color:var(--yw)}
+.wv-exname{font-weight:700;font-size:13px;flex:1;line-height:1.2}
+.wv-meta{font-size:10px;color:var(--mu);margin-top:1px}
+.wv-sug{font-family:'DM Mono',monospace;font-size:10px;padding:2px 6px;border-radius:4px;flex-shrink:0;white-space:nowrap}
+.wv-chev{color:var(--mu);font-size:15px;flex-shrink:0;transition:transform .2s}
+.wv-chev.open{transform:rotate(90deg)}
+.wv-body{padding:0 12px 12px;display:none}.wv-body.open{display:block}
+.wvsh{display:grid;grid-template-columns:26px 1fr 1fr 72px;gap:4px;padding:0 0 5px;border-bottom:1px solid var(--bd);margin-bottom:5px}
+.wvsh span{font-size:9px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;text-align:center}
+.wvsh span:first-child{text-align:left}
+.wvsr{display:grid;grid-template-columns:26px 1fr 1fr 72px;gap:4px;align-items:center;background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:2px 2px 2px 2px;margin-bottom:5px;transition:border-color .15s,background .15s}
+.wvsr.r-ok{border-color:var(--gn);background:#0a1f0e}.wvsr.r-fail{border-color:var(--rd);background:#1a0808}
+.wvsn{height:36px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:11px;font-weight:700;color:var(--mu)}
+.wvsn.done{color:var(--gn)}
+.srbx{display:flex;gap:3px}
+.srok{width:34px;height:36px;border-radius:7px;border:1px solid var(--gnd);background:var(--gnd);color:var(--gn);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s;flex-shrink:0}
+.srok.on{background:var(--gn);color:#000;border-color:var(--gn)}
+.srno{width:34px;height:36px;border-radius:7px;border:1px solid var(--rdd);background:var(--rdd);color:var(--rd);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s;flex-shrink:0}
+.srno.on{background:var(--rd);color:#fff;border-color:var(--rd)}
+.wv-rpe{display:flex;gap:3px;margin:8px 0 6px}
+.wvrb{flex:1;padding:6px 1px;border-radius:6px;border:1px solid var(--bd);background:var(--s2);color:var(--mu);font-family:'Bebas Neue',sans-serif;font-size:14px;cursor:pointer;text-align:center;transition:all .1s}
+.wvrb .rd2{font-family:'DM Sans',sans-serif;font-size:7px;display:block;letter-spacing:0}
+.wvrb.r6{background:#14532d;border-color:#22c55e;color:#22c55e}.wvrb.r7{background:#14532d;border-color:#4ade80;color:#4ade80}
+.wvrb.r8{background:var(--ywd);border-color:var(--yw);color:var(--yw)}.wvrb.r9{background:var(--ord);border-color:var(--or);color:var(--or)}
+.wvrb.r10{background:var(--rdd);border-color:var(--rd);color:var(--rd)}
+.wv-prog{height:3px;background:var(--bd);border-radius:99px;margin-bottom:10px;overflow:hidden}
+.wv-prog-fill{height:100%;background:var(--gn);border-radius:99px;transition:width .3s ease}
+
+/* ── GRAPHS ── */
+.graph-wrap{width:100%;overflow:hidden;position:relative}
+svg text{font-family:'DM Sans',sans-serif}
+
+/* ── PERIODIZATION TIMELINE ── */
+.ptl{display:flex;flex-wrap:wrap;gap:3px;padding:4px 0}
+.pw{width:calc(100%/12 - 3px);min-width:22px;border-radius:4px;padding:4px 2px;text-align:center;font-size:8px;font-weight:600;cursor:pointer;transition:all .15s;border:1px solid transparent}
+.pw.ph1{background:#1e3a5f;color:#60a5fa;border-color:#2563eb}
+.pw.ph2{background:var(--pud);color:#c084fc;border-color:#7c3aed}
+.pw.ph3{background:var(--ord);color:#fb923c;border-color:#ea580c}
+.pw.dl{background:#1a1a2e;color:var(--mu);border-color:var(--bd)}
+.pw.cur{border-color:var(--ac)!important;box-shadow:0 0 0 2px rgba(0,212,255,.3)}
+.pw.test{background:#14532d;border-color:var(--gn);color:var(--gn)}
+
+/* ── HRV ── */
+.hrv-ring{display:flex;align-items:center;gap:16px;margin-bottom:12px}
+.hrv-circle{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;flex-shrink:0;border:3px solid}
+.hrv-good{border-color:var(--gn);color:var(--gn);background:var(--gnd)}
+.hrv-ok{border-color:var(--yw);color:var(--yw);background:var(--ywd)}
+.hrv-bad{border-color:var(--rd);color:var(--rd);background:var(--rdd)}
+.hrv-none{border-color:var(--bd);color:var(--mu);background:var(--s2)}
+
+/* ── TEST CALENDAR ── */
+.test-item{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--bd)}
+.test-item:last-child{border-bottom:none}
+.ti-left .ti-wk{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:var(--ac)}
+.ti-left .ti-type{font-size:11px;color:var(--mu);margin-top:1px}
+.ti-right{text-align:right}
+.ti-date{font-size:11px;color:var(--tx);font-weight:600}
+.ti-status{font-size:10px;margin-top:2px}
+.ti-done{color:var(--gn)}.ti-next{color:var(--ac)}.ti-future{color:var(--mu)}
+</style>
+</head>
+<body>
+
+<div id="ld" class="ld"><div class="sp"></div><p style="font-size:12px;color:var(--mu)">Ladataan...</p></div>
+
+<div class="hdr">
+  <h1>400M PRO</h1>
+  <div class="sub"><div class="sdot" id="sdot"></div><span id="slbl">Yhdistetään...</span></div>
+</div>
+
+<div class="tabs">
+  <button class="tb active" onclick="T('dash',this)">🏠 Koti</button>
+  <button class="tb" onclick="T('voima',this)">💪 Voima</button>
+  <button class="tb" onclick="T('juoksu',this)">🏃 Juoksu</button>
+  <button class="tb" onclick="T('extra',this)">➕ Extra</button>
+  <button class="tb" onclick="T('analyys',this)">📈 Analyysi</button>
+  <button class="tb" onclick="T('historia',this)">📋 Loki</button>
+  <button class="tb" onclick="T('asetukset',this)">⚙️ Asetukset</button>
+</div>
+
+<!-- ══ DASH ══ -->
+<div class="sec active" id="sec-dash">
+  <div id="az"></div>
+  <div id="test-alert"></div>
+
+  <!-- Smart next session card -->
+  <div id="next-sess-card" style="margin-bottom:11px"></div>
+
+  <!-- week strip removed — replaced by upcoming sessions in next card -->
+  <div class="sg">
+    <div class="sb bl"><div class="v" id="s-wk">–</div><div class="l">Viikko</div></div>
+    <div class="sb" id="s-ready-box" onclick="showDetailModal('readiness')" style="cursor:pointer"><div class="v" id="s-ready">–</div><div class="l">Valmiustila ›</div></div>
+    <div class="sb" id="s-acwr-box" onclick="showDetailModal('acwr')" style="cursor:pointer"><div class="v" id="s-acwr">–</div><div class="l">ACWR ›</div></div>
+    <div class="sb gn" onclick="showDetailModal('hrv')" style="cursor:pointer"><div class="v" id="s-st">–</div><div class="l">Putki ›</div></div>
+  </div>
+  <div class="card">
+    <div class="ct">KEHITYS TAVOITTEESEEN</div>
+    <div class="pbw"><div class="pbl"><span class="n">🏋️ Penkki</span><span class="m" id="pb-n">–</span></div><div class="pbt"><div class="pbf" id="pb-f" style="background:var(--bl);width:0%"></div></div></div>
+    <div class="pbw"><div class="pbl"><span class="n">💪 Leuka</span><span class="m" id="pp-n">–</span></div><div class="pbt"><div class="pbf" id="pp-f" style="background:var(--pu);width:0%"></div></div></div>
+    <div class="pbw"><div class="pbl"><span class="n">🏃 400m</span><span class="m" id="pr-n">–</span></div><div class="pbt"><div class="pbf" id="pr-f" style="background:var(--ac);width:0%"></div></div></div>
+    <div class="pbw"><div class="pbl"><span class="n">💓 HRV</span><span class="m" id="hrv-n">–</span></div><div class="pbt"><div class="pbf" id="hrv-f" style="background:var(--gn);width:0%"></div></div></div>
+  </div>
+  <div class="card">
+    <div class="ct">VIIKON KUORMITUS</div>
+    <div id="lchart" style="height:65px;display:flex;align-items:flex-end;gap:4px;padding:0 2px"></div>
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--mu);margin-top:4px"><span>Ma</span><span>Ti</span><span>Ke</span><span>To</span><span>Pe</span><span>La</span><span>Su</span></div>
+  </div>
+  <div id="upcoming-card" style="margin-bottom:11px"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px">
+    <button class="btn bp" onclick="openSessionPicker()">📋 Valitse treeni</button>
+    <button class="btn bs" onclick="showWeeklySummary()">📅 Viikkoyhteenveto</button>
+  </div>
+</div>
+
+<!-- ══ VOIMA ══ -->
+<div class="sec" id="sec-voima">
+  <!-- Pre-workout context card -->
+  <div id="preworkout-card" style="margin-bottom:10px"></div>
+  <!-- Header row: date + sleep + type selector -->
+  <div class="card" style="padding:11px 13px">
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <div style="flex:1;min-width:120px">
+        <label class="fl" style="margin-bottom:3px">Päivämäärä</label>
+        <input type="date" class="fi" id="v-dt" style="padding:7px 10px;font-size:13px">
+      </div>
+      <div style="flex:0 0 80px">
+        <label class="fl" style="margin-bottom:3px">Uni (h)</label>
+        <div class="niw" style="height:36px">
+          <button class="nb" style="height:36px;width:32px;font-size:16px" onclick="adj('v-sl',-0.5)">−</button>
+          <input type="number" class="nd" id="v-sl" value="7.5" step="0.5" min="3" max="12" style="height:36px;font-size:13px">
+          <button class="nb" style="height:36px;width:32px;font-size:16px" onclick="adj('v-sl',0.5)">+</button>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:9px">
+      <label class="fl" style="margin-bottom:3px">Treenityyppi</label>
+      <select class="fs" id="v-ty" onchange="buildWorkoutView()" style="padding:7px 10px;font-size:13px">
+        <option value="ya">💪 Yläkroppa A — Penkki + leuat</option>
+        <option value="yb">💪 Yläkroppa B — Rotaatio</option>
+        <option value="aa">🦵 Alakroppa A — Kyykky + hip thrust</option>
+        <option value="ab">🦵 Alakroppa B — Rotaatio</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Live workout view — all exercises expanded inline -->
+  <div id="workout-view"></div>
+
+  <!-- Save button -->
+  <button class="btn bg" onclick="saveVoima()" style="margin-top:4px">✅ TALLENNA VOIMATREENI</button>
+</div>
+
+<!-- ══ JUOKSU ══ -->
+<div class="sec" id="sec-juoksu">
+  <div class="card">
+    <div class="ct">JUOKSUTREENI</div>
+    <div class="fg"><label class="fl">Päivämäärä</label><input type="date" class="fi" id="r-dt"></div>
+    <div class="fg"><label class="fl">Treenityyppi</label>
+      <select class="fs" id="r-ty" onchange="updRunForm()">
+        <option value="intervalli">🔴 Intervalli (200–300m sarjat)</option>
+        <option value="aerobinen">🟢 Aerobinen (Zone 2)</option>
+        <option value="nopeus">🟠 Nopeus (sprintit)</option>
+        <option value="kilpailuvauhti">🟡 Kilpailuvauhti (race pace)</option>
+        <option value="testi_400m">🏆 400m TESTI</option>
+      </select>
+    </div>
+    <div id="r-sp"></div>
+    <div class="fg"><label class="fl">Kokonaismatka (km)</label><div class="niw"><button class="nb" onclick="adj('r-di',-0.5)">−</button><input type="number" class="nd" id="r-di" value="5" step="0.5" min="0" max="40"><button class="nb" onclick="adj('r-di',0.5)">+</button></div></div>
+    <div class="fg"><label class="fl">RPE</label><div class="rg" id="rrpe"><button class="rb" onclick="pRPE(6,'rrpe')">6<span class="rd2">Kevyt</span></button><button class="rb" onclick="pRPE(7,'rrpe')">7<span class="rd2">Lähes</span></button><button class="rb" onclick="pRPE(8,'rrpe')">8<span class="rd2">Raskas</span></button><button class="rb" onclick="pRPE(9,'rrpe')">9<span class="rd2">Kova</span></button><button class="rb" onclick="pRPE(10,'rrpe')">10<span class="rd2">MAX</span></button></div></div>
+    <div class="fg"><label class="fl">Uni (h)</label><div class="niw"><button class="nb" onclick="adj('r-sl',-0.5)">−</button><input type="number" class="nd" id="r-sl" value="7.5" step="0.5" min="3" max="12"><button class="nb" onclick="adj('r-sl',0.5)">+</button></div></div>
+    <div class="fg"><label class="fl">Muistiinpanot</label><textarea class="fta" id="r-no" placeholder="Miten meni?"></textarea></div>
+  </div>
+  <button class="btn bg" onclick="saveRun()">✅ TALLENNA JUOKSUTREENI</button>
+</div>
+
+<!-- ══ EXTRA ══ -->
+<div class="sec" id="sec-extra">
+  <div class="card">
+    <div class="ct">LISÄAKTIVITEETTI</div>
+    <div class="fg"><label class="fl">Päivämäärä</label><input type="date" class="fi" id="e-dt"></div>
+    <div class="fg"><label class="fl">Aktiviteetti</label>
+      <div class="ag2">
+        <button class="ab2" onclick="pAct(this,'pyoraily')"><span class="ai2">🚴</span>Pyöräily</button>
+        <button class="ab2" onclick="pAct(this,'stadion')"><span class="ai2">🏟️</span>Stadion</button>
+        <button class="ab2" onclick="pAct(this,'tennis')"><span class="ai2">🎾</span>Tennis</button>
+        <button class="ab2" onclick="pAct(this,'jalkapallo')"><span class="ai2">⚽</span>Jalkapallo</button>
+        <button class="ab2" onclick="pAct(this,'uinti')"><span class="ai2">🏊</span>Uinti</button>
+        <button class="ab2" onclick="pAct(this,'muu_puntti')"><span class="ai2">🏋️</span>Muut puntit</button>
+      </div>
+    </div>
+    <div id="e-pf" style="display:none" class="fg"><label class="fl">Mitä liikkeitä?</label><textarea class="fta" id="e-ex" placeholder="Esim: 3×10 legpress..."></textarea></div>
+    <div class="fg"><label class="fl">Kesto (min)</label><div class="niw"><button class="nb" onclick="adj('e-du',-10)">−</button><input type="number" class="nd" id="e-du" value="60" step="10" min="10" max="300"><button class="nb" onclick="adj('e-du',10)">+</button></div></div>
+    <div class="fg"><label class="fl">Intensiteetti</label><div class="rg" id="erpe"><button class="rb" onclick="pRPE(6,'erpe')">6<span class="rd2">Kevyt</span></button><button class="rb" onclick="pRPE(7,'erpe')">7<span class="rd2">Koht.</span></button><button class="rb" onclick="pRPE(8,'erpe')">8<span class="rd2">Raskas</span></button><button class="rb" onclick="pRPE(9,'erpe')">9<span class="rd2">Kova</span></button><button class="rb" onclick="pRPE(10,'erpe')">10<span class="rd2">MAX</span></button></div></div>
+    <div class="ab ai" id="e-pv" style="display:none;margin-top:4px"><span class="ic">⚡</span><span id="e-pt"></span></div>
+  </div>
+  <button class="btn bg" onclick="saveExtra()">✅ TALLENNA LISÄAKTIVITEETTI</button>
+</div>
+
+<!-- ══ ANALYYSI ══ -->
+<div class="sec" id="sec-analyys">
+
+  <!-- SUBTABS -->
+  <div style="display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px">
+    <button class="atb active" id="atb-0" onclick="showATab(0)">⚡ Valmius</button>
+    <button class="atb" id="atb-1" onclick="showATab(1)">💪 Lihasanalyysi</button>
+    <button class="atb" id="atb-2" onclick="showATab(2)">🏃 Juoksu</button>
+    <button class="atb" id="atb-3" onclick="showATab(3)">📊 Graafit</button>
+    <button class="atb" id="atb-4" onclick="showATab(4)">💓 HRV</button>
+    <button class="atb" id="atb-5" onclick="showATab(5)">⚖️ Paino</button>
+  </div>
+
+  <!-- TAB 0: VALMIUS -->
+  <div class="atab active" id="atab-0">
+    <div class="card" id="acwr-card">
+      <div class="ct">⚡ VALMIUSINDEKSI & ACWR</div>
+      <div id="acwr-content"><p style="color:var(--mu);font-size:12px">Ladataan...</p></div>
+    </div>
+    <div class="card">
+      <div class="ct">🗓️ PERIODISAATIO — 48 VIIKKOA</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;font-size:10px;margin-bottom:8px">
+        <span><span style="width:8px;height:8px;background:#1e3a5f;border:1px solid #2563eb;border-radius:2px;display:inline-block;margin-right:3px"></span>Perusta</span>
+        <span><span style="width:8px;height:8px;background:var(--pud);border:1px solid #7c3aed;border-radius:2px;display:inline-block;margin-right:3px"></span>Rakentaminen</span>
+        <span><span style="width:8px;height:8px;background:var(--ord);border:1px solid #ea580c;border-radius:2px;display:inline-block;margin-right:3px"></span>Huipentuminen</span>
+        <span><span style="width:8px;height:8px;background:#14532d;border:1px solid var(--gn);border-radius:2px;display:inline-block;margin-right:3px"></span>Testi</span>
+      </div>
+      <div class="ptl" id="ptl"></div>
+      <div id="ptl-detail" style="margin-top:8px;font-size:12px;color:var(--mu)">Napauta viikkoa</div>
+    </div>
+    <div class="card">
+      <div class="ct">🏆 TESTAUSKALENTERI</div>
+      <div id="test-cal"></div>
+    </div>
+  </div>
+
+  <!-- TAB 1: LIHASANALYYSI -->
+  <div class="atab" id="atab-1">
+    <div class="card">
+      <div class="ct">🔬 6 VIIKON LIHASRYHMÄANALYYSI</div>
+      <div id="muscle-analysis"><p style="color:var(--mu);font-size:12px">Ladataan analyysiä...</p></div>
+    </div>
+    <div class="card">
+      <div class="ct">📈 RPE-TRENDI LIIKKEITTÄIN</div>
+      <p style="font-size:11px;color:var(--mu);margin-bottom:10px">Jos RPE nousee samalla painolla → ylikuormituksen merkki</p>
+      <div id="rpe-trend"></div>
+    </div>
+    <div class="card">
+      <div class="ct">🔄 PLATEAU-HAVAINNOT & SUOSITUKSET</div>
+      <div id="plateau-recs"></div>
+    </div>
+  </div>
+
+  <!-- TAB 2: JUOKSUANALYYSI -->
+  <div class="atab" id="atab-2">
+    <div class="card">
+      <div class="ct">🏃 ADAPTIIVINEN JUOKSUANALYYSI</div>
+      <div id="run-analysis"><p style="color:var(--mu);font-size:12px">Ladataan...</p></div>
+    </div>
+    <div class="card">
+      <div class="ct">📊 400M AIKA — TOTEUTUNUT VS. ODOTETTU</div>
+      <div id="g-run"></div>
+    </div>
+    <div class="card">
+      <div class="ct">💧 LAKTAATTIKYNNYSESTIMAATTI</div>
+      <div id="lt-estimate"><p style="color:var(--mu);font-size:12px">Tarvitaan intervalleja laskentaan</p></div>
+    </div>
+  </div>
+
+  <!-- TAB 3: GRAAFIT -->
+  <div class="atab" id="atab-3">
+    <div class="card">
+      <div class="ct">📊 PENKKI — ARVIOITU 1RM</div>
+      <div style="font-size:10px;color:var(--mu);margin-bottom:6px">Epley-kaava: paino×(1+toistot/30) · Harmaa = tavoite</div>
+      <div id="g-bench"></div>
+    </div>
+    <div class="card">
+      <div class="ct">📊 LEUKA — ARVIOITU 1RM</div>
+      <div id="g-pull"></div>
+    </div>
+    <div class="card">
+      <div class="ct">📊 LIIKEKOHTAINEN KEHITYS</div>
+      <select class="fs" id="ex-graph-sel" onchange="renderExGraph()" style="margin-bottom:10px;font-size:12px;padding:7px">
+        <option value="bench">Penkkipunnerrus</option>
+        <option value="squat">Takakyykky</option>
+        <option value="pullup_w">Lisäpainoleuka</option>
+        <option value="hipthrust">Hip thrust</option>
+        <option value="rdl">Romanian maastaveto</option>
+        <option value="ohp">Pystypunnerrus (OHP)</option>
+        <option value="row_bar">Vaakasoutu</option>
+        <option value="dips">Dip</option>
+      </select>
+      <div id="g-ex"></div>
+    </div>
+    <div class="card">
+      <div class="ct">🏆 TESTAUSPROTOKOLLA — 3RM → 1RM</div>
+      <div id="test-protocol">
+        <div class="fg">
+          <label class="fl">Liike</label>
+          <select class="fs" id="tp-ex" style="font-size:12px;padding:7px">
+            <option value="bench">Penkkipunnerrus</option>
+            <option value="squat">Takakyykky</option>
+            <option value="pullup_w">Lisäpainoleuka</option>
+            <option value="hipthrust">Hip thrust</option>
+          </select>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+          <div class="fg"><label class="fl">Paino (kg)</label><div class="niw"><button class="nb" onclick="adj('tp-w',-2.5)">−</button><input type="number" class="nd" id="tp-w" value="100" step="2.5"><button class="nb" onclick="adj('tp-w',2.5)">+</button></div></div>
+          <div class="fg"><label class="fl">Toistot (3RM)</label><div class="niw"><button class="nb" onclick="adj('tp-r',-1)">−</button><input type="number" class="nd" id="tp-r" value="3" min="1" max="10"><button class="nb" onclick="adj('tp-r',1)">+</button></div></div>
+        </div>
+        <button class="btn bp" onclick="calcTestProtocol()" style="margin-bottom:10px">Laske 1RM</button>
+        <div id="tp-result"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: HRV -->
+  <div class="atab" id="atab-4">
+    <div class="card">
+      <div class="ct">💓 HRV-SEURANTA</div>
+      <div class="hrv-ring" onclick="showDetailPanel('hrv')" style="cursor:pointer">
+        <div class="hrv-circle hrv-none" id="hrv-circle">–</div>
+        <div>
+          <div style="font-size:13px;font-weight:600" id="hrv-status">Ei HRV-dataa</div>
+          <div style="font-size:11px;color:var(--mu);margin-top:3px" id="hrv-sub">Kirjaa aamuinen HRV Garminista/Polarista</div>
+          <div style="font-size:11px;color:var(--mu);margin-top:2px" id="hrv-trend"></div>
+        </div>
+      </div>
+      <div class="fg" style="margin-top:10px"><label class="fl">Kirjaa HRV</label>
+        <div class="niw"><button class="nb" onclick="adj('hrv-in',-1)">−</button><input type="number" class="nd" id="hrv-in" value="55" min="20" max="120"><button class="nb" onclick="adj('hrv-in',1)">+</button></div>
+      </div>
+      <button class="btn bsm bs" onclick="saveHRV()">Tallenna HRV</button>
+      <div id="hrv-graph" style="margin-top:12px"></div>
+    </div>
+  </div>
+
+  <!-- TAB 5: PAINO -->
+  <div class="atab" id="atab-5">
+    <div class="card">
+      <div class="ct">⚖️ KEHONPAINO</div>
+      <div class="fg"><label class="fl">Kirjaa paino (kg)</label><div class="niw"><button class="nb" onclick="adj('bw-in',-0.5)">−</button><input type="number" class="nd" id="bw-in" value="90" step="0.5" min="50" max="200"><button class="nb" onclick="adj('bw-in',0.5)">+</button></div></div>
+      <button class="btn bsm bs" onclick="saveBW()">Tallenna paino</button>
+      <div id="bw-list" style="margin-top:8px"></div>
+      <div id="g-bw" style="margin-top:10px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HISTORIA ══ -->
+<div class="sec" id="sec-historia">
+  <div class="card">
+    <div class="ct">PARHAAT TULOKSET</div>
+    <div class="sg"><div class="sb bl"><div class="v" id="b-be">–</div><div class="l">Penkki 1RM</div></div><div class="sb pu"><div class="v" id="b-pu">–</div><div class="l">Leuka +kg</div></div></div>
+    <div class="sb gn" style="margin-bottom:0"><div class="v" id="b-40">–</div><div class="l">400m paras</div></div>
+  </div>
+  <div class="card"><div class="ct">TREENILOKI</div>
+    <input type="search" class="hsrch" id="hsrch" placeholder="Hae treenejä..." oninput="rdHist()" autocomplete="off">
+    <div class="hfltrs">
+      <button class="hfbtn on" id="hf-all" onclick="setFilter('all')">Kaikki</button>
+      <button class="hfbtn" id="hf-voima" onclick="setFilter('voima')">💪 Voima</button>
+      <button class="hfbtn" id="hf-juoksu" onclick="setFilter('juoksu')">🏃 Juoksu</button>
+      <button class="hfbtn" id="hf-extra" onclick="setFilter('extra')">➕ Extra</button>
+      <button class="hfbtn" id="hf-testi" onclick="setFilter('testi')">🏆 Testit</button>
+    </div>
+    <div id="hl"><p style="color:var(--mu);font-size:12px">Ladataan...</p></div>
+  </div>
+  <div class="card">
+    <div class="ct">💾 VARMUUSKOPIO</div>
+    <p style="font-size:12px;color:var(--mu);margin-bottom:12px;line-height:1.6">Vie kaikki treenidatasi JSON-tiedostona iPhonen Tiedostoihin tai iCloudiin. Tuo data takaisin tarvittaessa. <strong style="color:var(--tx)">Tee varmuuskopio ennen laitteen vaihtoa tai Safarin tyhjennystä.</strong></p>
+    <button class="btn bg" onclick="exportData()" style="margin-bottom:8px">📤 VIE DATA (Lataa JSON)</button>
+    <div style="position:relative">
+      <button class="btn bs" onclick="document.getElementById('import-file').click()">📥 TUO DATA (Lataa JSON)</button>
+      <input type="file" id="import-file" accept=".json" onchange="importData(event)" style="display:none">
+    </div>
+    <div id="import-status" style="margin-top:8px"></div>
+  </div>
+  <div class="card"><button class="btn bd2" onclick="doClear()">🗑️ TYHJENNÄ KAIKKI DATA</button></div>
+</div>
+
+<!-- ══ ASETUKSET ══ -->
+<div class="sec" id="sec-asetukset">
+  <div class="card">
+    <div class="ct">ALOITUSARVOT</div>
+    <div class="fg"><label class="fl">Penkki 1RM (kg)</label><div class="niw"><button class="nb" onclick="adj('s-be',-2.5)">−</button><input type="number" class="nd" id="s-be" value="120" step="2.5"><button class="nb" onclick="adj('s-be',2.5)">+</button></div></div>
+    <div class="fg"><label class="fl">Lisäpainoleuka 1RM (kg)</label><div class="niw"><button class="nb" onclick="adj('s-pu',-2.5)">−</button><input type="number" class="nd" id="s-pu" value="40" step="2.5"><button class="nb" onclick="adj('s-pu',2.5)">+</button></div></div>
+    <div class="fg"><label class="fl">Ohjelman aloituspäivä</label><input type="date" class="fi" id="s-st"></div>
+    <div class="fg"><label class="fl">HRV-perustaso (Garmin/Polar arvo)</label><div class="niw"><button class="nb" onclick="adj('s-hrv',-1)">−</button><input type="number" class="nd" id="s-hrv" value="55" min="20" max="120"><button class="nb" onclick="adj('s-hrv',1)">+</button></div></div>
+    <button class="btn bp" onclick="saveSettings()">💾 TALLENNA</button>
+  </div>
+  <div class="card">
+    <div class="ct">PROGRESSIOSÄÄNNÖT</div>
+    <div class="ab ag"><span class="ic">↑</span><span>Kaikki ✓ + RPE ≤ 8 → +2.5kg ensi viikolla</span></div>
+    <div class="ab ai"><span class="ic">→</span><span>1 epäonnistui tai RPE 9 → sama paino</span></div>
+    <div class="ab aw"><span class="ic">↓</span><span>2+ epäonnistui tai RPE 10 → −5%</span></div>
+    <div class="ab ad"><span class="ic">🛑</span><span>Uni &lt;6h tai HRV &gt;10% alle perustason → pakotettu kevennys</span></div>
+  </div>
+</div>
+
+<div class="snk" id="snk"></div>
+
+<script>
+// ══ STORAGE ══════════════════════════════════════════
+const CK='treeni_v6';
+let D=dflt(), rpe={}, curEx=null, curSets=[], savedExs=[], selAct=null;
+
+function dflt(){return{settings:{benchRM:120,pullRM:40,startDate:new Date().toISOString().split('T')[0],hrvBase:55},sessions:[],extras:[],bodyweights:[],hrv:[],bests:{bench:null,pull:null,run400:null}}}
+
+function sync(st,lb){document.getElementById('sdot').className='sdot '+st;document.getElementById('slbl').textContent=lb}
+
+async function cLoad(){
+  sync('sy','Ladataan...');
+  try{const r=await window.storage.get(CK);if(r&&r.value)D={...dflt(),...JSON.parse(r.value)};sync('ok','Synkronoitu ✓');}
+  catch(e){
+    // Fallback to localStorage
+    try{const r=localStorage.getItem(CK+'_fb');if(r)D={...dflt(),...JSON.parse(r)};sync('ok','Paikallinen tila');}
+    catch(e2){sync('ok','Valmis');}
+  }
+}
+
+async function cSave(){
+  sync('sy','Tallennetaan...');
+  try{await window.storage.set(CK,JSON.stringify(D));sync('ok','Tallennettu ✓');}
+  catch(e){
+    try{localStorage.setItem(CK+'_fb',JSON.stringify(D));sync('ok','Tallennettu (paikallinen)');}
+    catch(e2){sync('er','Virhe');snk('⚠️ Tallennus epäonnistui');}
+  }
+}
+
+// ══ UTILS ════════════════════════════════════════════
+const td=()=>new Date().toISOString().split('T')[0];
+const dow=()=>new Date().getDay();
+const fmt=s=>`${Math.floor(s/60)}:${Math.round(s%60).toString().padStart(2,'0')}`;
+const wks=()=>Math.max(1,Math.floor((new Date()-new Date(D.settings.startDate))/(1000*60*60*24*7))+1);
+const isDL=w=>w%4===0;
+const ph=w=>w<=16?'PERUSTA':w<=32?'RAKENTAMINEN':'HUIPENTUMINEN';
+const TEST_WEEKS=[4,8,12,16,20,24,28,32,36,40,44,48];
+const isTest=w=>TEST_WEEKS.includes(w);
+
+function snk(m){const el=document.getElementById('snk');el.textContent=m;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2500);}
+function adj(id,d){const el=document.getElementById(id);if(!el)return;const mn=parseFloat(el.min)||0,mx=parseFloat(el.max)||9999;el.value=Math.max(mn,Math.min(mx,Math.round((parseFloat(el.value)+d)*10)/10));}
+function T(id,btn){document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tb').forEach(b=>b.classList.remove('active'));document.getElementById('sec-'+id).classList.add('active');if(btn)btn.classList.add('active');if(id==='dash')rdDash();if(id==='voima'){if(!document.getElementById('v-dt').value)document.getElementById('v-dt').value=td();renderPreWorkout();buildWorkoutView();}if(id==='juoksu'){document.getElementById('r-dt').value=td();updRunForm();}if(id==='extra')document.getElementById('e-dt').value=td();if(id==='analyys')rdAnalysis();if(id==='historia')rdHist();if(id==='asetukset')ldSett();}
+
+function pRPE(v,gid){rpe[gid]=v;document.querySelectorAll(`#${gid} .rb`).forEach(b=>{b.className='rb';if(parseInt(b.textContent)===v)b.classList.add('r'+v);});if(gid==='erpe')updEPrev();}
+
+// ══ SCHEDULE ══════════════════════════════════════════
+function sched(){
+  const w=wks(),d=dow(),dl=isDL(w),p=ph(w);
+  if(dl)return{type:'DELOAD',desc:`Vk ${w} — Kevennys. Kuormitus -40%.`,nav:'rest',phase:p,week:w};
+  const m={1:{type:'Voima — Yläkroppa',desc:'Penkki + leuat + yläselkä',nav:'voima'},2:{type:'Juoksu — Intervalli',desc:w<=8?'6–8×200m @ 85–90%':w<=16?'4–6×300m @ 85%':'4×400m race pace',nav:'juoksu'},3:{type:'Voima — Alakroppa',desc:'Kyykky + hip thrust + jalkatyö',nav:'voima'},4:{type:'Juoksu — Aerobinen',desc:'40–60 min Zone 2 @ 65–75% HRmax',nav:'juoksu'},5:{type:w>=17?'Voima — Yläkroppa (Maksimivoima)':'Voima — Yläkroppa',desc:w>=17?'DUP: 5×3 @ RPE 9':'Penkki + leuat + apuliikkeet',nav:'voima'},6:{type:w>=17?'Juoksu — Kilpailuvauhti':w>=5?'Juoksu — Nopeus':'Juoksu — Intervalli',desc:w>=17?'500m ylikantama / race pace':w>=5?'Sprintit täysillä':'6×200m sarjat',nav:'juoksu'},0:{type:'Lepo',desc:'Palautuminen on osa ohjelmaa.',nav:'rest'}};
+  return{...(m[d]||m[0]),week:w,phase:p};
+}
+
+function startToday(){const s=sched(),tabs=document.querySelectorAll('.tb');if(s.nav==='voima')T('voima',tabs[1]);else if(s.nav==='juoksu')T('juoksu',tabs[2]);else snk('Lepopäivä — levätään! 😴');}
+
+// ══════════════════════════════════════════════════════
+// ADAPTIIVINEN MOOTTORI — ACWR + Trendianalyysi + HRV
+// Perustuu: Gabbett 2016, Hulin et al. 2016
+// ══════════════════════════════════════════════════════
+
+function sLoad(s){const r=s.rpe||7;if(s.type==='voima')return r*(s.exercises||[]).reduce((a,e)=>a+(e.sets?.length||0),0)*1.2;return r*(s.dist||5)*2.5;}
+function eLoad(e){const m={pyoraily:.6,stadion:1.2,tennis:.8,jalkapallo:.9,uinti:.7,muu_puntti:1.0}[e.activity]||.8;return(e.rpe||7)*((e.duration||60)/60)*10*m;}
+function loadForDate(ds){let l=0;D.sessions.filter(s=>s.date===ds).forEach(s=>l+=sLoad(s));D.extras.filter(e=>e.date===ds).forEach(e=>l+=eLoad(e));return l;}
+function wkLoad(ds){const d=new Date(ds),mon=new Date(d);mon.setDate(d.getDate()-(d.getDay()===0?6:d.getDay()-1));let t=0;for(let i=0;i<7;i++){const dd=new Date(mon);dd.setDate(mon.getDate()+i);t+=loadForDate(dd.toISOString().split('T')[0]);}return Math.round(t);}
+function loadLastNDays(n){let t=0;for(let i=0;i<n;i++){const d=new Date();d.setDate(d.getDate()-i);t+=loadForDate(d.toISOString().split('T')[0]);}return t;}
+function dLoads(){return Array.from({length:7},(_,i)=>{const d=new Date();d.setDate(d.getDate()-6+i);return Math.round(loadForDate(d.toISOString().split('T')[0]));});}
+function streak(){let s=0;for(let i=0;i<60;i++){const d=new Date();d.setDate(d.getDate()-i);const ds=d.toISOString().split('T')[0];if(D.sessions.some(x=>x.date===ds)||D.extras.some(x=>x.date===ds))s++;else if(i>0)break;}return s;}
+
+function calcACWR(){
+  const acute=loadLastNDays(7),chronic=loadLastNDays(28);
+  if(chronic<1)return{ratio:null,zone:'nodata',acute,chronic};
+  const ratio=acute/chronic;
+  let zone,label,color;
+  if(ratio<0.6){zone='low';label='Alikuormitus';color='var(--bl)';}
+  else if(ratio<0.8){zone='moderate';label='Hieman matala';color='var(--mu)';}
+  else if(ratio<=1.3){zone='optimal';label='Optimaalinen ✓';color='var(--gn)';}
+  else if(ratio<=1.5){zone='high';label='Korkea — tarkkaile';color='var(--yw)';}
+  else{zone='danger';label='Liian korkea ⚠️';color='var(--rd)';}
+  return{ratio:Math.round(ratio*100)/100,zone,label,color,acute:Math.round(acute),chronic:Math.round(chronic)};
+}
+
+function linearTrend(pts){
+  const n=pts.length;if(n<2)return{slope:0,intercept:0,r2:0};
+  const sumX=pts.reduce((a,p)=>a+p.x,0),sumY=pts.reduce((a,p)=>a+p.y,0);
+  const sumXY=pts.reduce((a,p)=>a+p.x*p.y,0),sumX2=pts.reduce((a,p)=>a+p.x*p.x,0);
+  const slope=(n*sumXY-sumX*sumY)/(n*sumX2-sumX*sumX);
+  const intercept=(sumY-slope*sumX)/n;
+  const yMean=sumY/n;
+  const ssTot=pts.reduce((a,p)=>a+Math.pow(p.y-yMean,2),0);
+  const ssRes=pts.reduce((a,p)=>a+Math.pow(p.y-(slope*p.x+intercept),2),0);
+  return{slope,intercept,r2:ssTot>0?1-ssRes/ssTot:0};
+}
+
+function exerciseTrend(exId,nWeeks=6){
+  const pts=[];const now=new Date();
+  for(let w=nWeeks-1;w>=0;w--){
+    const wStart=new Date(now);wStart.setDate(now.getDate()-w*7-6);
+    const wEnd=new Date(now);wEnd.setDate(now.getDate()-w*7);
+    const wDates=[];
+    for(let d=new Date(wStart);d<=wEnd;d.setDate(d.getDate()+1))wDates.push(d.toISOString().split('T')[0]);
+    let best=null;
+    D.sessions.filter(s=>wDates.includes(s.date)&&s.type==='voima').forEach(s=>{
+      const ex=(s.exercises||[]).find(e=>e.id===exId);
+      if(ex&&ex.weight){if(!best||ex.weight>best)best=ex.weight;}
+    });
+    if(best!==null)pts.push({x:nWeeks-1-w,y:best});
+  }
+  if(pts.length<2)return null;
+  const tr=linearTrend(pts);
+  const lastY=pts[pts.length-1]?.y||0;
+  const plateauWeeks=pts.filter(p=>Math.abs(p.y-lastY)<2).length;
+  return{slope:tr.slope,r2:tr.r2,pts,weeklyGain:tr.slope,
+    trend:tr.slope>0.5?'nouseva':tr.slope<-0.5?'laskeva':'tasainen',plateauWeeks};
+}
+
+function getHRVStatus(){
+  if(!D.hrv.length)return{val:null,status:'none',label:'Ei dataa',sub:'Kirjaa aamuinen HRV Garminista/Polarista',modifier:0};
+  const sorted=[...D.hrv].sort((a,b)=>b.date.localeCompare(a.date));
+  const latest=sorted[0].value;
+  const last7=sorted.slice(0,7).map(h=>h.value);
+  const avg7=last7.reduce((a,v)=>a+v,0)/last7.length;
+  const base=D.settings.hrvBase||avg7;
+  const pctDev=(latest-base)/base*100;
+  const trend7=last7.length>=3?linearTrend(last7.map((v,i)=>({x:i,y:v}))).slope.toFixed(1):null;
+  let status,label,sub,modifier;
+  if(pctDev<-15){status='bad';label='Ylikuormitus';sub='HRV >15% alle perustason — lepo tai kevennys';modifier=-2;}
+  else if(pctDev<-8){status='ok';label='Kohtalainen palautuminen';sub='HRV hieman alle perustason — kevennä intensiteettiä';modifier=-1;}
+  else if(pctDev>8){status='great';label='Erinomainen palautuminen';sub='HRV yli perustason — voit lisätä intensiteettiä';modifier=1;}
+  else{status='good';label='Hyvä palautuminen';sub='HRV normaalitasolla';modifier=0;}
+  return{val:Math.round(latest),avg7:Math.round(avg7),base:Math.round(base),pct:Math.round(pctDev),status,label,sub,modifier,trend7};
+}
+
+function calcReadiness(){
+  const acwr=calcACWR(),hrv=getHRVStatus();
+  const lastSession=D.sessions.slice(-1)[0];
+  const sleep=lastSession?.sleep||7.5;
+  const daysSince=lastSession?Math.floor((new Date()-new Date(lastSession.date))/(1000*60*60*24)):3;
+  let acwrScore=30;
+  if(acwr.ratio!==null){
+    if(acwr.zone==='optimal')acwrScore=40;
+    else if(acwr.zone==='moderate')acwrScore=30;
+    else if(acwr.zone==='low')acwrScore=20;
+    else if(acwr.zone==='high')acwrScore=20;
+    else if(acwr.zone==='danger')acwrScore=5;
+  }
+  let hrvScore=20;
+  if(hrv.val!==null){
+    if(hrv.status==='great')hrvScore=30;
+    else if(hrv.status==='good')hrvScore=24;
+    else if(hrv.status==='ok')hrvScore=14;
+    else if(hrv.status==='bad')hrvScore=4;
+  }
+  const sleepScore=sleep>=8?20:sleep>=7?16:sleep>=6?10:3;
+  const recovScore=daysSince>=2?10:daysSince===1?6:3;
+  const total=Math.min(100,acwrScore+hrvScore+sleepScore+recovScore);
+  let zone,label,color,rpeAdj,volumeAdj;
+  if(total>=85){zone='peak';label='Huippuvalmis';color='var(--gn)';rpeAdj=1;volumeAdj=0.1;}
+  else if(total>=70){zone='good';label='Hyvä valmiustila';color='var(--gn)';rpeAdj=0;volumeAdj=0;}
+  else if(total>=50){zone='moderate';label='Kohtalainen';color='var(--yw)';rpeAdj=-1;volumeAdj=-0.1;}
+  else if(total>=30){zone='low';label='Matala — kevennä';color='var(--or)';rpeAdj=-2;volumeAdj=-0.2;}
+  else{zone='poor';label='Heikko — lepo/deload';color='var(--rd)';rpeAdj=-3;volumeAdj=-0.3;}
+  return{score:total,zone,label,color,rpeAdj,volumeAdj,acwrScore,hrvScore,sleepScore,recovScore};
+}
+
+async function saveHRV(){const v=parseFloat(document.getElementById('hrv-in').value);D.hrv.push({date:td(),value:v});await cSave();snk('💓 HRV '+v+' kirjattu');rdAnalysis();}
+
+// ══ EXPECTED PROGRESS ═════════════════════════════════
+// Expected curves: linear interpolation between milestones
+const EXP={
+  bench:[{w:0,v:120},{w:4,v:124},{w:8,v:128},{w:12,v:131},{w:16,v:133},{w:20,v:137},{w:24,v:140},{w:28,v:143},{w:32,v:148},{w:36,v:151},{w:40,v:153},{w:44,v:155},{w:48,v:155}],
+  pull:[{w:0,v:40},{w:4,v:44},{w:8,v:48},{w:12,v:51},{w:16,v:55},{w:20,v:58},{w:24,v:62},{w:28,v:65},{w:32,v:68},{w:36,v:71},{w:40,v:73},{w:44,v:75},{w:48,v:75}],
+  run400:[{w:0,v:70},{w:4,v:68},{w:8,v:66},{w:12,v:64},{w:16,v:62},{w:20,v:61},{w:24,v:60},{w:28,v:59.5},{w:32,v:59},{w:36,v:58.5},{w:40,v:58},{w:44,v:58},{w:48,v:58}],
+};
+
+function expAt(curve,week){
+  const pts=curve;
+  if(week<=pts[0].w)return pts[0].v;
+  if(week>=pts[pts.length-1].w)return pts[pts.length-1].v;
+  for(let i=0;i<pts.length-1;i++){if(week>=pts[i].w&&week<=pts[i+1].w){const t=(week-pts[i].w)/(pts[i+1].w-pts[i].w);return pts[i].v+t*(pts[i+1].v-pts[i].v);}}
+  return pts[pts.length-1].v;
+}
+
+// ══ ACTUAL DATA SERIES ════════════════════════════════
+// Epley 1RM estimate: w*(1+r/30)
+function epley(weight, reps){ return Math.round(weight*(1+Math.max(1,reps)/30)); }
+
+function actualBench(){
+  const pts=[{w:0,v:D.settings.benchRM||120,label:'Lähtötaso'}];
+  D.sessions.filter(s=>s.type==='voima').forEach(s=>{
+    const bench=s.exercises?.find(e=>e.id==='bench');
+    if(bench&&bench.weight&&bench.sets?.length){
+      const w=Math.floor((new Date(s.date)-new Date(D.settings.startDate))/(1000*60*60*24*7))+1;
+      const best1rm=Math.max(...bench.sets.filter(st=>st.success!==false).map(st=>epley(st.weight||bench.weight,st.reps||5)));
+      pts.push({w,v:best1rm,label:s.date});
+    }
+  });
+  return pts.sort((a,b)=>a.w-b.w);
+}
+
+function actualPull(){
+  const pts=[{w:0,v:D.settings.pullRM||40,label:'Lähtötaso'}];
+  D.sessions.filter(s=>s.type==='voima').forEach(s=>{
+    const pull=s.exercises?.find(e=>e.id&&e.id.startsWith('pullup'));
+    if(pull&&pull.weight&&pull.sets?.length){
+      const w=Math.floor((new Date(s.date)-new Date(D.settings.startDate))/(1000*60*60*24*7))+1;
+      const best1rm=Math.max(...pull.sets.filter(st=>st.success!==false).map(st=>epley((st.weight||0)+(pull.weight||0),st.reps||4)));
+      pts.push({w,v:best1rm,label:s.date});
+    }
+  });
+  return pts.sort((a,b)=>a.w-b.w);
+}
+
+function actualRun(){
+  const pts=[];
+  D.sessions.filter(s=>s.time400).forEach(s=>{
+    const w=Math.floor((new Date(s.date)-new Date(D.settings.startDate))/(1000*60*60*24*7))+1;
+    pts.push({w,v:s.time400});
+  });
+  return pts.sort((a,b)=>a.w-b.w);
+}
+
+// ══ SVG GRAPH RENDERER ════════════════════════════════
+function renderGraph(containerId,actual,expected,color,yLabel,invert=false,yFmt=v=>Math.round(v)){
+  const el=document.getElementById(containerId);
+  if(!el)return;
+  const W=el.offsetWidth||320,H=160,pad={t:16,r:12,b:28,l:42};
+  const cW=W-pad.l-pad.r,cH=H-pad.t-pad.b;
+  const maxW=48,allV=[...actual.map(p=>p.v),...expected.map(p=>p.v)];
+  const minV=Math.min(...allV)*0.97,maxV=Math.max(...allV)*1.02;
+  const px=w=>pad.l+(w/maxW)*cW;
+  const py=v=>invert?pad.t+((v-minV)/(maxV-minV))*cH:pad.t+((maxV-v)/(maxV-minV))*cH;
+
+  // Expected path
+  const expPath=expected.map((p,i)=>`${i===0?'M':'L'}${px(p.w)},${py(p.v)}`).join(' ');
+  // Actual path
+  const actPath=actual.map((p,i)=>`${i===0?'M':'L'}${px(p.w)},${py(p.v)}`).join(' ');
+  // Current week marker
+  const cw=wks(),cx=px(Math.min(cw,48));
+
+  // Y axis labels
+  const ySteps=4;
+  const yLabels=Array.from({length:ySteps+1},(_,i)=>{const v=minV+(maxV-minV)*i/ySteps;return{v,y:invert?pad.t+((v-minV)/(maxV-minV))*cH:pad.t+((maxV-v)/(maxV-minV))*cH};});
+
+  // Test week markers
+  const testMarkers=TEST_WEEKS.filter(w=>w<=48).map(w=>`<line x1="${px(w)}" y1="${pad.t}" x2="${px(w)}" y2="${pad.t+cH}" stroke="#22c55e" stroke-width="1" stroke-dasharray="2,3" opacity=".4"/>`).join('');
+
+  el.innerHTML=`<svg width="100%" viewBox="0 0 ${W} ${H}" style="overflow:visible">
+    ${yLabels.map(yl=>`<line x1="${pad.l}" y1="${yl.y}" x2="${pad.l+cW}" y2="${yl.y}" stroke="var(--bd)" stroke-width="1"/>
+    <text x="${pad.l-4}" y="${yl.y+4}" text-anchor="end" font-size="9" fill="var(--mu)">${yFmt(yl.v)}</text>`).join('')}
+    ${testMarkers}
+    <line x1="${cx}" y1="${pad.t}" x2="${cx}" y2="${pad.t+cH}" stroke="var(--ac)" stroke-width="1.5" stroke-dasharray="3,3" opacity=".6"/>
+    <path d="${expPath}" fill="none" stroke="var(--mu)" stroke-width="1.5" stroke-dasharray="5,4" opacity=".6"/>
+    ${actual.length>1?`<path d="${actPath}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`:''}
+    ${actual.map(p=>`<circle cx="${px(p.w)}" cy="${py(p.v)}" r="4" fill="${color}" stroke="var(--bg)" stroke-width="1.5"/>
+    <text x="${px(p.w)}" y="${py(p.v)-7}" text-anchor="middle" font-size="9" fill="${color}">${yFmt(p.v)}</text>`).join('')}
+    <text x="${cx+3}" y="${pad.t+10}" font-size="9" fill="var(--ac)">Vk ${Math.min(cw,48)}</text>
+    <line x1="${pad.l}" y1="${pad.t+cH}" x2="${pad.l+cW}" y2="${pad.t+cH}" stroke="var(--bd)" stroke-width="1"/>
+    <line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${pad.t+cH}" stroke="var(--bd)" stroke-width="1"/>
+    ${[0,8,16,24,32,40,48].map(w=>`<text x="${px(w)}" y="${H-8}" text-anchor="middle" font-size="9" fill="var(--mu)">${w}</text>`).join('')}
+  </svg>`;
+}
+
+function renderHRVGraph(){
+  const el=document.getElementById('hrv-graph');
+  if(!el||!D.hrv.length)return;
+  const recent=[...D.hrv].sort((a,b)=>a.date.localeCompare(b.date)).slice(-14);
+  const W=el.offsetWidth||320,H=80,pad={t:8,r:8,b:20,l:36};
+  const cW=W-pad.l-pad.r,cH=H-pad.t-pad.b;
+  const vals=recent.map(h=>h.value);
+  const minV=Math.min(...vals)*0.95,maxV=Math.max(...vals)*1.05;
+  const base=D.settings.hrvBase||55;
+  const px=(_,i)=>pad.l+(i/(Math.max(recent.length-1,1)))*cW;
+  const py=v=>pad.t+((maxV-v)/(maxV-minV))*cH;
+  const path=recent.map((h,i)=>`${i===0?'M':'L'}${px(null,i)},${py(h.value)}`).join(' ');
+  const baseY=py(base);
+  el.innerHTML=`<svg width="100%" viewBox="0 0 ${W} ${H}">
+    <line x1="${pad.l}" y1="${baseY}" x2="${pad.l+cW}" y2="${baseY}" stroke="var(--gn)" stroke-width="1" stroke-dasharray="3,3" opacity=".5"/>
+    <text x="${pad.l-2}" y="${baseY+3}" text-anchor="end" font-size="8" fill="var(--gn)">${Math.round(base)}</text>
+    <path d="${path}" fill="none" stroke="var(--rd)" stroke-width="2" stroke-linecap="round"/>
+    ${recent.map((h,i)=>`<circle cx="${px(null,i)}" cy="${py(h.value)}" r="3" fill="${h.value<base*0.9?'var(--rd)':h.value>base?'var(--gn)':'var(--yw)'}"/>`).join('')}
+    <line x1="${pad.l}" y1="${pad.t+cH}" x2="${pad.l+cW}" y2="${pad.t+cH}" stroke="var(--bd)" stroke-width="1"/>
+  </svg>`;
+}
+
+function renderBWGraph(){
+  const el=document.getElementById('g-bw');
+  if(!el||D.bodyweights.length<2)return;
+  const sorted=[...D.bodyweights].sort((a,b)=>a.date.localeCompare(b.date));
+  const W=el.offsetWidth||320,H=80,pad={t:8,r:8,b:20,l:36};
+  const cW=W-pad.l-pad.r,cH=H-pad.t-pad.b;
+  const vals=sorted.map(b=>b.weight);
+  const minV=Math.min(...vals)-2,maxV=Math.max(...vals)+2;
+  const px=(_,i)=>pad.l+(i/(sorted.length-1))*cW;
+  const py=v=>pad.t+((maxV-v)/(maxV-minV))*cH;
+  const path=sorted.map((b,i)=>`${i===0?'M':'L'}${px(null,i)},${py(b.weight)}`).join(' ');
+  el.innerHTML=`<svg width="100%" viewBox="0 0 ${W} ${H}">
+    <path d="${path}" fill="none" stroke="var(--or)" stroke-width="2" stroke-linecap="round"/>
+    ${sorted.map((b,i)=>`<circle cx="${px(null,i)}" cy="${py(b.weight)}" r="3" fill="var(--or)"/>`).join('')}
+    <text x="${px(null,0)}" y="${py(sorted[0].weight)-6}" text-anchor="middle" font-size="9" fill="var(--mu)">${sorted[0].weight}</text>
+    <text x="${px(null,sorted.length-1)}" y="${py(sorted[sorted.length-1].weight)-6}" text-anchor="middle" font-size="9" fill="var(--or)">${sorted[sorted.length-1].weight}</text>
+    <line x1="${pad.l}" y1="${pad.t+cH}" x2="${pad.l+cW}" y2="${pad.t+cH}" stroke="var(--bd)" stroke-width="1"/>
+  </svg>`;
+}
+
+// ══ PERIODIZATION TIMELINE ════════════════════════════
+function renderTimeline(){
+  const el=document.getElementById('ptl');
+  if(!el)return;
+  const w=wks();
+  el.innerHTML=Array.from({length:48},(_,i)=>{
+    const wk=i+1,dl=isDL(wk),tst=isTest(wk);
+    const p=wk<=16?'ph1':wk<=32?'ph2':'ph3';
+    const cls=tst?'test':dl?'dl':p;
+    const cur=wk===Math.min(w,48)?'cur':'';
+    return `<div class="pw ${cls} ${cur}" onclick="showWeekDetail(${wk})" title="Vk ${wk}">${wk}</div>`;
+  }).join('');
+}
+
+function showWeekDetail(w){
+  const dl=isDL(w),tst=isTest(w),p=ph(w);
+  const testType=w%8===0?'1RM-TESTI':'3RM-TESTI';
+  let txt=`<strong>Viikko ${w}</strong> — ${p}`;
+  if(dl&&tst)txt+=` · 🏆 ${testType} + DELOAD`;
+  else if(dl)txt+=' · DELOAD-VIIKKO (-40% volyymi)';
+  else if(tst)txt+=` · 🏆 ${testType}`;
+  const benchExp=Math.round(expAt(EXP.bench,w));
+  const pullExp=Math.round(expAt(EXP.pull,w));
+  const runExp=expAt(EXP.run400,w);
+  txt+=`<br><span style="color:var(--mu)">Odotettu: Penkki ${benchExp}kg · Leuka +${pullExp}kg · 400m ${fmt(runExp)}</span>`;
+  document.getElementById('ptl-detail').innerHTML=txt;
+}
+
+// ══ TEST CALENDAR ══════════════════════════════════════
+function renderTestCal(){
+  const el=document.getElementById('test-cal');
+  if(!el)return;
+  const w=wks();
+  const startDate=new Date(D.settings.startDate);
+  el.innerHTML=TEST_WEEKS.map(tw=>{
+    const testDate=new Date(startDate);testDate.setDate(testDate.getDate()+(tw-1)*7+5);// Saturday of test week
+    const ds=testDate.toISOString().split('T')[0];
+    const d=new Date(ds);
+    const dateStr=`${d.getDate()}.${d.getMonth()+1}.${d.getFullYear()}`;
+    const past=tw<w,current=Math.abs(tw-w)<=1;
+    const type=tw%8===0?'1RM-TESTI (Penkki + Leuka + 400m)':'3RM-TESTI (Penkki + Leuka)';
+    const benchExp=Math.round(expAt(EXP.bench,tw));
+    const pullExp=Math.round(expAt(EXP.pull,tw));
+    const runExp=tw%8===0?` · 400m ${fmt(expAt(EXP.run400,tw))}`:'';
+    let statusHTML='';
+    if(past)statusHTML=`<div class="ti-status ti-done">✓ Mennyt</div>`;
+    else if(current)statusHTML=`<div class="ti-status ti-next">⚡ Lähestymässä!</div>`;
+    else statusHTML=`<div class="ti-status ti-future">Tulossa</div>`;
+    return `<div class="test-item" style="${current?'border-color:var(--ac)':''}">
+      <div class="ti-left"><div class="ti-wk">VK ${tw}</div><div class="ti-type" style="font-size:10px;max-width:180px">${type}</div><div style="font-size:10px;color:var(--mu);margin-top:2px">Tavoite: ${benchExp}kg · +${pullExp}kg${runExp}</div></div>
+      <div class="ti-right"><div class="ti-date">${dateStr}</div>${statusHTML}</div>
+    </div>`;
+  }).join('');
+}
+
+// ══ ADAPTIIVINEN PAINOEHDOTUS ═════════════════════════
+function lastPerf(id){for(let i=D.sessions.length-1;i>=0;i--){const ex=(D.sessions[i].exercises||[]).find(e=>e.id===id);if(ex)return ex;}return null;}
+
+function suggest(ex){
+  const last=lastPerf(ex.id),w=wks(),dl=isDL(w);
+  const ready=calcReadiness(),acwr=calcACWR(),trend=exerciseTrend(ex.id,6);
+  if(!last){
+    if(ex.pct&&ex.rmKey){
+      let base=D.settings[ex.rmKey]*ex.pct;
+      if(dl)base*=0.85;
+      base*=(1+ready.volumeAdj*0.5);
+      return{weight:Math.round(base/2.5)*2.5,dir:'first',text:'Aloitus: '+Math.round(base/2.5)*2.5+'kg',readiness:ready};
+    }
+    return null;
+  }
+  const failed=(last.sets||[]).filter(s=>s.success===false).length;
+  const rpe2=last.rpe||8;
+  const maxW=last.weight||Math.max(...(last.sets||[]).map(s=>s.weight||0),0);
+  let w2=maxW,dir='same',reasons=[];
+  if(dl){w2=Math.round(maxW*0.85/2.5)*2.5;return{weight:w2,dir:'deload',text:'⬇️ DELOAD '+w2+'kg (-15%)',readiness:ready};}
+  if(acwr.zone==='danger'){w2=Math.round(maxW*0.90/2.5)*2.5;return{weight:w2,dir:'down',text:'↓ '+w2+'kg — ACWR '+acwr.ratio+' liian korkea',readiness:ready};}
+  if(failed===0&&rpe2<=8){dir='up';w2=maxW+2.5;reasons.push('kaikki ✓, RPE '+rpe2);}
+  else if(failed>=2||rpe2>=10){dir='down';w2=Math.round(maxW*0.95/2.5)*2.5;reasons.push(failed+' epäonnistui');}
+  else reasons.push('RPE '+rpe2);
+  if(trend){
+    if(trend.trend==='tasainen'&&trend.plateauWeeks>=3&&dir==='same'){
+      w2=Math.round(maxW*0.92/2.5)*2.5;dir='plateau';reasons.push('plateau '+trend.plateauWeeks+'vk → reset');
+    }
+    if(trend.trend==='laskeva'&&dir==='up'){dir='same';w2=maxW;reasons.push('laskeva trendi');}
+  }
+  if(ready.zone==='poor'||ready.zone==='low'){
+    if(dir==='up'){dir='same';w2=maxW;reasons.push('valmiustila '+ready.score+'/100');}
+    else if(dir==='same'){w2=Math.round(maxW*0.95/2.5)*2.5;dir='down';reasons.push('valmiustila '+ready.score+'/100');}
+  } else if(ready.zone==='peak'&&dir==='same'&&failed===0){
+    dir='up';w2=maxW+2.5;reasons.push('huippuvalmiustila '+ready.score+'/100');
+  }
+  if(acwr.zone==='high'&&dir==='up'){w2=maxW;dir='same';reasons.push('ACWR '+acwr.ratio+' korkea');}
+  const arrow={up:'↑',down:'↓',same:'→',plateau:'⟳'}[dir]||'→';
+  const trendSuffix=trend?' · '+(trend.weeklyGain>0?'+':'')+trend.weeklyGain.toFixed(1)+'kg/vk':'';
+  return{weight:Math.round(w2/2.5)*2.5,dir,readiness:ready,acwr,trend,
+    text:arrow+' '+Math.round(w2/2.5)*2.5+'kg — '+reasons.join(', ')+trendSuffix};
+}
+
+function nextSugs(){
+  const s=sched();if(s.nav!=='voima')return null;
+  const km={1:'ya',3:'aa',5:'ya'};const key=km[dow()]||'ya';
+  return(EX[key]||[]).map(ex=>({name:ex.name.replace('★ ',''),sug:suggest(ex)})).filter(r=>r.sug);
+}
+
+// ══ EXERCISE BANK — laajennettu kirjasto ══════════════
+const BANK = {
+  // ── PUSH ──────────────────────────────────────────────
+  bench:        {name:'Penkkipunnerrus',cat:'push',note:'Pääliike',sets:5,reps:5,rmKey:'benchRM',pct:.83},
+  bench_close:  {name:'Kapea penkki',cat:'push',note:'Ojentajat enemmän',sets:4,reps:6,rmKey:'benchRM',pct:.78},
+  incline:      {name:'Vinopenkki käsipainoilla',cat:'push',note:'Ylärintalihas',sets:3,reps:8},
+  incline_bar:  {name:'Vinopenkki (tanko)',cat:'push',note:'Ylärintalihas raskaana',sets:4,reps:6,rmKey:'benchRM',pct:.75},
+  decline_bar:  {name:'Lasku penkki (tanko)',cat:'push',note:'Alarintalihas',sets:3,reps:8},
+  board:        {name:'Board press',cat:'push',note:'Lukitusvaihe',sets:3,reps:5,rmKey:'benchRM',pct:.77},
+  dips:         {name:'Dip lisäpainolla',cat:'push',note:'Ojentajat + alarintalihas',sets:3,reps:10},
+  skull:        {name:'Ranskalainen punnerrus',cat:'push',note:'Ojentajat tanko',sets:3,reps:10},
+  skull_db:     {name:'Ranskalainen (käsipainot)',cat:'push',note:'Ojentajat, laajempi liikerata',sets:3,reps:12},
+  tricep_pd:    {name:'Triceps pushdown (kaapeli)',cat:'push',note:'Ojentajat eristetty',sets:3,reps:12},
+  tricep_oh:    {name:'Triceps yläpää (kaapeli)',cat:'push',note:'Pitkä pää ojentajista',sets:3,reps:12},
+  ohp:          {name:'Pystypunnerrus (OHP)',cat:'push',note:'Hartiat + ojentajat',sets:4,reps:6},
+  ohp_db:       {name:'Käsipaino OHP',cat:'push',note:'Stabiliteetti + hartiat',sets:3,reps:10},
+  db_press:     {name:'Käsipainopenkki',cat:'push',note:'Laajempi liikerata',sets:3,reps:10},
+  cable_fly:    {name:'Kaapeli fly',cat:'push',note:'Rintalihas eristetty',sets:3,reps:15},
+  pec_deck:     {name:'Pec deck (butterfly)',cat:'push',note:'Rintalihas kontraktiossa',sets:3,reps:15},
+  lat_raise:    {name:'Sivunosto (käsipainot)',cat:'push',note:'Keskhartia',sets:4,reps:15},
+  front_raise:  {name:'Etunosto',cat:'push',note:'Etuhartia',sets:3,reps:12},
+  // ── PULL ──────────────────────────────────────────────
+  pullup_w:     {name:'Lisäpainoleuka (leveä)',cat:'pull',note:'Pääliike',sets:5,reps:4,rmKey:'pullRM',pct:.85},
+  pullup_n:     {name:'Lisäpainoleuka (kapea)',cat:'pull',note:'Hauikset enemmän',sets:5,reps:4,rmKey:'pullRM',pct:.85},
+  neg_pull:     {name:'Negatiiviset leuat 3s',cat:'pull',note:'3s lasku — eksentrinen',sets:3,reps:3},
+  lat:          {name:'Ylätalja (lat pulldown)',cat:'pull',note:'Sama liike kuin leuka',sets:4,reps:8},
+  lat_close:    {name:'Ylätalja kapea ote',cat:'pull',note:'Hauikset enemmän',sets:4,reps:10},
+  row_bar:      {name:'Vaakasoutu (tanko)',cat:'pull',note:'Yläselkä — pakollinen',sets:4,reps:8},
+  row_bar_rev:  {name:'Yläkulmavaakasoutu (tanko)',cat:'pull',note:'Ylä/kesk selkä — kulmasoutu',sets:4,reps:8},
+  row_db:       {name:'Vaakasoutu (käsipaino)',cat:'pull',note:'Unilateraalinen',sets:4,reps:10},
+  row_cable:    {name:'Istuen kaapelisouto',cat:'pull',note:'Jatkuva jännitys',sets:4,reps:12},
+  row_cable_hi: {name:'Kulmasoutu yläkaapeli',cat:'pull',note:'Yläselkä + takaolka',sets:3,reps:12},
+  chest_sup:    {name:'Chest supported row',cat:'pull',note:'Selkä tuettuna — ei huijaa',sets:4,reps:10},
+  tbar_row:     {name:'T-tanko soutu',cat:'pull',note:'Paksu selkä',sets:4,reps:8},
+  facepull:     {name:'Face pull (kaapeli)',cat:'pull',note:'Olkapään terveys',sets:3,reps:15},
+  band_pull:    {name:'Band pull-apart',cat:'pull',note:'Takaolka + kiertäjäkalvosin',sets:3,reps:20},
+  hammer:       {name:'Vasarakäänne',cat:'pull',note:'Brachialis + hauikset',sets:3,reps:12},
+  curl:         {name:'Biceps curl (tanko)',cat:'pull',note:'Hauikset',sets:3,reps:12},
+  curl_db:      {name:'Käsipaino curl',cat:'pull',note:'Unilateraalinen',sets:3,reps:12},
+  curl_incline: {name:'Vinopenkki curl',cat:'pull',note:'Pitkä pää bicepsistä',sets:3,reps:12},
+  preacher:     {name:'Preacher curl',cat:'pull',note:'Hauikset eristetty',sets:3,reps:12},
+  spider_curl:  {name:'Spider curl',cat:'pull',note:'Hauiksen huippu',sets:3,reps:12},
+  cable_curl:   {name:'Kaapeli curl',cat:'pull',note:'Jatkuva jännitys hauiksissa',sets:3,reps:15},
+  // ── LEGS ──────────────────────────────────────────────
+  squat:        {name:'Takakyykky',cat:'legs',note:'Pääliike',sets:5,reps:5},
+  front_sq:     {name:'Etukyykky',cat:'legs',note:'Nelipäinen enemmän',sets:5,reps:5},
+  goblet:       {name:'Goblet squat',cat:'legs',note:'Liikkuvuus + aktivointi',sets:3,reps:12},
+  hack_sq:      {name:'Hack kyykky',cat:'legs',note:'Nelipäinen eristetty',sets:4,reps:10},
+  lunge:        {name:'Askelkyykky käsipainoilla',cat:'legs',note:'10/jalka',sets:3,reps:10},
+  lunge_b:      {name:'Askelkyykky (tanko)',cat:'legs',note:'8/jalka',sets:3,reps:8},
+  lunge_rev:    {name:'Taaksepäin askelkyykky',cat:'legs',note:'Polvi säästää enemmän',sets:3,reps:10},
+  bulgarian:    {name:'Bulgarialainen kyykky',cat:'legs',note:'8/jalka — haastava yksillainen',sets:3,reps:8},
+  step_up:      {name:'Step up',cat:'legs',note:'Toiminnallinen jalkavoima',sets:3,reps:10},
+  rdl:          {name:'Romanian maastaveto',cat:'legs',note:'Takareisi',sets:4,reps:5},
+  dl_conv:      {name:'Konventionaalinen maastaveto',cat:'legs',note:'Koko takaketju',sets:4,reps:5},
+  dl_sumo:      {name:'Sumo maastaveto',cat:'legs',note:'Lähiadduktioit enemmän',sets:4,reps:5},
+  hipthrust:    {name:'Hip thrust (tanko)',cat:'legs',note:'Gluteus — kriittinen 400m:lle',sets:4,reps:10},
+  hip_single:   {name:'Yksijalk. hip thrust',cat:'legs',note:'Unilateraalinen gluteus',sets:3,reps:10},
+  nordic:       {name:'Nordic hamstring curl',cat:'legs',note:'PAKOLLINEN — loukkaantumisehkäisy',sets:3,reps:6},
+  nordic_iso:   {name:'Nordic curl isometrinen',cat:'legs',note:'Pidä 30s yläasennossa',sets:3,reps:3},
+  leg_curl_ly:  {name:'Leg curl (makuulaite)',cat:'legs',note:'Takareisi eristetty',sets:4,reps:12},
+  leg_curl_sit: {name:'Istuen leg curl',cat:'legs',note:'Pitkä lihasosa takareidestä',sets:4,reps:12},
+  leg_ext:      {name:'Leg extension',cat:'legs',note:'Nelipäinen eristetty',sets:3,reps:15},
+  legpress:     {name:'Legpress',cat:'legs',note:'Jalkavoima suuri volyymi',sets:4,reps:12},
+  adductor_m:   {name:'Adductor machine',cat:'legs',note:'Lähentäjät',sets:3,reps:15},
+  glute_cable:  {name:'Gluteus kaapelipotkut',cat:'legs',note:'Pakara eristetty',sets:3,reps:15},
+  calf_s:       {name:'Pohjelihas seisten',cat:'legs',note:'Gastrocnemius',sets:4,reps:15},
+  calf_sit:     {name:'Pohjelihas istuen (soleus)',cat:'legs',note:'Soleus — eri lihasosa',sets:4,reps:20},
+  calf_donkey:  {name:'Donkey calf raise',cat:'legs',note:'Maksimaalinen liikerata',sets:3,reps:15},
+  // ── CORE & ABS ────────────────────────────────────────
+  deadbug:       {name:'Kuollut kovakuori',cat:'core',note:'Stabiliteetti — selkäranka neutraalina',sets:3,reps:8},
+  plank:         {name:'Planke',cat:'core',note:'45s/sarja — pidä lantio suorana',sets:3,reps:1},
+  side_plank:    {name:'Sivuplanke',cat:'core',note:'30s/puoli — vinot vatsalihakset',sets:3,reps:1},
+  ab_wheel:      {name:'Ab wheel',cat:'core',note:'Etumaiset + stabiliteetti',sets:3,reps:8},
+  pallof:        {name:'Pallof press',cat:'core',note:'Anti-rotaatio — toiminnallinen',sets:3,reps:10},
+  crunch_cable:  {name:'Kaapelicrunch',cat:'core',note:'Etumaiset kuormalla',sets:4,reps:15},
+  hanging_knee:  {name:'Polvennostot roikkuen',cat:'core',note:'Alavatsa',sets:3,reps:12},
+  hanging_leg:   {name:'Jalkanostot roikkuen',cat:'core',note:'Alavatsa raskas',sets:3,reps:10},
+  toes_to_bar:   {name:'Toes to bar',cat:'core',note:'Koko vatsa + lonkankoukistajat',sets:3,reps:8},
+  russian_tw:    {name:'Russian twist',cat:'core',note:'Vinot vatsalihakset',sets:3,reps:20},
+  bicycle:       {name:'Polkupyörä (bicycle crunch)',cat:'core',note:'Vinojen vatsalihasten klassikko',sets:3,reps:20},
+  v_up:          {name:'V-nosto',cat:'core',note:'Koko vatsa',sets:3,reps:12},
+  leg_raise_ly:  {name:'Jalkanostot maaten',cat:'core',note:'Alavatsa — selkä lattiassa',sets:3,reps:15},
+  inchworm:      {name:'Mittarimato',cat:'core',note:'Dynaaminen vatsa + liikkuvuus',sets:3,reps:8},
+  hollow_rock:   {name:'Hollow body rock',cat:'core',note:'Koko vatsa jännitettynä',sets:3,reps:20},
+  dragon_flag:   {name:'Dragon flag',cat:'core',note:'Vaativa — koko vatsa+selkä',sets:3,reps:5},
+  l_sit:         {name:'L-istunta (L-sit)',cat:'core',note:'Isometrinen koko vatsa',sets:3,reps:1},
+  cup_swing:     {name:'Kuppikeinu (kettlebell)',cat:'core',note:'Dynaaminen core + lonkka',sets:3,reps:10},
+  med_slam:      {name:'Lääkepallonheitto',cat:'core',note:'Räjähtävä core + 400m',sets:3,reps:10},
+  back_ext:      {name:'Selän ojennus',cat:'core',note:'Alaselkä + takaketju',sets:3,reps:15},
+  ghr:           {name:'Glute-ham raise (GHR)',cat:'core',note:'Takareisi + pakara + selkä',sets:3,reps:8},
+  suitcase:      {name:'Suitcase carry',cat:'core',note:'Unilat. core + kantavuus — 20m/puoli',sets:3,reps:1},
+  farmers_walk:  {name:'Farmers walk',cat:'core',note:'Core + puristusvoima — 30m',sets:3,reps:1},
+};
+
+// Workout templates — core integroitu jokaiseen treeniin
+const TMPL = {
+  ya: ['bench','board','pullup_w','neg_pull','row_bar','dips','facepull','curl','ab_wheel','pallof'],
+  yb: ['bench','incline','pullup_n','lat','row_db','skull','facepull','hammer','hanging_knee','side_plank'],
+  aa: ['squat','rdl','lunge','nordic','hipthrust','calf_s','deadbug','leg_raise_ly'],
+  ab: ['front_sq','dl_conv','lunge_b','nordic','hipthrust','calf_sit','goblet','plank','inchworm'],
+};
+
+// Alternatives map
+const ALTS = {
+  bench:        ['bench_close','incline_bar','db_press','decline_bar','cable_fly'],
+  bench_close:  ['skull','tricep_pd','dips'],
+  board:        ['bench_close','incline_bar','dips'],
+  incline:      ['incline_bar','db_press','cable_fly','pec_deck'],
+  incline_bar:  ['incline','bench','db_press'],
+  dips:         ['skull','skull_db','tricep_pd','tricep_oh'],
+  skull:        ['skull_db','tricep_pd','tricep_oh','dips'],
+  skull_db:     ['skull','tricep_pd','tricep_oh'],
+  tricep_pd:    ['skull','tricep_oh','dips'],
+  ohp:          ['ohp_db','lat_raise'],
+  pullup_w:     ['lat','pullup_n','neg_pull','chest_sup'],
+  pullup_n:     ['lat_close','pullup_w','lat','preacher'],
+  neg_pull:     ['lat','lat_close','pullup_w'],
+  lat:          ['pullup_w','lat_close','row_cable'],
+  lat_close:    ['pullup_n','lat','row_cable'],
+  row_bar:      ['row_bar_rev','row_db','row_cable','chest_sup','tbar_row'],
+  row_bar_rev:  ['row_bar','chest_sup','tbar_row','row_cable_hi'],
+  row_db:       ['row_bar','chest_sup','row_cable'],
+  row_cable:    ['row_db','chest_sup','row_cable_hi'],
+  row_cable_hi: ['facepull','row_bar_rev','band_pull'],
+  chest_sup:    ['row_bar','tbar_row','row_db'],
+  tbar_row:     ['row_bar','chest_sup'],
+  facepull:     ['band_pull','row_cable_hi'],
+  curl:         ['curl_db','preacher','spider_curl','cable_curl'],
+  curl_db:      ['curl','curl_incline','preacher'],
+  hammer:       ['curl','curl_db','cable_curl'],
+  preacher:     ['curl','spider_curl','cable_curl'],
+  spider_curl:  ['preacher','curl_incline','cable_curl'],
+  squat:        ['front_sq','hack_sq','goblet','legpress','bulgarian'],
+  front_sq:     ['squat','hack_sq','goblet','legpress'],
+  goblet:       ['squat','front_sq','hack_sq'],
+  lunge:        ['lunge_b','lunge_rev','bulgarian','step_up','legpress'],
+  lunge_b:      ['lunge','lunge_rev','bulgarian','step_up'],
+  lunge_rev:    ['lunge','lunge_b','step_up'],
+  bulgarian:    ['lunge','lunge_b','step_up'],
+  rdl:          ['dl_conv','dl_sumo','leg_curl_ly','nordic'],
+  dl_conv:      ['rdl','dl_sumo','leg_curl_ly'],
+  dl_sumo:      ['dl_conv','rdl'],
+  hipthrust:    ['hip_single','glute_cable','legpress'],
+  hip_single:   ['hipthrust','glute_cable'],
+  nordic:       ['nordic_iso','leg_curl_ly','leg_curl_sit','rdl'],
+  nordic_iso:   ['nordic','leg_curl_ly'],
+  leg_curl_ly:  ['nordic','leg_curl_sit','rdl'],
+  leg_curl_sit: ['leg_curl_ly','nordic'],
+  leg_ext:      ['legpress','hack_sq'],
+  legpress:     ['squat','hack_sq','leg_ext'],
+  calf_s:       ['calf_sit','calf_donkey'],
+  calf_sit:     ['calf_s','calf_donkey'],
+  deadbug:      ['plank','ab_wheel','pallof','hollow_rock'],
+  plank:        ['deadbug','side_plank','ab_wheel'],
+  ab_wheel:     ['deadbug','crunch_cable','hanging_knee','dragon_flag'],
+  pallof:       ['deadbug','side_plank','med_rot'],
+  hanging_knee: ['hanging_leg','toes_to_bar','leg_raise','v_up'],
+  hanging_leg:  ['toes_to_bar','hanging_knee','dragon_flag'],
+  toes_to_bar:  ['hanging_leg','hanging_knee','dragon_flag'],
+  crunch_cable: ['sit_up','v_up','crunch_cable'],
+  russian_tw:   ['med_rot','pallof','side_plank'],
+  med_slam:     ['med_rot','cup_swing'],
+  inchworm:     ['deadbug','ab_wheel'],
+  cup_swing:    ['med_slam','med_rot'],
+  dragon_flag:  ['ab_wheel','hanging_leg','l_sit'],
+  hollow_rock:  ['deadbug','flutter_kick','v_up'],
+  v_up:         ['leg_raise','sit_up','hanging_knee'],
+  leg_raise:    ['hanging_knee','v_up','flutter_kick'],
+  l_sit:        ['dragon_flag','hanging_leg'],
+  flutter_kick: ['leg_raise','hollow_rock'],
+};
+
+// ══ SMART NEXT SESSION ENGINE ══════════════════════════
+// Program schedule: week → [Mon,Tue,Wed,Thu,Fri,Sat,Sun]
+// Returns the next training session to do based on history
+function getNextSession() {
+  const w = wks(), dl = isDL(w);
+
+  // Build expected schedule for this week
+  // Mon=voima ya/yb, Tue=juoksu, Wed=voima aa/ab, Thu=juoksu aerob, Fri=voima ya/yb, Sat=juoksu, Sun=rest
+  const blockNum = Math.floor((w-1)/4); // 0-indexed 4-week block
+  const useB = blockNum % 2 === 1; // rotate template B every other block
+  const upperKey = useB ? 'yb' : 'ya';
+  const lowerKey = useB ? 'ab' : 'aa';
+
+  const weekSchedule = [
+    null,                                          // Sun
+    { type:'voima', key: upperKey, label:'Voima — Yläkroppa', short:'💪 YLÄ' },
+    { type:'juoksu', key:'intervalli', label:'Juoksu — Intervalli', short:'🏃 INT' },
+    { type:'voima', key: lowerKey, label:'Voima — Alakroppa', short:'🦵 ALA' },
+    { type:'juoksu', key:'aerobinen', label:'Juoksu — Aerobinen', short:'🟢 AER' },
+    { type:'voima', key: upperKey, label: w>=17?'Voima — Yläkroppa (Maksimivoima)':'Voima — Yläkroppa', short:'💪 YLÄ' },
+    { type:'juoksu', key: w>=17?'kilpailuvauhti': w>=5?'nopeus':'intervalli', label: w>=17?'Juoksu — Kilpailuvauhti': w>=5?'Juoksu — Nopeus':'Juoksu — Intervalli', short: w>=17?'🏆 KP':'⚡ NOP' },
+  ];
+
+  // Get sessions this week
+  const mon = new Date();
+  const d = mon.getDay();
+  mon.setDate(mon.getDate() - (d === 0 ? 6 : d - 1));
+  const weekDates = Array.from({length:7}, (_,i) => {
+    const dd = new Date(mon); dd.setDate(mon.getDate()+i);
+    return dd.toISOString().split('T')[0];
+  });
+
+  // Find which sessions this week are done
+  const doneDays = new Set();
+  D.sessions.forEach(s => {
+    const idx = weekDates.indexOf(s.date);
+    if (idx >= 0) doneDays.add(idx+1); // 1=Mon...7=Sun
+  });
+
+  // Find missed sessions (past days this week not done, excluding rest days)
+  const todayDOW2 = new Date().getDay() || 7; // 1=Mon...7=Sun
+  const missed = [];
+  for (let i = 1; i < todayDOW2; i++) {
+    const sess = weekSchedule[i === 7 ? 0 : i];
+    if (sess && !doneDays.has(i)) missed.push({ dow: i, ...sess, missed: true });
+  }
+
+  // Today's planned session
+  const todaySess = weekSchedule[todayDOW2 === 7 ? 0 : todayDOW2];
+
+  // If deload, override
+  if (dl) return {
+    type: 'deload', label: 'DELOAD-VIIKKO', short: '🔄 DL',
+    desc: `Viikko ${w} — Painot -15%, sarjat 3×5`,
+    missed, week: w, phase: ph(w)
+  };
+
+  // If there are missed sessions, suggest doing the most recent missed one first
+  if (missed.length > 0) {
+    const m = missed[missed.length-1]; // most recent missed
+    return { ...m, week: w, phase: ph(w),
+      desc: `⚠️ Jäänyt väliin — ${['','Ma','Ti','Ke','To','Pe','La','Su'][m.dow]}`, missed };
+  }
+
+  // Otherwise return today's session
+  if (todaySess) return { ...todaySess, week: w, phase: ph(w), desc: '', missed: [] };
+
+  // Sunday / rest — but show next weekday's session
+  const nextSess = weekSchedule[1]; // Monday = next session
+  return { type:'rest', label:'Lepo', short:'😴 LEP', desc:'Palautumispäivä — huomenna: '+(nextSess?.label||'Yläkroppa'), week: w, phase: ph(w), missed: [], nextDay: nextSess };
+}
+
+// Returns upcoming sessions for the next 7 days
+function getUpcomingSessions() {
+  const w = wks(), dl = isDL(w);
+  const blockNum = Math.floor((w-1)/4);
+  const useB = blockNum % 2 === 1;
+  const upperKey = useB ? 'yb' : 'ya';
+  const lowerKey = useB ? 'ab' : 'aa';
+  const labels = {
+    1:'💪 Yläkroppa', 2:'🏃 Intervalli', 3:'🦵 Alakroppa',
+    4:'🟢 Aerobinen', 5:'💪 Yläkroppa', 6: w>=5?'⚡ Nopeus':'🏃 Intervalli', 0:'😴 Lepo'
+  };
+  const keys = {1:upperKey,2:'intervalli',3:lowerKey,4:'aerobinen',5:upperKey,6:'nopeus',0:null};
+  const result = [];
+  for (let i=0; i<7; i++) {
+    const d = new Date(); d.setDate(d.getDate()+i);
+    const dow = d.getDay();
+    const ds = d.toISOString().split('T')[0];
+    const dayName = ['Su','Ma','Ti','Ke','To','Pe','La'][dow];
+    const label = dl ? '🔄 Deload' : (labels[dow]||'😴 Lepo');
+    const key = dl ? null : keys[dow];
+    const done = D.sessions.some(s=>s.date===ds);
+    result.push({ date:ds, dayName, label, key, done, isToday:i===0 });
+  }
+  return result;
+}
+
+// ══ EXERCISES ═════════════════════════════════════════
+// Build EX from TMPL + BANK for backwards compat
+const EX = {};
+Object.entries(TMPL).forEach(([key, ids]) => {
+  EX[key] = ids.map(id => ({ id, ...BANK[id] })).filter(Boolean);
+});
+
+// ══ WORKOUT STATE ═════════════════════════════════════
+// ── PRE-WORKOUT CONTEXT ──────────────────────────────
+function renderPreWorkout() {
+  const el = document.getElementById('preworkout-card');
+  if (!el) return;
+  const ready = calcReadiness();
+  const acwr = calcACWR();
+  const hrv = getHRVStatus();
+  const type = document.getElementById('v-ty')?.value || 'ya';
+  const exs = EX[type] || [];
+  // Get top 4 main exercises with suggestions
+  const mainExs = exs.filter(ex => ex.rmKey || ['squat','hipthrust','rdl','dl_conv','nordic'].includes(ex.id)).slice(0,4);
+
+  el.innerHTML = `<div class="card" style="background:linear-gradient(135deg,var(--acd),#0f172a);border-color:var(--ac);padding:13px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;color:var(--ac)">⚡ TREENINÄKYMÄ</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span style="font-size:11px;padding:3px 8px;border-radius:6px;background:var(--s2);color:${ready.color};font-weight:700">Valmius ${ready.score}</span>
+        ${acwr.ratio?`<span style="font-size:11px;padding:3px 8px;border-radius:6px;background:var(--s2);color:${acwr.color};font-weight:700">ACWR ${acwr.ratio}</span>`:''}
+      </div>
+    </div>
+    ${hrv.status==='bad'?`<div class="ab ad" style="margin-bottom:8px"><span class="ic">💓</span><span style="font-size:11px">HRV alhainen — kevennä painoja ${Math.abs(ready.rpeAdj)} RPE-pistettä</span></div>`:''}
+    ${ready.zone==='peak'?`<div class="ab ag" style="margin-bottom:8px"><span class="ic">🔥</span><span style="font-size:11px">Huippuvalmiustila — tänään voit antaa kaikkensa</span></div>`:''}
+    <div style="font-size:10px;color:var(--mu);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px">Tämän treenin painoehdotukset</div>
+    ${mainExs.map(ex=>{
+      const sug=suggest(ex);
+      if(!sug)return '';
+      const cls=sug.dir==='up'?'var(--gn)':sug.dir==='down'?'var(--rd)':'var(--mu)';
+      const arrow=sug.dir==='up'?'↑':sug.dir==='down'?'↓':'→';
+      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.08)">
+        <span style="font-size:12px;font-weight:600">${ex.name.replace('★ ','')}</span>
+        <span style="font-family:'DM Mono',monospace;font-size:12px;color:${cls};font-weight:700">${arrow} ${sug.weight}kg</span>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+// wvData: array of { id, name, sets, rpe, note, swapped }
+// wvSets[exIdx]: array of { weight, reps, success }
+let wvData = [];   // exercise list for current session
+let wvSets = {};   // sets keyed by exercise index
+let wvRPE  = {};   // rpe keyed by exercise index
+let wvNotes = {};  // notes keyed by exercise index
+
+function saveNotesFromDOM() {
+  wvData.forEach((_, ei) => {
+    const el = document.getElementById('wvnote-' + ei);
+    if (el) wvNotes[ei] = el.value;
+  });
+}
+
+function buildWorkoutView(force) {
+  // Don't reset if a workout is already in progress (unless forced)
+  const hasProgress = wvData.length > 0 && Object.values(wvSets).flat().some(s => s.success !== null);
+  if (hasProgress && !force) {
+    renderWorkoutView(); // just re-render current state
+    return;
+  }
+  const type = document.getElementById('v-ty').value;
+  const exs = EX[type] || [];
+  wvData = exs.map((ex, i) => {
+    const sug = suggest(ex);
+    const sw = sug ? sug.weight : (ex.pct ? Math.round(D.settings[ex.rmKey||'benchRM']*ex.pct/2.5)*2.5 : 60);
+    wvSets[i] = Array.from({length: ex.sets}, () => ({ weight: sw, reps: ex.reps, success: null }));
+    wvRPE[i] = null;
+    return { ...ex, note2:'' };
+  });
+  wvNotes = {};
+  renderWorkoutView();
+}
+
+function renderWorkoutView() {
+  const container = document.getElementById('workout-view');
+  if (!container) return;
+
+  // Progress bar
+  const totalSets = Object.values(wvSets).flat().length;
+  const doneSets = Object.values(wvSets).flat().filter(s => s.success !== null).length;
+  const pct = totalSets ? Math.round(doneSets/totalSets*100) : 0;
+
+  let html = `<div class="wv-prog" style="margin-bottom:10px"><div class="wv-prog-fill" style="width:${pct}%"></div></div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--mu);margin-bottom:10px">
+      <span>${doneSets}/${totalSets} sarjaa tehty</span>
+      <span style="color:${pct===100?'var(--gn)':pct>50?'var(--yw)':'var(--mu)'}">${pct}%</span>
+    </div>`;
+
+  wvData.forEach((ex, ei) => {
+    const sets = wvSets[ei] || [];
+    const okCount = sets.filter(s => s.success === true).length;
+    const doneCount = sets.filter(s => s.success !== null).length;
+    const allOk = okCount === sets.length && sets.length > 0;
+    const partial = doneCount > 0 && !allOk;
+    const sug = suggest(ex);
+    const sugCls = sug ? (sug.dir==='up'?'su':sug.dir==='down'?'sd':'ss') : '';
+    const exCls = allOk ? 'wv-done' : partial ? 'wv-partial' : '';
+    const isOpen = !allOk; // auto-close completed exercises
+
+    html += `<div class="wv-ex ${exCls}" id="wvex-${ei}">
+      <div class="wv-header" onclick="toggleWvEx(${ei})">
+        <div class="wv-num">${allOk ? '✓' : ei+1}</div>
+        <div style="flex:1;min-width:0">
+          <div class="wv-exname">${ex.name.replace('★ ','')}</div>
+          <div class="wv-meta">${ex.sets}×${ex.reps}${ex.note?' · '+ex.note:''} ${wvRPE[ei]?'· RPE '+wvRPE[ei]:''}</div>
+        </div>
+        ${sug ? `<div class="wv-sug ${sugCls}">${sug.text.split('—')[0].trim()}</div>` : ''}
+        <div class="wv-chev ${isOpen?'open':''}" id="wvchev-${ei}">›</div>
+      </div>
+      <div class="wv-body ${isOpen?'open':''}" id="wvbody-${ei}">
+        ${sets.map((s, si) => wvSetRow(ei, si, s)).join('')}
+        <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
+          <button class="btn bsm bs" onclick="wvAddSet(${ei})" style="font-size:11px;padding:6px 10px">+ Sarja</button>
+          <button class="btn bsm bs" onclick="wvSwapEx(${ei})" style="font-size:11px;padding:6px 10px;border-color:var(--yw);color:var(--yw)">🔄 Vaihda</button>
+          ${sets.length>1?`<button class="btn bsm bs" onclick="wvRemoveSet(${ei})" style="font-size:11px;padding:6px 10px;color:var(--mu)">− Sarja</button>`:''}
+        </div>
+        <div style="margin-top:8px">
+          <div style="font-size:10px;color:var(--mu);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">RPE tästä liikkeestä</div>
+          <div class="wv-rpe">${[6,7,8,9,10].map(v=>`<button class="wvrb ${wvRPE[ei]===v?'r'+v:''}" onclick="wvSetRPE(${ei},${v})">${v}<span class="rd2">${{6:'Kevyt',7:'Lähes',8:'2jälj',9:'1jälj',10:'MAX'}[v]}</span></button>`).join('')}</div>
+        </div>
+        <div style="margin-top:6px">
+          <textarea class="fta" id="wvnote-${ei}" placeholder="Huomio, kipu, tekniikka..." style="min-height:50px;font-size:12px" onchange="wvNotes[${ei}]=this.value" oninput="wvNotes[${ei}]=this.value">${wvNotes[ei]||''}</textarea>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+function wvSetRow(ei, si, s) {
+  const ok = s.success === true, fail = s.success === false;
+  // Portrait-friendly: Sarja# + ✓/✗ napit ylhäällä, paino ja toistot alhaalla isommilla napeilla
+  return `<div class="wvsr ${ok?'r-ok':fail?'r-fail':''}" id="wvsr-${ei}-${si}" style="display:block;padding:8px 8px 6px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <div class="wvsn ${ok?'done':''}" style="width:auto;height:auto;font-size:12px;font-weight:700;color:${ok?'var(--gn)':fail?'var(--rd)':'var(--mu)'}">Sarja ${si+1}</div>
+      <div class="srbx" style="gap:6px">
+        <button class="srok ${ok?'on':''}" onclick="wvResult(${ei},${si},true)" style="width:52px;height:40px;font-size:18px;border-radius:9px">✓</button>
+        <button class="srno ${fail?'on':''}" onclick="wvResult(${ei},${si},false)" style="width:52px;height:40px;font-size:18px;border-radius:9px">✗</button>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div>
+        <div style="font-size:9px;color:var(--mu);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Paino (kg)</div>
+        <div class="niw" style="height:48px">
+          <button class="nb" style="width:44px;height:48px;font-size:22px;font-weight:300" onclick="wvAdjSet(${ei},${si},'weight',-2.5)">−</button>
+          <input type="number" class="nd" id="wvsw-${ei}-${si}" value="${s.weight}" step="2.5"
+            oninput="wvUpdSet(${ei},${si},'weight',this.value)"
+            style="font-size:20px;height:48px;font-weight:600;min-width:0">
+          <button class="nb" style="width:44px;height:48px;font-size:22px;font-weight:300" onclick="wvAdjSet(${ei},${si},'weight',2.5)">+</button>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:9px;color:var(--mu);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Toistot</div>
+        <div class="niw" style="height:48px">
+          <button class="nb" style="width:44px;height:48px;font-size:22px;font-weight:300" onclick="wvAdjSet(${ei},${si},'reps',-1)">−</button>
+          <input type="number" class="nd" id="wvsr-i-${ei}-${si}" value="${s.reps}"
+            oninput="wvUpdSet(${ei},${si},'reps',this.value)"
+            style="font-size:20px;height:48px;font-weight:600;min-width:0">
+          <button class="nb" style="width:44px;height:48px;font-size:22px;font-weight:300" onclick="wvAdjSet(${ei},${si},'reps',1)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── REST TIMER ─────────────────────────────────────────
+let restTimerInterval = null;
+let restTimerEl = null;
+
+function startRestTimer(seconds) {
+  // Remove existing timer
+  document.getElementById('rest-timer-banner')?.remove();
+  if (restTimerInterval) clearInterval(restTimerInterval);
+
+  let remaining = seconds;
+  const banner = document.createElement('div');
+  banner.id = 'rest-timer-banner';
+  banner.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:var(--s2);border-top:2px solid var(--ac);padding:12px 16px;z-index:250;display:flex;align-items:center;justify-content:space-between;gap:12px';
+  banner.innerHTML = `
+    <div style="flex:1">
+      <div style="font-size:10px;color:var(--mu);font-weight:600;text-transform:uppercase;letter-spacing:.5px">Palautus</div>
+      <div id="rest-timer-val" style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--ac);line-height:1">${remaining}s</div>
+      <div style="height:3px;background:var(--bd);border-radius:99px;margin-top:4px;overflow:hidden">
+        <div id="rest-timer-bar" style="height:100%;background:var(--ac);border-radius:99px;width:100%;transition:width 1s linear"></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-shrink:0">
+      <button onclick="addRestTime(30)" style="padding:8px 12px;background:var(--s2);border:1px solid var(--bd);border-radius:8px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer">+30s</button>
+      <button onclick="stopRestTimer()" style="padding:8px 14px;background:var(--gn);border:none;border-radius:8px;color:#000;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer">Valmis</button>
+    </div>`;
+  document.body.appendChild(banner);
+
+  const total = seconds;
+  restTimerInterval = setInterval(() => {
+    remaining--;
+    const valEl = document.getElementById('rest-timer-val');
+    const barEl = document.getElementById('rest-timer-bar');
+    if (valEl) valEl.textContent = remaining + 's';
+    if (barEl) barEl.style.width = (remaining / total * 100) + '%';
+    if (remaining <= 3 && valEl) valEl.style.color = 'var(--rd)';
+    if (remaining <= 0) {
+      stopRestTimer();
+      // Vibrate if supported
+      if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+      snk('⏱ Palautus ohi — seuraava sarja!');
+    }
+  }, 1000);
+}
+
+function addRestTime(s) {
+  // Get current remaining from display and add
+  const el = document.getElementById('rest-timer-val');
+  if (!el) return;
+  const cur = parseInt(el.textContent) || 0;
+  if (restTimerInterval) clearInterval(restTimerInterval);
+  startRestTimer(cur + s);
+}
+
+function stopRestTimer() {
+  if (restTimerInterval) { clearInterval(restTimerInterval); restTimerInterval = null; }
+  document.getElementById('rest-timer-banner')?.remove();
+}
+
+function wvResult(ei, si, success) {
+  saveNotesFromDOM();
+  wvSets[ei][si].success = wvSets[ei][si].success === success ? null : success;
+
+  // Start rest timer when a set is marked (✓ or ✗)
+  if (wvSets[ei][si].success !== null) {
+    // Default rest: 3 min for main lifts (★), 90s for accessories
+    const isMain = wvData[ei]?.name?.includes('★') || ['bench','squat','pullup_w','pullup_n','hipthrust','rdl','dl_conv'].includes(wvData[ei]?.id);
+    startRestTimer(isMain ? 180 : 90);
+  } else {
+    stopRestTimer();
+  }
+
+  // Auto-close exercise when all sets done and no failures
+  const sets = wvSets[ei];
+  const allDone = sets.every(s => s.success !== null);
+  if (allDone) {
+    const anyFail = sets.some(s => s.success === false);
+    if (!anyFail) {
+      setTimeout(() => {
+        const body = document.getElementById(`wvbody-${ei}`);
+        const chev = document.getElementById(`wvchev-${ei}`);
+        if (body) { body.classList.remove('open'); if(chev) chev.classList.remove('open'); }
+      }, 500);
+    }
+  }
+  renderWorkoutView();
+}
+
+function wvAdjSet(ei, si, field, delta) {
+  if (!wvSets[ei] || !wvSets[ei][si]) return;
+  saveNotesFromDOM();
+  wvSets[ei][si][field] = Math.max(0, (wvSets[ei][si][field]||0) + delta);
+  renderWorkoutView();
+}
+
+function wvUpdSet(ei, si, field, val) {
+  if (!wvSets[ei] || !wvSets[ei][si]) return;
+  wvSets[ei][si][field] = parseFloat(val) || 0;
+}
+
+function wvSetRPE(ei, val) {
+  saveNotesFromDOM();
+  wvRPE[ei] = wvRPE[ei] === val ? null : val;
+  renderWorkoutView();
+}
+
+function wvAddSet(ei) {
+  saveNotesFromDOM();
+  const sets = wvSets[ei];
+  const last = sets[sets.length-1] || { weight:60, reps:5 };
+  wvSets[ei].push({ weight: last.weight, reps: last.reps, success: null });
+  renderWorkoutView();
+}
+
+function wvRemoveSet(ei) {
+  if (wvSets[ei].length > 1) { saveNotesFromDOM(); wvSets[ei].pop(); renderWorkoutView(); }
+}
+
+function toggleWvEx(ei) {
+  const body = document.getElementById(`wvbody-${ei}`);
+  const chev = document.getElementById(`wvchev-${ei}`);
+  if (!body) return;
+  body.classList.toggle('open');
+  if (chev) chev.classList.toggle('open');
+}
+
+function wvSwapEx(ei) {
+  const ex = wvData[ei];
+  const alts = (ALTS[ex.id]||[]).map(id=>({id,...BANK[id]})).filter(Boolean);
+  const sameCat = Object.entries(BANK).filter(([id,e])=>e.cat===BANK[ex.id]?.cat&&id!==ex.id&&!alts.find(a=>a.id===id)).map(([id,e])=>({id,...e}));
+  const overlay = document.createElement('div');
+  overlay.className = 'sum-ov';
+  overlay.id = 'swap-ov';
+  overlay.innerHTML = `<div class="sum-sh">
+    <div class="sum-handle"></div>
+    <div class="sum-ttl" style="font-size:16px">🔄 VAIHDA: ${ex.name.replace('★ ','')}</div>
+    <div style="font-size:11px;color:var(--mu);margin-bottom:10px">Suositellut vaihtoehdot</div>
+    ${alts.map(a=>{const s=suggest(a);return `<div onclick="wvDoSwap(${ei},'${a.id}')" style="padding:11px;background:var(--s2);border:1px solid var(--bd);border-radius:10px;margin-bottom:7px;cursor:pointer">
+      <div style="font-weight:600;font-size:13px">${a.name}</div>
+      <div style="font-size:10px;color:var(--mu);margin-top:2px">${a.sets||3}×${a.reps||8}${a.note?' · '+a.note:''}</div>
+      ${s?`<div style="font-size:10px;padding:2px 6px;border-radius:4px;display:inline-block;margin-top:3px;background:var(--gnd);color:var(--gn)">${s.text.split('—')[0].trim()}</div>`:''}
+    </div>`;}).join('')}
+    ${sameCat.length?`<div style="font-size:11px;color:var(--mu);margin:8px 0 6px">Muut vaihtoehdot</div>
+    ${sameCat.map(a=>`<div onclick="wvDoSwap(${ei},'${a.id}')" style="padding:10px;background:var(--s2);border:1px solid var(--bd);border-radius:10px;margin-bottom:6px;cursor:pointer"><div style="font-weight:600;font-size:12px">${a.name}</div><div style="font-size:10px;color:var(--mu)">${a.sets||3}×${a.reps||8}</div></div>`).join('')}`:''}
+    <button class="btn bs" onclick="document.getElementById('swap-ov').remove()" style="margin-top:6px">Peruuta</button>
+  </div>`;
+  document.body.appendChild(overlay);
+}
+
+function wvDoSwap(ei, newId) {
+  document.getElementById('swap-ov')?.remove();
+  const newEx = { id:newId, ...BANK[newId] };
+  if (!newEx.name) return;
+  saveNotesFromDOM();
+  wvData[ei] = newEx;
+  // Reset sets for new exercise
+  const sug = suggest(newEx);
+  const sw = sug ? sug.weight : 60;
+  wvSets[ei] = Array.from({length: newEx.sets||3}, () => ({ weight:sw, reps:newEx.reps||8, success:null }));
+  wvRPE[ei] = null;
+  wvNotes[ei] = '';
+  renderWorkoutView();
+  snk(`✓ Vaihdettu: ${newEx.name}`);
+}
+
+function collectWorkoutData() {
+  // Collect data from wvData + wvSets + wvRPE into savedExs format
+  const collected = [];
+  wvData.forEach((ex, ei) => {
+    const sets = wvSets[ei] || [];
+    const note = wvNotes[ei] || document.getElementById('wvnote-'+ei)?.value || '';
+    const rpeVal = wvRPE[ei];
+    const maxW = sets.length ? Math.max(...sets.map(s=>s.weight||0)) : 0;
+    // Only include if any set has been marked
+    if (sets.some(s => s.success !== null)) {
+      collected.push({ id:ex.id, name:ex.name, sets, rpe:rpeVal||8, weight:maxW, note });
+      // Update bests
+      if (ex.id === 'bench') { const e=maxW*(1+sets.reduce((a,s)=>a+(s.reps||0),0)/(30*Math.max(sets.length,1))); if(!D.bests.bench||e>D.bests.bench)D.bests.bench=Math.round(e); }
+      if (ex.id && ex.id.startsWith('pullup')) { if(!D.bests.pull||maxW>D.bests.pull)D.bests.pull=maxW; }
+    }
+  });
+  return collected;
+}
+
+async function saveVoima() {
+  const collected = collectWorkoutData();
+  if (!collected.length) { snk('Merkitse ensin sarjoja ✓ tai ✗!'); return; }
+  savedExs = collected;
+  showSessionSummary();
+}
+
+// ── loadExs kept for compatibility (called from startRecommended etc)
+function loadExs() { buildWorkoutView(); }
+function closeEx() {}   // no-op in new view
+function openEx() {}    // no-op in new view
+
+function showSessionSummary(){
+  const exs = savedExs;
+  const totalSets = exs.reduce((a,e)=>a+(e.sets?.length||0),0);
+  const okSets = exs.reduce((a,e)=>a+(e.sets?.filter(s=>s.success===true).length||0),0);
+  const avgRPE = Math.round(exs.reduce((a,e)=>a+(e.rpe||7),0)/exs.length);
+  const sleep = parseFloat(document.getElementById('v-sl').value)||7.5;
+
+  const exRows = exs.map(ex => {
+    const maxW = ex.weight||0;
+    const ok = ex.sets?.filter(s=>s.success===true).length||0;
+    const tot = ex.sets?.length||0;
+    const last = lastPerf(ex.id);
+    const diff = last ? (maxW - (last.weight||0)) : 0;
+    const diffHTML = diff>0 ? `<span style="color:var(--gn);font-size:10px">↑ +${diff}kg</span>` : diff<0 ? `<span style="color:var(--rd);font-size:10px">↓ ${diff}kg</span>` : '';
+    return `<div class="sum-row">
+      <div class="sum-left">
+        <div class="sum-ex">${ex.name.replace('★ ','')}</div>
+        <div class="sum-detail">${ok}/${tot} sarjaa ✓ · RPE ${ex.rpe}</div>
+      </div>
+      <div class="sum-right">
+        <div class="sum-kg">${maxW}<span style="font-size:13px;font-family:'DM Sans',sans-serif">kg</span></div>
+        <div class="sum-sets">${diffHTML}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const perf = okSets/totalSets;
+  const perfColor = perf>=.9?'var(--gn)':perf>=.7?'var(--yw)':'var(--rd)';
+  const perfLabel = perf>=.9?'Erinomainen':perf>=.7?'Hyvä':'Parannettavaa';
+
+  // Training feedback based on expectations
+  const ready = calcReadiness();
+  const acwr = calcACWR();
+  let feedbacks = [];
+  if(perf>=0.9 && avgRPE<=8) feedbacks.push({t:'ag',ic:'🔥',m:'Loistava treeni! Kaikki sarjat onnistui hyvällä RPE:llä. Jatka samaan malliin.'});
+  else if(perf>=0.9 && avgRPE>=9) feedbacks.push({t:'ai',ic:'💪',m:'Kaikki sarjat onnistui mutta RPE oli korkea. Seuraavalle kerralle sama paino — ei nosteta vielä.'});
+  else if(perf<0.7) feedbacks.push({t:'aw',ic:'⚠️',m:'Useampi sarja epäonnistui. Tarkista: onko paino liian korkea, uni riittävää tai tuleeko deload?'});
+  if(sleep<6.5) feedbacks.push({t:'ad',ic:'😴',m:'Uni alle 6.5h — tämä selittää heikkoa suoritusta. Priorisoi yöunet ensi yönä.'});
+  if(acwr.zone==='high'||acwr.zone==='danger') feedbacks.push({t:'aw',ic:'📊',m:'ACWR '+acwr.ratio+' on korkea — tulevan viikon treeniä kannattaa keventää.'});
+  if(ready.zone==='peak'&&perf>=0.9) feedbacks.push({t:'ag',ic:'⚡',m:'Valmiustila oli huipussa ja treeni meni erinomaisesti — hyvä päivä testata uusi maksimi!'});
+  // Compare to expected progress
+  const benchEx = exs.find(e=>e.id==='bench');
+  if(benchEx) {
+    const expW = expAt(EXP.bench, wks());
+    const diff = benchEx.weight - expW;
+    if(diff>=5) feedbacks.push({t:'ag',ic:'📈',m:'Penkki '+benchEx.weight+'kg — '+Math.abs(diff).toFixed(0)+'kg edellä aikataulusta. Erinomainen!'});
+    else if(diff<=-5) feedbacks.push({t:'ai',ic:'📉',m:'Penkki '+benchEx.weight+'kg — '+Math.abs(diff).toFixed(0)+'kg jäljessä aikataulusta. Tarkista progressio.'});
+  }
+  const feedbackHTML = feedbacks.length ? '<div style="border-top:1px solid var(--bd);padding-top:12px;margin-top:4px">'+
+    feedbacks.map(f=>'<div class="ab '+f.t+'" style="margin-bottom:6px"><span class="ic">'+f.ic+'</span><span>'+f.m+'</span></div>').join('')+'</div>' : '';
+
+  const overlay = document.createElement('div');
+  overlay.className = 'sum-ov';
+  overlay.id = 'sum-modal';
+  overlay.innerHTML = `<div class="sum-sh">
+    <div class="sum-handle"></div>
+    <div class="sum-ttl">✅ TREENIYHTEENVETO</div>
+    <div class="sum-sub">${document.getElementById('v-ty').options[document.getElementById('v-ty').selectedIndex].text} · ${document.getElementById('v-dt').value||td()}</div>
+    <div class="sum-score">
+      <div class="sum-sc-box"><div class="sum-sc-val" style="color:${perfColor}">${Math.round(perf*100)}%</div><div class="sum-sc-lbl">Sarjat ✓</div></div>
+      <div class="sum-sc-box"><div class="sum-sc-val" style="color:${avgRPE>=9?'var(--rd)':avgRPE>=8?'var(--yw)':'var(--gn)'}">${avgRPE}</div><div class="sum-sc-lbl">Keskim. RPE</div></div>
+      <div class="sum-sc-box"><div class="sum-sc-val" style="color:${sleep<6?'var(--rd)':sleep>=7.5?'var(--gn)':'var(--yw)'}">${sleep}h</div><div class="sum-sc-lbl">Uni</div></div>
+    </div>
+    ${exRows}
+    ${feedbackHTML}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px">
+      <button class="btn bs" onclick="document.getElementById('sum-modal').remove()">← Takaisin</button>
+      <button class="btn bg" onclick="confirmSaveVoima()">💾 Tallenna treeni</button>
+    </div>
+  </div>`;
+  document.body.appendChild(overlay);
+}
+
+async function confirmSaveVoima(){
+  document.getElementById('sum-modal')?.remove();
+  D.sessions.push({
+    id:Date.now(),type:'voima',
+    date:document.getElementById('v-dt').value||td(),
+    exercises:savedExs,
+    sleep:parseFloat(document.getElementById('v-sl').value)||7.5,
+    rpe:Math.round(savedExs.reduce((a,e)=>a+(e.rpe||7),0)/savedExs.length),
+    label:document.getElementById('v-ty').options[document.getElementById('v-ty').selectedIndex].text,
+  });
+  await cSave();
+  savedExs=[]; wvData=[]; wvSets={}; wvRPE={}; wvNotes={};
+  buildWorkoutView(true);
+  snk('✅ Voimatreeni tallennettu!');
+  setTimeout(()=>T('dash',document.querySelector('.tb')),700);
+}
+
+// ══ RUN ══════════════════════════════════════════════
+function updRunForm(){
+  const type=document.getElementById('r-ty').value,c=document.getElementById('r-sp');
+  if(type==='intervalli'){c.innerHTML=`<div class="fg"><label class="fl">Matka/sarja</label><select class="fs" id="i-di"><option>200m</option><option>300m</option><option>400m</option><option>500m</option></select></div><div class="fg"><label class="fl">Sarjoja</label><div class="niw"><button class="nb" onclick="adj('i-n',-1)">−</button><input type="number" class="nd" id="i-n" value="6" min="1" max="15"><button class="nb" onclick="adj('i-n',1)">+</button></div></div><div class="fg"><label class="fl">Paras sarja-aika (s)</label><div class="niw"><button class="nb" onclick="adj('i-b',-0.5)">−</button><input type="number" class="nd" id="i-b" value="33" step="0.5" min="20" max="120"><button class="nb" onclick="adj('i-b',0.5)">+</button></div></div>`;}
+  else if(type==='testi_400m'){c.innerHTML=`<div class="card" style="border-color:var(--ac);margin-bottom:0"><div style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;color:var(--ac);margin-bottom:9px">🏆 400M TESTI</div><div class="fg"><label class="fl">Minuutit</label><div class="niw"><button class="nb" onclick="adj('t-m',-1)">−</button><input type="number" class="nd" id="t-m" value="1" min="0" max="5" oninput="tFb()"><button class="nb" onclick="adj('t-m',1)">+</button></div></div><div class="fg"><label class="fl">Sekunnit</label><div class="niw"><button class="nb" onclick="adj('t-s',-0.5)">−</button><input type="number" class="nd" id="t-s" value="8" step="0.5" min="0" max="59.5" oninput="tFb()"><button class="nb" onclick="adj('t-s',0.5)">+</button></div></div><div id="t-fb"></div></div>`;}
+  else c.innerHTML='';
+}
+
+function tFb(){const t=(parseFloat(document.getElementById('t-m').value)||0)*60+(parseFloat(document.getElementById('t-s').value)||0);const d=t-58;document.getElementById('t-fb').innerHTML=d<=0?`<div class="ab ag"><span class="ic">🏆</span><span>TAVOITE! ${fmt(t)} — ${Math.abs(d).toFixed(1)}s alle 58s!</span></div>`:`<div class="ab ai"><span class="ic">📊</span><span>${fmt(t)} — ${d.toFixed(1)}s tavoitteesta (58s)</span></div>`;}
+
+async function saveRun(){
+  const r=rpe['rrpe'];if(!r){snk('Valitse RPE!');return;}
+  const type=document.getElementById('r-ty').value;
+  const sess={id:Date.now(),type:'juoksu',runType:type,date:document.getElementById('r-dt').value||td(),dist:parseFloat(document.getElementById('r-di').value)||5,sleep:parseFloat(document.getElementById('r-sl').value)||7.5,rpe:r,notes:document.getElementById('r-no').value,label:document.getElementById('r-ty').options[document.getElementById('r-ty').selectedIndex].text};
+  if(type==='testi_400m'){const t=(parseFloat(document.getElementById('t-m').value)||0)*60+(parseFloat(document.getElementById('t-s').value)||0);sess.time400=t;if(!D.bests.run400||t<D.bests.run400)D.bests.run400=t;}
+  if(type==='intervalli'){sess.intDist=document.getElementById('i-di')?.value;sess.intN=document.getElementById('i-n')?.value;sess.intBest=document.getElementById('i-b')?.value;}
+  D.sessions.push(sess);await cSave();rpe['rrpe']=null;document.querySelectorAll('#rrpe .rb').forEach(b=>b.className='rb');snk('✅ Juoksutreeni tallennettu!');
+  setTimeout(()=>T('dash',document.querySelector('.tb')),700);
+}
+
+// ══ EXTRA ════════════════════════════════════════════
+function pAct(btn,type){document.querySelectorAll('.ab2').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');selAct=type;document.getElementById('e-pf').style.display=type==='muu_puntti'?'block':'none';updEPrev();}
+function updEPrev(){const r=rpe['erpe'];if(!selAct||!r)return;const dur=parseFloat(document.getElementById('e-du').value)||60;const load=eLoad({activity:selAct,duration:dur,rpe:r});document.getElementById('e-pv').style.display='flex';document.getElementById('e-pt').textContent=`Kuormituspisteet: ${Math.round(load)} (${load>80?'kova':load>50?'kohtalainen':'kevyt'}). Huomioidaan seuraavan treenin ehdotuksissa.`;}
+async function saveExtra(){if(!selAct){snk('Valitse aktiviteetti!');return;}const r=rpe['erpe'];if(!r){snk('Valitse intensiteetti!');return;}D.extras.push({id:Date.now(),date:document.getElementById('e-dt').value||td(),activity:selAct,duration:parseFloat(document.getElementById('e-du').value)||60,rpe:r,exercises:document.getElementById('e-ex')?.value||''});await cSave();selAct=null;rpe['erpe']=null;document.querySelectorAll('.ab2').forEach(b=>b.classList.remove('sel'));document.getElementById('e-pv').style.display='none';snk('✅ Lisäaktiviteetti kirjattu!');setTimeout(()=>T('dash',document.querySelector('.tb')),700);}
+
+// ══ BW & SETTINGS ════════════════════════════════════
+async function saveBW(){const w=parseFloat(document.getElementById('bw-in').value);D.bodyweights.push({date:td(),weight:w});await cSave();snk(`⚖️ ${w}kg kirjattu`);rdBWList();}
+function rdBWList(){const el=document.getElementById('bw-list');if(!el)return;const r=[...D.bodyweights].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5);if(!r.length){el.innerHTML='';return;}el.innerHTML='<div style="font-size:10px;color:var(--mu);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Viimeisimmät</div>'+r.map(b=>{const d=new Date(b.date);return `<div class="bwr"><span>${d.getDate()}.${d.getMonth()+1}.${d.getFullYear()}</span><span style="font-family:'DM Mono',monospace;font-weight:600">${b.weight}kg</span></div>`;}).join('');}
+function ldSett(){document.getElementById('s-be').value=D.settings.benchRM;document.getElementById('s-pu').value=D.settings.pullRM;document.getElementById('s-st').value=D.settings.startDate;document.getElementById('s-hrv').value=D.settings.hrvBase||55;}
+async function saveSettings(){D.settings.benchRM=parseFloat(document.getElementById('s-be').value)||120;D.settings.pullRM=parseFloat(document.getElementById('s-pu').value)||40;D.settings.startDate=document.getElementById('s-st').value||td();D.settings.hrvBase=parseFloat(document.getElementById('s-hrv').value)||55;await cSave();snk('✅ Asetukset tallennettu!');}
+function showDetailModal(type) {
+  const acwr = calcACWR();
+  const ready = calcReadiness();
+  const hrv = getHRVStatus();
+  let title = '', html = '';
+
+  if (type === 'acwr') {
+    title = 'ACWR — Kuormitussuhde';
+    // Build 8-week ACWR history
+    const history = [];
+    for (let i=7;i>=0;i--) {
+      const d=new Date(); d.setDate(d.getDate()-i*7);
+      const ds=d.toISOString().split('T')[0];
+      const a7=(() => {let t=0;for(let j=0;j<7;j++){const dd=new Date(d);dd.setDate(d.getDate()-j);t+=loadForDate(dd.toISOString().split('T')[0]);}return t;})();
+      const c28=(() => {let t=0;for(let j=0;j<28;j++){const dd=new Date(d);dd.setDate(d.getDate()-j);t+=loadForDate(dd.toISOString().split('T')[0]);}return t;})();
+      const r=c28>0?Math.round(a7/c28*100)/100:null;
+      history.push({week:8-i, ratio:r, label:d.getDate()+'.'+(d.getMonth()+1)+'.'});
+    }
+    html = `<div style="margin-bottom:14px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+        <div style="background:var(--s2);border-radius:10px;padding:12px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:${acwr.color||'var(--mu)'}">${acwr.ratio||'–'}</div><div style="font-size:10px;color:var(--mu)">Tämä viikko</div></div>
+        <div style="background:var(--s2);border-radius:10px;padding:12px;text-align:center"><div style="font-size:12px;font-weight:600;color:${acwr.color||'var(--mu)'};margin-top:6px">${acwr.label||'Ei dataa'}</div><div style="font-size:10px;color:var(--mu);margin-top:4px">Akuutti: ${acwr.acute} / Krooninen: ${acwr.chronic}</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--mu);margin-bottom:10px;line-height:1.6">ACWR = 7pv kuorma / 28pv kuorma. Optimaalinen vyöhyke 0.8–1.3 (Gabbett 2016). Yli 1.5 → loukkaantumisriski kasvaa merkittävästi.</div>
+      <div style="font-size:11px;font-weight:600;color:var(--mu);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">8 viikon historia</div>
+      ${history.map(h=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--bd)">
+        <span style="font-size:11px;color:var(--mu)">${h.label}</span>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:80px;height:6px;background:var(--bd);border-radius:99px;overflow:hidden"><div style="height:100%;border-radius:99px;background:${h.ratio===null?'var(--bd)':h.ratio<=1.3?'var(--gn)':h.ratio<=1.5?'var(--yw)':'var(--rd)'};width:${h.ratio?Math.min(100,h.ratio/2*100):0}%"></div></div>
+          <span style="font-family:'DM Mono',monospace;font-size:12px;font-weight:600;color:${h.ratio===null?'var(--mu)':h.ratio<=1.3?'var(--gn)':h.ratio<=1.5?'var(--yw)':'var(--rd)'}">${h.ratio||'–'}</span>
+        </div>
+      </div>`).join('')}
+    </div>`;
+  } else if (type === 'readiness') {
+    title = 'Valmiustila — Breakdown';
+    html = `<div>
+      <div style="text-align:center;margin-bottom:16px">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:52px;color:${ready.color};line-height:1">${ready.score}</div>
+        <div style="font-size:13px;font-weight:600;color:${ready.color}">${ready.label}</div>
+        <div style="font-size:11px;color:var(--mu);margin-top:4px">100 pistettä = täydellinen valmiustila</div>
+      </div>
+      ${[
+        {label:'ACWR-tila',score:ready.acwrScore,max:40,desc:calcACWR().label||'–'},
+        {label:'HRV',score:ready.hrvScore,max:30,desc:hrv.label||'–'},
+        {label:'Uni',score:ready.sleepScore,max:20,desc:(D.sessions.slice(-1)[0]?.sleep||'?')+'h'},
+        {label:'Palautumisaika',score:ready.recovScore,max:10,desc:'Edellisestä treenistä'}
+      ].map(f=>`<div style="margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="font-weight:600">${f.label}</span><span style="font-family:'DM Mono',monospace">${f.score}/${f.max}</span></div>
+        <div style="height:8px;background:var(--bd);border-radius:99px;overflow:hidden;margin-bottom:3px"><div style="height:100%;border-radius:99px;background:${f.score/f.max>=.7?'var(--gn)':f.score/f.max>=.4?'var(--yw)':'var(--rd)'};width:${Math.round(f.score/f.max*100)}%"></div></div>
+        <div style="font-size:10px;color:var(--mu)">${f.desc}</div>
+      </div>`).join('')}
+    </div>`;
+  } else if (type === 'hrv') {
+    title = 'HRV & Treeniputki';
+    const recent=[...D.hrv].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,14);
+    html = `<div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+        <div style="background:var(--s2);border-radius:10px;padding:12px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:${hrv.status==='good'||hrv.status==='great'?'var(--gn)':hrv.status==='ok'?'var(--yw)':'var(--rd)'}">${hrv.val||'–'}</div><div style="font-size:10px;color:var(--mu)">Tänään (ms)</div></div>
+        <div style="background:var(--s2);border-radius:10px;padding:12px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--mu)">${hrv.base||'–'}</div><div style="font-size:10px;color:var(--mu)">Perustaso (ms)</div></div>
+      </div>
+      <div style="font-size:11px;font-weight:600;color:var(--mu);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">${hrv.label} — ${hrv.pct!=null?(hrv.pct>0?'+':'')+hrv.pct+'% perustasosta':''}</div>
+      ${recent.length?`<div style="font-size:11px;font-weight:600;color:var(--mu);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">HRV-historia</div>
+      ${recent.map(h=>{const d=new Date(h.value);const ds=new Date(h.date).getDate()+'.'+(new Date(h.date).getMonth()+1)+'.';const col=h.value>=(hrv.base||55)?'var(--gn)':h.value>=(hrv.base||55)*0.92?'var(--yw)':'var(--rd)';return `<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--bd)"><span style="font-size:11px;color:var(--mu)">${ds}</span><div style="display:flex;align-items:center;gap:8px"><div style="width:80px;height:6px;background:var(--bd);border-radius:99px;overflow:hidden"><div style="height:100%;border-radius:99px;background:${col};width:${Math.min(100,Math.round(h.value/120*100))}%"></div></div><span style="font-family:'DM Mono',monospace;font-size:12px;font-weight:600;color:${col}">${h.value}</span></div></div>`;}).join('')}`:'<p style="color:var(--mu);font-size:12px">Ei HRV-dataa. Kirjaa aamuinen HRV Analyysi-välilehdeltä.</p>'}
+      <div style="margin-top:12px;font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Treeniputki</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--ac);text-align:center">${streak()}</div>
+      <div style="font-size:11px;color:var(--mu);text-align:center">peräkkäistä treenipäivää</div>
+    </div>`;
+  }
+
+  const overlay = document.createElement('div');
+  overlay.className = 'sum-ov';
+  overlay.innerHTML = `<div class="sum-sh">
+    <div class="sum-handle"></div>
+    <div class="sum-ttl" style="font-size:18px;margin-bottom:14px">${title}</div>
+    ${html}
+    <button class="btn bs" onclick="this.closest('.sum-ov').remove()" style="margin-top:10px">Sulje</button>
+  </div>`;
+  document.body.appendChild(overlay);
+}
+
+function showDetailPanel(type) { showDetailModal(type); }
+
+function showWeeklySummary() {
+  const now = new Date();
+  const mon = new Date(now); mon.setDate(now.getDate()-(now.getDay()===0?6:now.getDay()-1));
+  const dates = Array.from({length:7},(_,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+i);return d.toISOString().split('T')[0];});
+  const weekSessions = D.sessions.filter(s=>dates.includes(s.date));
+  const weekExtras = D.extras.filter(e=>dates.includes(e.date));
+  const totalLoad = wkLoad(now.toISOString().split('T')[0]);
+  const voimaSess = weekSessions.filter(s=>s.type==='voima').length;
+  const juoksuSess = weekSessions.filter(s=>s.type==='juoksu').length;
+  // Best performances this week
+  const benchBest = weekSessions.flatMap(s=>s.exercises||[]).filter(e=>e.id==='bench').reduce((b,e)=>Math.max(b,e.weight||0),0);
+  const acwr = calcACWR();
+  // Next week plan
+  const w = wks();
+  const nextW = w+1;
+  const nextDL = nextW%4===0;
+  const overlay = document.createElement('div');
+  overlay.className = 'sum-ov';
+  overlay.id = 'weekly-sum';
+  overlay.onclick = e=>{if(e.target===overlay)overlay.remove();};
+  overlay.innerHTML = `<div class="sum-sh">
+    <div class="sum-handle"></div>
+    <div class="sum-ttl">📅 VIIKKOYHTEENVETO — VK ${w}</div>
+    <div class="sum-score" style="margin-bottom:12px">
+      <div class="sum-sc-box"><div class="sum-sc-val" style="color:var(--bl)">${voimaSess}</div><div class="sum-sc-lbl">Voima</div></div>
+      <div class="sum-sc-box"><div class="sum-sc-val" style="color:var(--gn)">${juoksuSess}</div><div class="sum-sc-lbl">Juoksu</div></div>
+      <div class="sum-sc-box"><div class="sum-sc-val" style="color:var(--or)">${totalLoad}</div><div class="sum-sc-lbl">Kuorma</div></div>
+    </div>
+    ${benchBest>0?`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bd)"><span style="font-weight:600">🏋️ Paras penkki</span><span style="font-family:'DM Mono',monospace;color:var(--bl)">${benchBest}kg</span></div>`:''}
+    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bd)">
+      <span style="font-weight:600">📊 ACWR</span>
+      <span style="color:${acwr.color||'var(--mu)'};font-weight:600">${acwr.ratio||'–'} (${acwr.label||'Ei dataa'})</span>
+    </div>
+    <div style="margin-top:12px;padding:12px;background:var(--s2);border-radius:10px;border:1px solid var(--bd)">
+      <div style="font-size:11px;font-weight:700;color:var(--ac);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">📋 ENSI VIIKKO (VK ${nextW})</div>
+      ${nextDL?'<div class="ab aw"><span class="ic">🔄</span><span>Ensi viikko on DELOAD — painot -15%, sarjat 3×5</span></div>':
+      acwr.zone==='high'||acwr.zone==='danger'?'<div class="ab aw"><span class="ic">⚠️</span><span>Kuorma on korkea — pidä sama tai kevennä 10%</span></div>':
+      acwr.zone==='optimal'?'<div class="ab ag"><span class="ic">✅</span><span>Kuorma optimaalinen — jatka samalla intensiteetillä, nosta pääliikkeiden painoja +2.5kg jos sarjat onnistuivat</span></div>':
+      '<div class="ab ai"><span class="ic">💡</span><span>Voit lisätä kuormaa ensi viikolla</span></div>'}
+    </div>
+    <button class="btn bs" onclick="document.getElementById('weekly-sum').remove()" style="margin-top:14px">Sulje</button>
+  </div>`;
+  document.body.appendChild(overlay);
+}
+
+function exportData() {
+  const json = JSON.stringify(D, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const dateStr = new Date().toISOString().split('T')[0];
+  a.href = url;
+  a.download = `400mpro-varmuuskopio-${dateStr}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  snk('✅ Data viety — tallenna tiedosto iCloudiin!');
+}
+
+async function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const statusEl = document.getElementById('import-status');
+  try {
+    const text = await file.text();
+    const parsed = JSON.parse(text);
+    // Validate structure
+    if (!parsed.sessions || !parsed.settings) {
+      statusEl.innerHTML = '<div class="ab ad"><span class="ic">⚠️</span><span>Virheellinen tiedosto — ei ole 400M Pro varmuuskopio</span></div>';
+      return;
+    }
+    const sessionCount = parsed.sessions?.length || 0;
+    const confirmed = confirm(`Tuodaan ${sessionCount} treeniä. Tämä korvaa nykyisen datan. Jatketaanko?`);
+    if (!confirmed) { event.target.value = ''; return; }
+    D = { ...dflt(), ...parsed };
+    await cSave();
+    rdDash();
+    statusEl.innerHTML = `<div class="ab ag"><span class="ic">✅</span><span>Tuotu: ${sessionCount} treeniä, ${parsed.extras?.length||0} lisäaktiviteettia, ${parsed.hrv?.length||0} HRV-mittausta</span></div>`;
+    snk(`✅ ${sessionCount} treeniä tuotu!`);
+  } catch(e) {
+    statusEl.innerHTML = '<div class="ab ad"><span class="ic">⚠️</span><span>Tiedoston lukeminen epäonnistui</span></div>';
+  }
+  event.target.value = '';
+}
+
+async function doClear(){if(!confirm('Tyhjennä kaikki data?'))return;D=dflt();await cSave();rdDash();snk('🗑️ Data tyhjennetty');}
+
+// ══ ANALYSIS ══════════════════════════════════════════
+// Analysis subtab navigation
+let curATab = 0;
+function showATab(n) {
+  curATab = n;
+  document.querySelectorAll('.atb').forEach((b,i) => b.classList.toggle('active', i===n));
+  document.querySelectorAll('.atab').forEach((t,i) => t.classList.toggle('active', i===n));
+  setTimeout(() => renderATabContent(n), 30);
+}
+
+function renderATabContent(n) {
+  if (n===0) { renderACWRCard(); renderTimeline(); renderTestCal(); }
+  else if (n===1) { renderMuscleAnalysis(); renderRPETrend(); renderPlateauRecs(); }
+  else if (n===2) { renderRunAnalysis(); renderGraph('g-run',actualRun(),EXP.run400,'#00d4ff','s',true,v=>fmt(v)); renderLTEstimate(); }
+  else if (n===3) { renderGraph('g-bench',actualBench(),EXP.bench,'#3b82f6','kg',false,v=>Math.round(v)+'kg'); renderGraph('g-pull',actualPull(),EXP.pull,'#a855f7','kg',false,v=>'+'+Math.round(v)+'kg'); renderExGraph(); }
+  else if (n===4) { renderHRVTab(); renderHRVGraph(); }
+  else if (n===5) { rdBWList(); renderBWGraph(); }
+}
+
+function rdAnalysis(){
+  renderACWRCard();
+  renderTimeline();
+  renderTestCal();
+  // Render HRV ring (always visible in header)
+  renderHRVRing();
+}
+
+function renderACWRCard() {
+  const acwr = calcACWR();
+  const ready = calcReadiness();
+  const el = document.getElementById('acwr-content');
+  if (!el) return;
+  const benchTrend = exerciseTrend('bench',6);
+  const pullTrend = exerciseTrend('pullup_w',6);
+  const squatTrend = exerciseTrend('squat',6);
+  function tBadge(t) {
+    if(!t) return '<span style="color:var(--mu);font-size:11px">Ei dataa</span>';
+    const col = t.trend==='nouseva'?'var(--gn)':t.trend==='laskeva'?'var(--rd)':'var(--yw)';
+    const ar = t.trend==='nouseva'?'↑':t.trend==='laskeva'?'↓':'→';
+    return `<span style="color:${col};font-size:11px">${ar} ${t.weeklyGain>0?'+':''}${t.weeklyGain.toFixed(1)}kg/vk${t.plateauWeeks>=3?' · <strong>PLATEAU</strong>':''}</span>`;
+  }
+  el.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+      <div onclick="showDetailPanel('readiness')" style="background:var(--s2);border:1px solid ${ready.color};border-radius:10px;padding:12px;text-align:center;cursor:pointer">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:${ready.color};line-height:1">${ready.score}</div>
+        <div style="font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-top:3px">Valmiustila ›</div>
+        <div style="font-size:11px;color:${ready.color};margin-top:4px;font-weight:600">${ready.label}</div>
+      </div>
+      <div onclick="showDetailPanel('acwr')" style="background:var(--s2);border:1px solid ${acwr.color||'var(--bd)'};border-radius:10px;padding:12px;text-align:center;cursor:pointer">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:${acwr.color||'var(--mu)'};line-height:1">${acwr.ratio!==null?acwr.ratio:'–'}</div>
+        <div style="font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-top:3px">ACWR ›</div>
+        <div style="font-size:11px;color:${acwr.color||'var(--mu)'};margin-top:4px;font-weight:600">${acwr.label||'Ei dataa'}</div>
+      </div>
+    </div>
+    <div style="font-size:10px;color:var(--mu);margin-bottom:8px">ACWR ${ready.acwrScore}/40 · HRV ${ready.hrvScore}/30 · Uni ${ready.sleepScore}/20 · Palautumisaika ${ready.recovScore}/10</div>
+    ${acwr.ratio!==null?`<div style="display:flex;justify-content:space-between;font-size:11px;padding:7px 0;border-top:1px solid var(--bd)"><span>Akuutti 7pv: <strong>${acwr.acute}</strong></span><span>Krooninen 28pv: <strong>${acwr.chronic}</strong></span></div>`:'<div class="ab ai"><span class="ic">💡</span><span>ACWR lasketaan kun dataa on yli 7 päivältä</span></div>'}
+    <div style="border-top:1px solid var(--bd);padding-top:10px;margin-top:6px">
+      <div style="font-size:10px;color:var(--mu);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">6VK TRENDIANALYYSI</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--bd)"><span style="font-size:13px;font-weight:600">🏋️ Penkki</span>${tBadge(benchTrend)}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--bd)"><span style="font-size:13px;font-weight:600">💪 Leuka</span>${tBadge(pullTrend)}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0"><span style="font-size:13px;font-weight:600">🦵 Kyykky</span>${tBadge(squatTrend)}</div>
+    </div>`;
+}
+
+function renderHRVRing() {
+  const hrv = getHRVStatus();
+  const circ = document.getElementById('hrv-circle');
+  if(circ){ circ.textContent=hrv.val||'–'; circ.className='hrv-circle hrv-'+hrv.status; }
+  const st=document.getElementById('hrv-status'); if(st) st.textContent=hrv.label;
+  const sb=document.getElementById('hrv-sub'); if(sb) sb.textContent=hrv.sub;
+  const tr=document.getElementById('hrv-trend'); if(tr&&hrv.trend7!==null) tr.textContent='7pv trendi: '+(hrv.trend7>0?'+':'')+hrv.trend7+' ms/pv';
+  const hn=document.getElementById('hrv-n'); if(hn&&D.settings.hrvBase) hn.textContent=hrv.val?hrv.val+' ms ('+(hrv.pct>0?'+':'')+hrv.pct+'% perustasosta)':'Ei dataa';
+}
+function renderHRVTab() { renderHRVRing(); }
+
+// ── MUSCLE GROUP ANALYSIS ──────────────────────────────
+function renderMuscleAnalysis() {
+  const el = document.getElementById('muscle-analysis');
+  if (!el) return;
+
+  // Define muscle groups and their primary exercises
+  const groups = [
+    { name:'Rintalihas (push)', emoji:'🏋️', exIds:['bench','incline','incline_bar','db_press','dips'], target:155 },
+    { name:'Selkä (pull)', emoji:'💪', exIds:['pullup_w','pullup_n','lat','row_bar','row_db','chest_sup'], target:75 },
+    { name:'Jalat (kyykky)', emoji:'🦵', exIds:['squat','front_sq','lunge','lunge_b','legpress','hack_sq'], target:null },
+    { name:'Takareisi', emoji:'🔒', exIds:['rdl','dl_conv','nordic','leg_curl_ly','leg_curl_sit'], target:null },
+    { name:'Pakara', emoji:'🍑', exIds:['hipthrust','hip_single','glute_cable'], target:null },
+    { name:'Core', emoji:'🧱', exIds:['deadbug','plank','ab_wheel','pallof','dragon_flag','hanging_knee','crunch_cable'], target:null },
+  ];
+
+  // For each group, get 6-week trend for best exercise
+  const rows = groups.map(g => {
+    // Find which exercises have data
+    let bestTrend = null;
+    let bestExName = null;
+    for (const exId of g.exIds) {
+      const t = exerciseTrend(exId, 6);
+      if (t && (!bestTrend || t.pts.length > bestTrend.pts.length)) {
+        bestTrend = t; bestExName = BANK[exId]?.name || exId;
+      }
+    }
+    // Count sessions for this group in last 6 weeks
+    const cutoff = new Date(); cutoff.setDate(cutoff.getDate()-42);
+    let sessions = 0;
+    D.sessions.filter(s=>s.type==='voima'&&new Date(s.date)>=cutoff).forEach(s=>{
+      if((s.exercises||[]).some(e=>g.exIds.includes(e.id))) sessions++;
+    });
+    return { ...g, trend:bestTrend, exName:bestExName, sessions };
+  });
+
+  // Sort: struggling groups first
+  const sorted = [...rows].sort((a,b) => {
+    const scoreA = (a.trend?.trend==='nouseva'?2:a.trend?.trend==='tasainen'?1:0) + a.sessions*0.1;
+    const scoreB = (b.trend?.trend==='nouseva'?2:b.trend?.trend==='tasainen'?1:0) + b.sessions*0.1;
+    return scoreA - scoreB;
+  });
+
+  el.innerHTML = sorted.map(g => {
+    const tCol = g.trend ? (g.trend.trend==='nouseva'?'var(--gn)':g.trend.trend==='laskeva'?'var(--rd)':'var(--yw)') : 'var(--mu)';
+    const tText = g.trend ? (g.trend.trend==='nouseva'?'↑ Kehittyy':g.trend.trend==='laskeva'?'↓ Laskeva':'→ Tasainen') : 'Ei dataa';
+    const sessCol = g.sessions>=4?'var(--gn)':g.sessions>=2?'var(--yw)':'var(--rd)';
+    const plateau = g.trend?.plateauWeeks>=3;
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--bd)">
+      <div>
+        <div style="font-weight:700;font-size:13px">${g.emoji} ${g.name}</div>
+        <div style="font-size:10px;color:var(--mu);margin-top:2px">${g.exName||'Ei kirjauksia'} · <span style="color:${sessCol}">${g.sessions} treeniä/6vk</span></div>
+        ${plateau?'<div style="font-size:10px;color:var(--yw);margin-top:2px">⚠️ Plateau havaittu — muuta ärsykettä</div>':''}
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:13px;font-weight:700;color:${tCol}">${tText}</div>
+        ${g.trend?`<div style="font-size:10px;color:var(--mu)">${g.trend.weeklyGain>0?'+':''}${g.trend.weeklyGain.toFixed(1)}kg/vk</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+
+  // Find the most lagging group
+  const lagging = sorted[0];
+  if (lagging && lagging.trend?.trend !== 'nouseva') {
+    el.innerHTML += `<div class="ab aw" style="margin-top:10px"><span class="ic">💡</span><span><strong>${lagging.name}</strong> tarvitsee enemmän huomiota — ${lagging.sessions<3?'lisää treenien määrää (tavoite 3-4/6vk)':'kokeile eri liikkeitä tai intensiteettijaksoa'}.</span></div>`;
+  }
+}
+
+// ── RPE TREND PER EXERCISE ─────────────────────────────
+function renderRPETrend() {
+  const el = document.getElementById('rpe-trend');
+  if (!el) return;
+  const mainExs = ['bench','pullup_w','squat','hipthrust','rdl'];
+  const rows = mainExs.map(exId => {
+    // Get last 6 weeks of RPE data for this exercise at similar weights
+    const pts = [];
+    D.sessions.filter(s=>s.type==='voima').slice(-30).forEach(s => {
+      const ex = (s.exercises||[]).find(e=>e.id===exId);
+      if (ex && ex.rpe && ex.weight) {
+        const wk = Math.floor((new Date()-new Date(s.date))/(1000*60*60*24*7));
+        if (wk <= 6) pts.push({ wk, rpe:ex.rpe, weight:ex.weight, date:s.date });
+      }
+    });
+    if (pts.length < 2) return null;
+    pts.sort((a,b)=>a.date.localeCompare(b.date));
+    // Detect if RPE is rising at similar weights (normalize by weight)
+    const recent3 = pts.slice(-3);
+    const older3 = pts.slice(0,3);
+    const recentRPE = recent3.reduce((a,p)=>a+p.rpe,0)/recent3.length;
+    const olderRPE = older3.reduce((a,p)=>a+p.rpe,0)/older3.length;
+    const rpeDelta = recentRPE - olderRPE;
+    return { exId, name:BANK[exId]?.name||exId, pts, rpeDelta, recentRPE:recentRPE.toFixed(1) };
+  }).filter(Boolean);
+
+  if (!rows.length) { el.innerHTML='<p style="color:var(--mu);font-size:12px">Tarvitaan enemmän kirjauksia</p>'; return; }
+
+  el.innerHTML = rows.map(r => {
+    const warn = r.rpeDelta > 0.5;
+    const col = warn ? 'var(--yw)' : r.rpeDelta < -0.5 ? 'var(--gn)' : 'var(--mu)';
+    const icon = warn ? '⚠️' : r.rpeDelta < -0.5 ? '✅' : '→';
+    return `<div style="padding:9px 0;border-bottom:1px solid var(--bd)">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-weight:600;font-size:13px">${BANK[r.exId]?.name?.replace('★ ','')||r.exId}</div>
+        <div style="font-size:12px;color:${col};font-weight:700">${icon} RPE ${r.recentRPE}</div>
+      </div>
+      ${warn?`<div style="font-size:11px;color:var(--yw);margin-top:3px">RPE noussut +${r.rpeDelta.toFixed(1)} — ylikuormituksen merkki. Harkitse deloadia tai painon laskua.</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+// ── PLATEAU RECOMMENDATIONS ────────────────────────────
+function renderPlateauRecs() {
+  const el = document.getElementById('plateau-recs');
+  if (!el) return;
+  const mainExs = ['bench','pullup_w','squat','hipthrust','rdl','dl_conv'];
+  const plateaus = [];
+  mainExs.forEach(exId => {
+    const t = exerciseTrend(exId, 6);
+    if (t && t.plateauWeeks >= 3) {
+      const recs = {
+        bench: ['Vaihda board pressiin tai vinopenkki + vinopenkki 4×6', 'Lisää triceps-volyymia (dips, ranskalainen)', 'Intensiteettisykli: laske 10%, lisää toistoja (3×10), rakenna uudelleen'],
+        pullup_w: ['Vaihda kapea ote / ylätalja 4 viikoksi', 'Lisää negatiivisia leuankohottajia (3×5)', 'Lisää hauiksen volyymia (preacher curl, spider curl)'],
+        squat: ['Vaihda etukyykkyyn tai hack kyykkyyn 4 viikoksi', 'Lisää legpress-volyymia (4×12)', 'Intensiteettisykli: 3×3 @ 90%, sitten nouse uudelleen'],
+        hipthrust: ['Lisää yksijalkaiseen hip thrustiin', 'Pause-hip thrust (2s paussi yllä)', 'Yhdistä gluteus kaapelipotkuihin'],
+        rdl: ['Vaihda konventionaaliseen maastavetooon', 'Lisää leg curl -volyymia', 'Nordic hamstring curl lisäys'],
+        dl_conv: ['Vaihda sumo-maastavetooon', 'Tempo-maastaveto (3s lasku)', 'Lisää back extension'],
+      };
+      plateaus.push({ exId, name:BANK[exId]?.name?.replace('★ ','')||exId, weeks:t.plateauWeeks, recs:recs[exId]||['Vaihda vastaavaan liikkeeseen','Kokeile eri toistomäärää (3×3 tai 4×10)'] });
+    }
+  });
+
+  if (!plateaus.length) {
+    el.innerHTML = '<div class="ab ag"><span class="ic">✅</span><span>Ei plateauta havaittu — kehitys jatkuu!</span></div>';
+    return;
+  }
+
+  el.innerHTML = plateaus.map(p => `
+    <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--bd)">
+      <div style="font-weight:700;font-size:14px;color:var(--yw);margin-bottom:6px">⟳ ${p.name} — plateau ${p.weeks} viikkoa</div>
+      ${p.recs.map((r,i)=>`<div style="display:flex;gap:8px;margin-bottom:5px"><span style="color:var(--ac);font-size:11px;font-weight:700;flex-shrink:0">${i+1}.</span><span style="font-size:12px">${r}</span></div>`).join('')}
+    </div>`).join('');
+}
+
+// ── RUN ANALYSIS ───────────────────────────────────────
+function getRunSessions(type) {
+  return D.sessions.filter(s=>s.type==='juoksu'&&s.runType===type).sort((a,b)=>a.date.localeCompare(b.date));
+}
+
+function renderRunAnalysis() {
+  const el = document.getElementById('run-analysis');
+  if (!el) return;
+
+  const intervals = getRunSessions('intervalli');
+  const race = getRunSessions('kilpailuvauhti');
+  const speed = getRunSessions('nopeus');
+
+  if (!intervals.length && !race.length) {
+    el.innerHTML = '<p style="color:var(--mu);font-size:12px">Ei vielä juoksukirjauksia. Kirjaa intervalliharjoituksia nähdäksesi analyysin.</p>';
+    return;
+  }
+
+  let html = '';
+
+  // Interval trend
+  if (intervals.length >= 2) {
+    const bestTimes = intervals.filter(s=>s.intBest).map((s,i)=>({x:i,y:parseFloat(s.intBest),date:s.date,dist:s.intDist,n:s.intN,rpe:s.rpe}));
+    if (bestTimes.length >= 2) {
+      const tr = linearTrend(bestTimes);
+      const improving = tr.slope < -0.1; // negative = faster
+      const col = improving ? 'var(--gn)' : tr.slope > 0.3 ? 'var(--rd)' : 'var(--yw)';
+      const latest = bestTimes[bestTimes.length-1];
+      html += `<div style="padding:10px 0;border-bottom:1px solid var(--bd)">
+        <div style="font-weight:700;font-size:13px">🔴 Intervalli-trendi (${latest.dist||'200m'})</div>
+        <div style="display:flex;justify-content:space-between;margin-top:6px">
+          <div><div style="font-size:10px;color:var(--mu)">Paras aika nyt</div><div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:${col}">${latest.y}s</div></div>
+          <div style="text-align:right"><div style="font-size:10px;color:var(--mu)">Trendi/sessio</div><div style="font-size:16px;font-weight:700;color:${col}">${tr.slope>0?'+':''}${tr.slope.toFixed(1)}s</div></div>
+        </div>`;
+
+      // Adaptive recommendation for next session
+      const lastInterval = intervals[intervals.length-1];
+      const lastN = parseInt(lastInterval.intN)||6;
+      const lastRPE = lastInterval.rpe||8;
+      let rec = '';
+      if (improving && lastRPE <= 8) {
+        // Getting faster + manageable RPE → add volume or increase speed
+        const newN = Math.min(lastN + 1, 10);
+        rec = `Kehitys menee hyvin! Seuraava: ${newN}×${latest.dist||'200m'} tai pidä ${lastN} sarjaa ja tavoittele ${(latest.y-0.5).toFixed(1)}s/sarja`;
+      } else if (!improving && lastRPE >= 9) {
+        rec = `RPE korkea + ei kehitystä → vähennä: ${Math.max(lastN-1,4)}×${latest.dist||'200m'} tai pidä ${lastN} sarjaa kevyemmällä tahdilla`;
+      } else {
+        rec = `Pidä ${lastN} sarjaa, tavoiteaika ${latest.y}s — kehitys jatkuu`;
+      }
+      html += `<div class="ab ai" style="margin-top:8px"><span class="ic">⚡</span><span style="font-size:11px">${rec}</span></div></div>`;
+    }
+  }
+
+  // 400m race pace trend
+  if (race.length >= 1) {
+    const r400 = D.sessions.filter(s=>s.time400).map((s,i)=>({x:i,y:s.time400,date:s.date}));
+    if (r400.length >= 2) {
+      const tr = linearTrend(r400);
+      const latest = r400[r400.length-1];
+      const col = tr.slope < 0 ? 'var(--gn)' : 'var(--rd)';
+      html += `<div style="padding:10px 0;border-bottom:1px solid var(--bd)">
+        <div style="font-weight:700;font-size:13px">🏆 400m kehitys</div>
+        <div style="display:flex;justify-content:space-between;margin-top:6px">
+          <div><div style="font-size:10px;color:var(--mu)">Paras aika</div><div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:${col}">${fmt(latest.y)}</div></div>
+          <div style="text-align:right"><div style="font-size:10px;color:var(--mu)">Trendi/testi</div><div style="font-size:16px;font-weight:700;color:${col}">${tr.slope>0?'+':''}${tr.slope.toFixed(1)}s</div></div>
+        </div>
+      </div>`;
+    }
+  }
+
+  el.innerHTML = html || '<p style="color:var(--mu);font-size:12px">Kirjaa useampi juoksutreeni nähdäksesi trendin</p>';
+}
+
+// ── LACTATE THRESHOLD ESTIMATE ─────────────────────────
+// Perustuu: Stegmann & Kindermann (1982), Jansen (2001)
+// Estimaatti: LT = nopeus @ RPE 7–8 intervalleissa
+// Ei korvaa laboratoriotestiä mutta antaa suuntaa
+function renderLTEstimate() {
+  const el = document.getElementById('lt-estimate');
+  if (!el) return;
+  const intervals = D.sessions.filter(s=>s.runType==='intervalli'&&s.intBest&&s.intDist&&s.rpe);
+  if (intervals.length < 3) {
+    el.innerHTML='<p style="color:var(--mu);font-size:12px">Tarvitaan vähintään 3 intervallisessiota. Kirjaa RPE ja paras sarja-aika jokaisesta treenistä.</p>';
+    return;
+  }
+  // Find sessions at RPE 7-8 — this is near lactate threshold
+  const ltSessions = intervals.filter(s=>s.rpe>=7&&s.rpe<=8);
+  if (!ltSessions.length) { el.innerHTML='<p style="color:var(--mu);font-size:12px">Ei tarpeeksi RPE 7-8 -sessioita arvioon</p>'; return; }
+  // Calculate speed at LT (m/s) from distance and time
+  const speeds = ltSessions.map(s=>{
+    const distM = parseInt(s.intDist)||200;
+    const timeS = parseFloat(s.intBest)||35;
+    return distM/timeS; // m/s
+  });
+  const ltSpeed = speeds.reduce((a,v)=>a+v,0)/speeds.length;
+  const ltPace = 1000/ltSpeed; // s/km
+  const ltPaceMin = Math.floor(ltPace/60);
+  const ltPaceSec = Math.round(ltPace%60);
+  const ltZone2 = ltSpeed * 0.75; // Zone 2 = 75% LT speed
+  const z2Pace = 1000/ltZone2;
+  const z2Min = Math.floor(z2Pace/60);
+  const z2Sec = Math.round(z2Pace%60);
+  el.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+      <div style="background:var(--s2);border-radius:10px;padding:12px;text-align:center">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--yw)">${ltPaceMin}:${ltPaceSec.toString().padStart(2,'0')}</div>
+        <div style="font-size:10px;color:var(--mu);margin-top:3px">Laktaattikynnys (min/km)</div>
+      </div>
+      <div style="background:var(--s2);border-radius:10px;padding:12px;text-align:center">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gn)">${z2Min}:${z2Sec.toString().padStart(2,'0')}</div>
+        <div style="font-size:10px;color:var(--mu);margin-top:3px">Zone 2 -tahti (min/km)</div>
+      </div>
+    </div>
+    <div class="ab ai"><span class="ic">💡</span><span style="font-size:11px">Estimaatti perustuu RPE 7–8 intervallien nopeuteen (${ltSessions.length} sessiota). Aerobiset lenkit tulisi tehdä Zone 2 -tahdilla. Ei korvaa laboratoriotestiä.</span></div>`;
+}
+
+// ── PER-EXERCISE GRAPH ─────────────────────────────────
+function renderExGraph() {
+  const sel = document.getElementById('ex-graph-sel');
+  if (!sel) return;
+  const exId = sel.value;
+  const pts = [];
+  D.sessions.filter(s=>s.type==='voima').forEach(s=>{
+    const ex = (s.exercises||[]).find(e=>e.id===exId);
+    if (ex&&ex.sets?.length) {
+      const wk = Math.floor((new Date()-new Date(s.date))/(1000*60*60*24*7));
+      const best1rm = Math.max(...ex.sets.map(st=>epley(st.weight||0,st.reps||1)));
+      if (best1rm>0) pts.push({w:Math.max(0,wks()-wk),v:Math.round(best1rm),date:s.date});
+    }
+  });
+  pts.sort((a,b)=>a.w-b.w);
+  if (pts.length < 1) { const el=document.getElementById('g-ex');if(el)el.innerHTML='<p style="color:var(--mu);font-size:12px">Ei dataa tälle liikkeelle</p>'; return; }
+  renderGraph('g-ex', pts, [], '#f97316', 'kg', false, v=>Math.round(v)+'kg');
+}
+
+// ── TEST PROTOCOL ──────────────────────────────────────
+function calcTestProtocol() {
+  const w = parseFloat(document.getElementById('tp-w').value)||100;
+  const r = parseFloat(document.getElementById('tp-r').value)||3;
+  const exId = document.getElementById('tp-ex').value;
+  const e1rm = Math.round(epley(w,r));
+  // Compare to previous best
+  const prev = lastPerf(exId);
+  const prevBest = prev?.sets ? Math.max(...prev.sets.map(s=>epley(s.weight||0,s.reps||1))) : null;
+  const expected = expAt(EXP.bench, wks());
+  const diff = prevBest ? Math.round(e1rm - prevBest) : null;
+  const vsExpected = exId==='bench' ? Math.round(e1rm - expected) : null;
+
+  const el = document.getElementById('tp-result');
+  el.innerHTML = `
+    <div style="background:var(--gnd);border:1px solid var(--gn);border-radius:12px;padding:14px;text-align:center;margin-bottom:10px">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--gn);line-height:1">${e1rm} kg</div>
+      <div style="font-size:12px;color:var(--gn);margin-top:4px">Arvioitu 1RM (Epley-kaava)</div>
+      <div style="font-size:10px;color:var(--mu);margin-top:4px">${w}kg × ${r} toistoa</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+      ${diff!==null?`<div style="background:var(--s2);border-radius:9px;padding:10px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:${diff>=0?'var(--gn)':'var(--rd)'}">${diff>0?'+':''}${diff} kg</div><div style="font-size:10px;color:var(--mu)">vs. edellinen</div></div>`:'<div style="background:var(--s2);border-radius:9px;padding:10px;text-align:center"><div style="font-size:12px;color:var(--mu)">Ensimmäinen testi</div></div>'}
+      ${vsExpected!==null?`<div style="background:var(--s2);border-radius:9px;padding:10px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:${vsExpected>=0?'var(--gn)':'var(--yw)'}">${vsExpected>0?'+':''}${vsExpected} kg</div><div style="font-size:10px;color:var(--mu)">vs. ohjelma-tavoite</div></div>`:''}
+    </div>
+    <div style="font-size:11px;color:var(--mu)">Seuraavat työsarjasuositukset: 85%=${Math.round(e1rm*0.85)}kg · 80%=${Math.round(e1rm*0.80)}kg · 75%=${Math.round(e1rm*0.75)}kg</div>`;
+
+  // Save to bests
+  if (exId==='bench' && (!D.bests.bench || e1rm>D.bests.bench)) { D.bests.bench=e1rm; cSave(); }
+  if (exId==='pullup_w' && (!D.bests.pull || e1rm>D.bests.pull)) { D.bests.pull=e1rm; cSave(); }
+}
+
+// ══ DASHBOARD ═════════════════════════════════════════
+function rdDash() {
+  const w = wks(), next = getNextSession();
+  const ready = calcReadiness(), acwr = calcACWR(), hrv = getHRVStatus();
+
+  // Next session card
+  const nsCard = document.getElementById('next-sess-card');
+  const missedHTML = next.missed && next.missed.length
+    ? `<div style="font-size:11px;color:var(--or);margin-top:5px">⚠️ Väliin jääneet: ${next.missed.map(m=>['','Ma','Ti','Ke','To','Pe','La','Su'][m.dow]+' '+m.short).join(', ')}</div>` : '';
+  if (next.type === 'rest') {
+    nsCard.innerHTML = `<div class="tc"><div class="dt">😴 LEPO</div><div class="dd">Palautuminen on osa ohjelmaa · Vk ${w} · ${next.phase}</div><div style="margin-top:10px"><button class="btn bs" onclick="openSessionPicker()" style="padding:8px;font-size:12px">Haluatko tehdä silti? →</button></div></div>`;
+  } else if (next.type === 'deload') {
+    nsCard.innerHTML = `<div class="tc" style="border-color:var(--yw)"><div class="dt" style="color:var(--yw)">🔄 DELOAD VK ${w}</div><div class="dd">${next.desc}</div>${missedHTML}</div>`;
+  } else {
+    let exSugsHTML = '';
+    if (next.type === 'voima' && next.key && EX[next.key]) {
+      const sugs = EX[next.key].slice(0,4).map(ex => {
+        const s = suggest(ex); if (!s) return '';
+        const cls = s.dir==='up'?'su':s.dir==='down'?'sd':'ss';
+        return `<div class="ner"><span class="nen">${ex.name.replace('★ ','')}</span><span class="ns ${cls}">${s.text.split('—')[0].trim()}</span></div>`;
+      }).filter(Boolean).join('');
+      if (sugs) exSugsHTML = `<div style="margin-top:9px;border-top:1px solid rgba(255,255,255,.1);padding-top:9px"><div style="font-size:10px;color:rgba(148,163,184,.8);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px">⚡ Painoehdotukset (est. 1RM)</div>${sugs}</div>`;
+    }
+    nsCard.innerHTML = `<div class="tc"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="dt">${next.label}</div><div class="dd">Vk ${w} · ${next.phase}${next.desc?' · '+next.desc:''}</div></div><div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--ac);opacity:.5">${next.short||''}</div></div>${missedHTML}${exSugsHTML}<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px"><button class="btn bp" onclick="startRecommended()" style="padding:10px;font-size:12px">▶ Aloita tämä</button><button class="btn bs" onclick="openSessionPicker()" style="padding:10px;font-size:12px">Valitse itse →</button></div></div>`;
+  }
+
+  // Upcoming 7 days
+  const upcoming = document.getElementById('upcoming-card');
+  if (upcoming) {
+    const days = ['Su','Ma','Ti','Ke','To','Pe','La'];
+    const schedLabels = {1:'💪 Voima — Yläkroppa',2:`🔴 Juoksu — ${w<=8?'Intervalli':w<=16?'300m-sarjat':'Race pace'}`,3:'🦵 Voima — Alakroppa',4:'🟢 Juoksu — Aerobinen',5:`💪 Voima — ${w>=17?'Maksimivoima':'Yläkroppa'}`,6:`${w>=17?'🏆 Kilpailuvauhti':w>=5?'⚡ Nopeus':'🔴 Intervalli'}`,0:'😴 Lepo'};
+    let rows = '';
+    for (let i=1; i<=7; i++) {
+      const dd=new Date(); dd.setDate(dd.getDate()+i);
+      const dow2=dd.getDay(), ds=dd.toISOString().split('T')[0];
+      const dateStr=`${dd.getDate()}.${dd.getMonth()+1}`;
+      const label=isDL(w)?'🔄 Deload':(schedLabels[dow2]||'😴 Lepo');
+      const isRest=dow2===0||isDL(w);
+      const hasDone=D.sessions.some(s=>s.date===ds)||D.extras.some(e=>e.date===ds);
+      rows+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bd)"><span style="font-size:11px;color:var(--mu);min-width:50px">${days[dow2]} ${dateStr}</span><span style="font-size:12px;font-weight:${hasDone?700:400};color:${hasDone?'var(--gn)':isRest?'var(--mu)':'var(--tx)'}">${hasDone?'✓ Tehty':label}</span></div>`;
+    }
+    upcoming.innerHTML = `<div class="card" style="padding:11px 13px"><div class="ct" style="margin-bottom:8px">📅 TULOSSA — SEURAAVAT 7 PÄIVÄÄ</div>${rows}<button class="btn bs" onclick="openSessionPicker()" style="margin-top:10px;padding:8px;font-size:11px">📋 Valitse manuaalisesti</button></div>`;
+  }
+
+  // Training feedback
+  const az = document.getElementById('az');
+  if (az) {
+    const lastV=[...D.sessions].reverse().find(s=>s.type==='voima');
+    if(lastV){
+      const daysSince=Math.floor((new Date()-new Date(lastV.date))/(1000*60*60*24));
+      if(daysSince<=3){
+        const exs=lastV.exercises||[];const totalSets=exs.reduce((a,e)=>a+(e.sets?.length||0),0);const okSets=exs.reduce((a,e)=>a+(e.sets?.filter(s=>s.success===true).length||0),0);const pct=totalSets?Math.round(okSets/totalSets*100):0;const avgRPE=exs.length?Math.round(exs.reduce((a,e)=>a+(e.rpe||7),0)/exs.length):7;
+        let fb='',fbt='ai';
+        if(pct>=90&&avgRPE<=8){fb=`✅ Erinomainen treeni! ${pct}% sarjoista onnistui, RPE ${avgRPE}. Progressio jatkuu — +2.5kg seuraavalle kerralle.`;fbt='ag';}
+        else if(pct>=75){fb=`👍 Hyvä treeni. ${pct}% onnistui, RPE ${avgRPE}. Pidetään sama paino ensi kerralla.`;fbt='ai';}
+        else if(pct<60||avgRPE>=10){fb=`⚠️ Raskas treeni — ${pct}% onnistui, RPE ${avgRPE}. Seuraavalle kerralle kevennys.`;fbt='aw';}
+        if(fb) az.innerHTML=`<div class="ab ${fbt}"><span class="ic">💬</span><span><strong>Palaute:</strong> ${fb}</span></div>`+az.innerHTML;
+      }
+    }
+  }
+
+  // Stats — tappable
+  document.getElementById('s-wk').textContent = w;
+  document.getElementById('s-st').textContent = streak();
+  const rEl=document.getElementById('s-ready'),rBox=document.getElementById('s-ready-box');
+  if(rEl){rEl.textContent=ready.score;rEl.style.color=ready.color;}
+  if(rBox){rBox.style.cursor='pointer';rBox.onclick=()=>showDetailModal('readiness');}
+  const aEl=document.getElementById('s-acwr'),aBox=document.getElementById('s-acwr-box');
+  if(aEl){aEl.textContent=acwr.ratio!==null?acwr.ratio:'–';aEl.style.color=acwr.color||'var(--mu)';}
+  if(aBox){aBox.style.cursor='pointer';aBox.onclick=()=>showDetailModal('acwr');}
+
+  // Alerts
+  const alerts=[];
+  if(isDL(w))alerts.push({t:'ai',ic:'🔄',m:`Viikko ${w} on DELOAD. Painot -15%, sarjat 3×5.`});
+  const ls=D.sessions.slice(-1)[0];
+  if(ls&&ls.sleep<6)alerts.push({t:'ad',ic:'😴',m:`Uni ${ls.sleep}h — alle 6h heikentää palautumista.`});
+  const wl=wkLoad(td()),pd2=new Date();pd2.setDate(pd2.getDate()-7);const lwl=wkLoad(pd2.toISOString().split('T')[0]);
+  if(lwl>0&&wl>lwl*1.25)alerts.push({t:'aw',ic:'⚠️',m:`Kuormitus +${Math.round((wl/lwl-1)*100)}% edellisestä viikosta.`});
+  if(hrv.status==='bad')alerts.push({t:'ad',ic:'💓',m:'HRV alhainen — harkitse lepopäivää.'});
+  else if(hrv.status==='ok')alerts.push({t:'aw',ic:'💓',m:'HRV hieman alle perustason.'});
+  if(az)az.innerHTML+=(alerts.map(a=>`<div class="ab ${a.t}"><span class="ic">${a.ic}</span><span>${a.m}</span></div>`).join(''));
+
+  // Test alert
+  const nextTest=TEST_WEEKS.find(tw=>tw>=w);
+  const ta=document.getElementById('test-alert');
+  if(nextTest&&(nextTest-w)<=1)ta.innerHTML=`<div class="ab ag"><span class="ic">🏆</span><span>Testausviikko ${nextTest} lähestyy!</span></div>`;
+  else ta.innerHTML='';
+
+  // Progress bars — estimated 1RM
+  const bench=D.bests.bench||D.settings.benchRM;
+  document.getElementById('pb-f').style.width=Math.max(0,Math.min(100,Math.round((bench-120)/(155-120)*100)))+'%';
+  document.getElementById('pb-n').textContent=`${bench}kg est.1RM → 155kg`;
+  const pull=D.bests.pull||D.settings.pullRM;
+  document.getElementById('pp-f').style.width=Math.max(0,Math.min(100,Math.round((pull-40)/(75-40)*100)))+'%';
+  document.getElementById('pp-n').textContent=`+${pull}kg → +75kg`;
+  if(D.bests.run400){const pct=Math.max(0,Math.min(100,Math.round((70-D.bests.run400)/(70-58)*100)));document.getElementById('pr-f').style.width=pct+'%';document.getElementById('pr-n').textContent=`${fmt(D.bests.run400)} → 0:58`;}
+  const hrv2=getHRVStatus();
+  if(hrv2.val){
+    document.getElementById('hrv-f').style.width=Math.min(100,Math.round((hrv2.val/hrv2.base)*100))+'%';
+    const hEl=document.getElementById('hrv-n');
+    if(hEl){hEl.textContent=`${hrv2.val}ms (${hrv2.pct>0?'+':''}${hrv2.pct}%)`;hEl.parentElement.style.cursor='pointer';hEl.parentElement.onclick=()=>showDetailModal('hrv');}
+  }
+
+  // Week strip — tappable
+  const dn=['Su','Ma','Ti','Ke','To','Pe','La'],di=['😴','💪','🏃','🦵','🟢','💪','⚡'],d=dow();
+  document.getElementById('ws').innerHTML=Array.from({length:7},(_,i)=>{
+    const dd=new Date();dd.setDate(dd.getDate()-(d===0?6:d-1)+i);const ds=dd.toISOString().split('T')[0];
+    const has=D.sessions.some(s=>s.date===ds)||D.extras.some(e=>e.date===ds);
+    return `<div class="dc ${has?'done':ds===td()?'today':''}" style="cursor:pointer" onclick="showDayDetail('${ds}')"><span style="font-size:9px">${dn[(i+1)%7]}</span><span class="ci">${has?'✓':di[i]}</span></div>`;
+  }).join('');
+
+  // Load chart
+  const loads=dLoads(),maxL=Math.max(...loads,1),cols=['#3b82f6','#ef4444','#a855f7','#22c55e','#3b82f6','#f97316','#6b7280'];
+  document.getElementById('lchart').innerHTML=loads.map((l,i)=>`<div style="flex:1;border-radius:4px 4px 0 0;min-height:3px;height:${Math.round(l/maxL*62)+3}px;background:${cols[i]};opacity:${l>0?1:.15}"></div>`).join('');
+}
+
+function loadLastNDaysFrom(n, fromDate) {
+  let t=0;for(let i=0;i<n;i++){const d=new Date(fromDate);d.setDate(fromDate.getDate()-i);t+=loadForDate(d.toISOString().split('T')[0]);}return t;
+}
+
+function showDayDetail(ds) {
+  const sessions=D.sessions.filter(s=>s.date===ds),extras=D.extras.filter(e=>e.date===ds);
+  if(!sessions.length&&!extras.length){snk('Ei treeniä tänä päivänä');return;}
+  const d=new Date(ds);
+  const ov=document.createElement('div');ov.className='sum-ov';
+  ov.innerHTML=`<div class="sum-sh"><div class="sum-handle"></div><div class="sum-ttl" style="font-size:18px">${d.getDate()}.${d.getMonth()+1}.${d.getFullYear()}</div>
+    ${sessions.map(s=>{if(s.type==='voima'){const exRows=(s.exercises||[]).map(e=>{const mw=e.weight||0;const ok=(e.sets||[]).filter(st=>st.success===true).length;const tot=(e.sets||[]).length;return `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--bd);font-size:12px"><span style="font-weight:600">${e.name?.replace('★ ','')||e.id}</span><span style="color:var(--mu)">${mw}kg·${ok}/${tot}✓·RPE${e.rpe||'–'}</span></div>`;}).join('');return `<div style="margin-bottom:10px"><div style="font-weight:700;font-size:13px;margin-bottom:6px">💪 ${s.label}</div>${exRows}<div style="font-size:11px;color:var(--mu);margin-top:5px">Uni:${s.sleep}h·RPE:${s.rpe}</div></div>`;}return `<div style="margin-bottom:10px"><div style="font-weight:700;font-size:13px">🏃 ${s.label}</div><div style="font-size:11px;color:var(--mu)">${s.dist}km·RPE${s.rpe}${s.time400?' · ⏱ '+fmt(s.time400):''}</div></div>`;}).join('')}
+    ${extras.map(e=>`<div style="margin-bottom:8px"><div style="font-weight:700;font-size:13px">➕ ${e.activity}</div><div style="font-size:11px;color:var(--mu)">${e.duration}min·RPE${e.rpe}</div></div>`).join('')}
+    <button class="btn bs" onclick="this.closest('.sum-ov').remove()" style="margin-top:12px">Sulje</button></div>`;
+  document.body.appendChild(ov);
+}
+
+
+function startSessionByKey(key, label) {
+  const tabs = document.querySelectorAll('.tb');
+  const voimaKeys = ['ya','yb','aa','ab'];
+  if (voimaKeys.includes(key)) {
+    T('voima', tabs[1]);
+    const el = document.getElementById('v-ty');
+    if(el) { el.value = key; buildWorkoutView(true); }
+  } else {
+    T('juoksu', tabs[2]);
+    const el = document.getElementById('r-ty');
+    if(el) { el.value = key; updRunForm(); }
+  }
+}
+
+function startRecommended() {
+  const next = getNextSession(), tabs = document.querySelectorAll('.tb');
+  if (next.type === 'voima') { T('voima', tabs[1]); const el=document.getElementById('v-ty'); if(el&&next.key){el.value=next.key;buildWorkoutView();} }
+  else if (next.type === 'juoksu') { T('juoksu', tabs[2]); const el=document.getElementById('r-ty'); if(el&&next.key){el.value=next.key;updRunForm();} }
+  else snk('Lepopäivä tai deload — levätään! 😴');
+}
+
+function openSessionPicker() {
+  const sessions = [
+    {label:'💪 Yläkroppa A (Penkki + leuat)',tab:'voima',key:'ya'},
+    {label:'💪 Yläkroppa B (Rotaatio)',tab:'voima',key:'yb'},
+    {label:'🦵 Alakroppa A (Kyykky + hip thrust)',tab:'voima',key:'aa'},
+    {label:'🦵 Alakroppa B (Rotaatio)',tab:'voima',key:'ab'},
+    {label:'🔴 Juoksu — Intervalli',tab:'juoksu',key:'intervalli'},
+    {label:'🟢 Juoksu — Aerobinen',tab:'juoksu',key:'aerobinen'},
+    {label:'⚡ Juoksu — Nopeus',tab:'juoksu',key:'nopeus'},
+    {label:'🏆 Juoksu — Kilpailuvauhti',tab:'juoksu',key:'kilpailuvauhti'},
+    {label:'🏆 400m TESTI',tab:'juoksu',key:'testi_400m'},
+  ];
+  const overlay = document.createElement('div');
+  overlay.id = 'sess-picker';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:400;display:flex;align-items:flex-end';
+  overlay.innerHTML = `<div style="width:100%;background:var(--sf);border-radius:20px 20px 0 0;padding:18px 14px 32px;border-top:1px solid var(--bd);max-height:80vh;overflow-y:auto">
+    <div style="width:40px;height:4px;background:var(--bd);border-radius:99px;margin:0 auto 14px"></div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--tx);margin-bottom:14px">VALITSE TREENI</div>
+    ${sessions.map((s,i)=>`<div onclick="pickSession(${i})" style="padding:12px;background:var(--s2);border:1px solid var(--bd);border-radius:10px;margin-bottom:8px;font-weight:600;font-size:13px;cursor:pointer">${s.label}</div>`).join('')}
+    <button onclick="document.getElementById('sess-picker').remove()" class="btn bs" style="margin-top:4px">Peruuta</button>
+  </div>`;
+  overlay._sessions = sessions;
+  document.body.appendChild(overlay);
+}
+
+function pickSession(i) {
+  const overlay = document.getElementById('sess-picker');
+  if (!overlay) return;
+  const s = overlay._sessions[i];
+  overlay.remove();
+  const tabs = document.querySelectorAll('.tb');
+  if (s.tab === 'voima') { T('voima', tabs[1]); const el=document.getElementById('v-ty'); if(el){el.value=s.key;buildWorkoutView();} }
+  else { T('juoksu', tabs[2]); const el=document.getElementById('r-ty'); if(el){el.value=s.key;updRunForm();} }
+}
+
+// ══ HISTORY ═══════════════════════════════════════════
+const AN={pyoraily:'🚴 Pyöräily',stadion:'🏟️ Stadion',tennis:'🎾 Tennis',jalkapallo:'⚽ Jalkapallo',uinti:'🏊 Uinti',muu_puntti:'🏋️ Muut puntit'};
+
+let histFilter = 'all';
+function setFilter(f) {
+  histFilter = f;
+  document.querySelectorAll('.hfbtn').forEach(b => b.classList.remove('on'));
+  document.getElementById('hf-'+f)?.classList.add('on');
+  rdHist();
+}
+
+function rdHist(){
+  document.getElementById('b-be').textContent=D.bests.bench?`${D.bests.bench}kg`:'–';
+  document.getElementById('b-pu').textContent=D.bests.pull?`+${D.bests.pull}kg`:'–';
+  document.getElementById('b-40').textContent=D.bests.run400?fmt(D.bests.run400):'–';
+
+  const q = (document.getElementById('hsrch')?.value||'').toLowerCase().trim();
+
+  let all=[...D.sessions.map(s=>({...s,_src:'session'})),...D.extras.map(e=>({...e,_src:'extra',type:'extra',label:AN[e.activity]||e.activity}))].sort((a,b)=>b.date.localeCompare(a.date));
+
+  // Filter by type
+  if (histFilter === 'voima') all = all.filter(s => s.type === 'voima');
+  else if (histFilter === 'juoksu') all = all.filter(s => s.type === 'juoksu');
+  else if (histFilter === 'extra') all = all.filter(s => s._src === 'extra');
+  else if (histFilter === 'testi') all = all.filter(s => s.time400 || s.runType === 'testi_400m');
+
+  // Search filter
+  if (q) {
+    all = all.filter(s => {
+      const label = (s.label||'').toLowerCase();
+      const exNames = (s.exercises||[]).map(e=>e.name||'').join(' ').toLowerCase();
+      const notes = (s.notes||'').toLowerCase();
+      const date = s.date||'';
+      return label.includes(q)||exNames.includes(q)||notes.includes(q)||date.includes(q);
+    });
+  }
+
+  const hl=document.getElementById('hl');
+  if(!all.length){hl.innerHTML=`<p style="color:var(--mu);font-size:12px">${q?'Ei tuloksia haulle "'+q+'"':'Ei vielä treenejä.'}</p>`;return;}
+
+  hl.innerHTML=all.map(s=>{
+    const d=new Date(s.date),ds=`${d.getDate()}.${d.getMonth()+1}`,day=['Su','Ma','Ti','Ke','To','Pe','La'][d.getDay()];
+    let det='';
+    if(s._src==='extra')det=`${s.label} · ${s.duration}min · RPE ${s.rpe}`;
+    else if(s.type==='voima'){
+      const exNames=(s.exercises||[]).slice(0,3).map(e=>e.name?.replace('★ ','')).join(', ');
+      det=`RPE ${s.rpe} · Uni ${s.sleep}h · ${exNames}${(s.exercises?.length||0)>3?'…':''}`;
+    } else det=`${s.label||''} · ${s.dist}km · RPE ${s.rpe}${s.time400?' · ⏱ '+fmt(s.time400):''}${s.intDist?` · ${s.intN}×${s.intDist}`:''}`;
+    const tc=s.type==='voima'?'tbl':s._src==='extra'?'tor':'tgn';
+    return `<div class="hi"><div class="hh" onclick="togX('x-${s.id}','ch-${s.id}')"><div class="hd">${ds}<br><span style="font-size:9px">${day}</span></div><div class="hb"><div class="ht"><span><span class="tag ${tc}" style="margin-right:4px">${s._src==='extra'?'EXTRA':s.type?.toUpperCase()}</span>${s.label||''}</span><span id="ch-${s.id}" style="color:var(--mu);font-size:17px">›</span></div><div class="hdet">${det}</div></div></div><div class="hx" id="x-${s.id}">${buildExp(s)}</div></div>`;
+  }).join('');
+}
+
+function togX(eid,cid){const el=document.getElementById(eid),ch=document.getElementById(cid);const o=el.classList.toggle('open');if(ch)ch.textContent=o?'⌄':'›';}
+
+function buildExp(s){
+  if(s._src==='extra')return `<div><div class="er2"><div class="ef"><label>Kesto (min)</label><div class="niw"><button class="nb" onclick="eA('h-du-${s.id}',-10)">−</button><input class="nd" type="number" id="h-du-${s.id}" value="${s.duration||60}" style="font-size:13px"><button class="nb" onclick="eA('h-du-${s.id}',10)">+</button></div></div><div class="ef"><label>RPE</label><div class="niw"><button class="nb" onclick="eA('h-rp-${s.id}',-1)">−</button><input class="nd" type="number" id="h-rp-${s.id}" value="${s.rpe||7}" min="1" max="10" style="font-size:13px"><button class="nb" onclick="eA('h-rp-${s.id}',1)">+</button></div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:7px"><button class="btn bsm bg" onclick="doEdit('${s.id}','extra')">✓ Tallenna</button><button class="btn bsm bd2" onclick="doDel('${s.id}','extra')">🗑 Poista</button></div></div>`;
+  if(s.type==='voima'){const rows=(s.exercises||[]).map(ex=>{const mw=ex.sets?Math.max(...ex.sets.map(st=>st.weight||0)):0;const ok=ex.sets?ex.sets.filter(st=>st.success===true).length:0;return `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bd);font-size:11px"><span style="font-weight:600">${ex.name?.replace('★ ','')||ex.id}</span><span style="color:var(--mu);font-family:'DM Mono',monospace">${mw}kg · ${ok}/${ex.sets?.length||0}✓ · RPE ${ex.rpe||'–'}</span></div>`;}).join('');return `<div>${rows}<div class="er2" style="margin-top:7px"><div class="ef"><label>Uni (h)</label><div class="niw"><button class="nb" onclick="eA('h-sl-${s.id}',-0.5)">−</button><input class="nd" type="number" id="h-sl-${s.id}" value="${s.sleep||7.5}" step="0.5" style="font-size:13px"><button class="nb" onclick="eA('h-sl-${s.id}',0.5)">+</button></div></div><div class="ef"><label>PVM</label><input type="date" class="fi" id="h-dt-${s.id}" value="${s.date}" style="height:40px;font-size:12px"></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:7px"><button class="btn bsm bg" onclick="doEdit('${s.id}','session')">✓ Tallenna</button><button class="btn bsm bd2" onclick="doDel('${s.id}','session')">🗑 Poista</button></div></div>`;}
+  return `<div><div class="er2"><div class="ef"><label>Matka (km)</label><div class="niw"><button class="nb" onclick="eA('h-di-${s.id}',-0.5)">−</button><input class="nd" type="number" id="h-di-${s.id}" value="${s.dist||5}" step="0.5" style="font-size:13px"><button class="nb" onclick="eA('h-di-${s.id}',0.5)">+</button></div></div><div class="ef"><label>RPE</label><div class="niw"><button class="nb" onclick="eA('h-rp-${s.id}',-1)">−</button><input class="nd" type="number" id="h-rp-${s.id}" value="${s.rpe||7}" min="1" max="10" style="font-size:13px"><button class="nb" onclick="eA('h-rp-${s.id}',1)">+</button></div></div></div>${s.time400!==undefined?`<div class="ef" style="margin-bottom:7px"><label>400m aika (s)</label><div class="niw"><button class="nb" onclick="eA('h-t4-${s.id}',-0.5)">−</button><input class="nd" type="number" id="h-t4-${s.id}" value="${s.time400||68}" step="0.5" style="font-size:13px"><button class="nb" onclick="eA('h-t4-${s.id}',0.5)">+</button></div></div>`:''}<div class="ef" style="margin-bottom:7px"><label>PVM</label><input type="date" class="fi" id="h-dt-${s.id}" value="${s.date}" style="height:40px;font-size:12px"></div><div class="ef" style="margin-bottom:7px"><label>Muistiinpanot</label><textarea class="fta" id="h-no-${s.id}" style="min-height:50px">${s.notes||''}</textarea></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:7px"><button class="btn bsm bg" onclick="doEdit('${s.id}','session')">✓ Tallenna</button><button class="btn bsm bd2" onclick="doDel('${s.id}','session')">🗑 Poista</button></div></div>`;
+}
+
+function eA(id,d){const el=document.getElementById(id);if(el)el.value=Math.round((parseFloat(el.value)+d)*10)/10;}
+
+async function doEdit(id,src){
+  if(src==='session'){const idx=D.sessions.findIndex(s=>String(s.id)===String(id));if(idx===-1)return;const s=D.sessions[idx];const g=k=>document.getElementById(k+id);if(g('h-dt-'))s.date=g('h-dt-').value;if(g('h-sl-'))s.sleep=parseFloat(g('h-sl-').value)||s.sleep;if(g('h-di-'))s.dist=parseFloat(g('h-di-').value)||s.dist;if(g('h-rp-'))s.rpe=parseFloat(g('h-rp-').value)||s.rpe;if(g('h-t4-')){s.time400=parseFloat(g('h-t4-').value)||s.time400;if(!D.bests.run400||s.time400<D.bests.run400)D.bests.run400=s.time400;}if(g('h-no-'))s.notes=g('h-no-').value;D.sessions[idx]=s;}
+  else{const idx=D.extras.findIndex(e=>String(e.id)===String(id));if(idx===-1)return;const g=k=>document.getElementById(k+id);if(g('h-du-'))D.extras[idx].duration=parseFloat(g('h-du-').value)||D.extras[idx].duration;if(g('h-rp-'))D.extras[idx].rpe=parseFloat(g('h-rp-').value)||D.extras[idx].rpe;}
+  await cSave();snk('✅ Tallennettu!');rdHist();
+}
+
+async function doDel(id,src){if(!confirm('Poistetaanko?'))return;if(src==='session')D.sessions=D.sessions.filter(s=>String(s.id)!==String(id));else D.extras=D.extras.filter(e=>String(e.id)!==String(id));D.bests.run400=D.sessions.filter(s=>s.time400).reduce((b,s)=>(!b||s.time400<b)?s.time400:b,null);await cSave();snk('🗑 Poistettu');rdHist();rdDash();}
+
+// ══ INIT ══════════════════════════════════════════════
+async function init(){
+  await cLoad();
+  document.getElementById('ld').style.display='none';
+  ldSett();rdDash();
+}
+init();
+</script>
+</body>
+</html>
