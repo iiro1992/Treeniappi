@@ -711,7 +711,12 @@ async function cSave(){
 }
 
 // ══ UTILS ════════════════════════════════════════════
-const td=()=>new Date().toISOString().split('T')[0]; // päivämäärä UI-kenttiin
+// Paikallinen päivämäärä (ei UTC) — timezone-turvallinen
+const localDate=(d=new Date())=>{
+  const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), dd=String(d.getDate()).padStart(2,'0');
+  return y+'-'+m+'-'+dd;
+};
+const td=()=>localDate(); // päivämäärä UI-kenttiin
 const tdt=()=>new Date().toISOString(); // täysi aikaleima tallennukseen
 const dow=()=>new Date().getDay();
 const fmt=s=>`${Math.floor(s/60)}:${Math.round(s%60).toString().padStart(2,'0')}`;
@@ -872,24 +877,28 @@ function _renderOWeek(w){
 
   const phC=scheme.phase==='nopeusvoimafaasi'?'var(--rd)':scheme.phase==='voima'||scheme.phase==='perusvoima'?'var(--or)':scheme.phase==='volyymi'?'var(--bl)':'var(--yw)';
 
+  // Laske oikeat kalenteripäivien nimet päivämääristä
+  const WEEKDAYS=['Su','Ma','Ti','Ke','To','Pe','La'];
+
   const SESS=[
-    {d:'Ma',ico:'&#128170;',lbl:'Yl&auml;kroppa A',cns:'HIGH',type:'voima',key:k1},
-    {d:'Ti',ico:'&#9889;',lbl:'Juoksu &mdash; Flying + Intervallit',cns:'HIGH',type:'juoksu',key:'intervalli'},
-    {d:'Ke',ico:'&#128564;',lbl:'Lepo',cns:'LOW',type:'lepo'},
-    {d:'To',ico:'&#129461;',lbl:'Alakroppa',cns:'HIGH',type:'voima',key:k2},
-    isFH?{d:'Pe',ico:'&#128170;',lbl:'Yl&auml;kroppa B',cns:'MED',type:'voima',key:k3}
-        :{d:'Pe',ico:'&#129001;',lbl:'Zone 2 Aerobinen',cns:'LOW',type:'juoksu',key:'aerobinen'},
-    isFH?{d:'La',ico:'&#127942;',lbl:presc.fridaySession==='kilpailuvauhti'?'Kilpailuvauhti':'LA Toleranssi',cns:'HIGH',type:'juoksu',key:presc.fridaySession}
-        :{d:'La',ico:'&#128170;',lbl:'Yl&auml;kroppa B',cns:'MED',type:'voima',key:k3},
-    {d:'Su',ico:'&#128564;',lbl:'Lepo',cns:'LOW',type:'lepo'},
+    {ico:'&#128170;',lbl:'Yl&auml;kroppa A',cns:'HIGH',type:'voima',key:k1},
+    {ico:'&#9889;',lbl:'Juoksu &mdash; Flying + Intervallit',cns:'HIGH',type:'juoksu',key:'intervalli'},
+    {ico:'&#128564;',lbl:'Lepo',cns:'LOW',type:'lepo'},
+    {ico:'&#129461;',lbl:'Alakroppa',cns:'HIGH',type:'voima',key:k2},
+    isFH?{ico:'&#128170;',lbl:'Yl&auml;kroppa B',cns:'MED',type:'voima',key:k3}
+        :{ico:'&#129001;',lbl:'Zone 2 Aerobinen',cns:'LOW',type:'juoksu',key:'aerobinen'},
+    isFH?{ico:'&#127942;',lbl:presc.fridaySession==='kilpailuvauhti'?'Kilpailuvauhti':'LA Toleranssi',cns:'HIGH',type:'juoksu',key:presc.fridaySession}
+        :{ico:'&#128170;',lbl:'Yl&auml;kroppa B',cns:'MED',type:'voima',key:k3},
+    {ico:'&#128564;',lbl:'Lepo',cns:'LOW',type:'lepo'},
   ];
 
   const cC={'HIGH':'var(--rd)','MED':'var(--yw)','LOW':'var(--gn)'};
 
-  const today = new Date().toISOString().split('T')[0];
+  const today = localDate();
   const cards=SESS.map((s,i)=>{
     const sel=_oD===i;
     const dd=new Date(dates[i]);
+    const dayName=WEEKDAYS[dd.getDay()]; // oikea kalenteripäivä
     const ds=dd.getDate()+'.'+(dd.getMonth()+1)+'.';
     const isToday=dates[i]===today;
     const wasDone=s.type!=='lepo'&&done_s.some(ws2=>
@@ -899,7 +908,7 @@ function _renderOWeek(w){
     const sub=s.type==='voima'?scheme.label:s.type==='juoksu'?'Juoksuharjoitus':'Lepo &mdash; palautuminen';
     const click=s.type!=='lepo';
     return '<div onclick="'+(click?'ohjSelectDay('+i+')':'')+'" data-ohj-today="'+(isToday?'1':'0')+'" style="display:flex;align-items:center;gap:10px;padding:11px 12px;background:'+(sel?'rgba(0,212,255,.08)':isToday?'rgba(0,212,255,.04)':'var(--s2)')+';border:2px solid '+(sel?'var(--ac)':isToday?'var(--ac)':'transparent')+';border-radius:11px;margin-bottom:7px;cursor:'+(click?'pointer':'default')+';-webkit-tap-highlight-color:transparent;transition:background .12s">'
-      +'<div style="text-align:center;min-width:30px;flex-shrink:0"><div style="font-size:11px;font-weight:700;color:'+(isToday?'var(--ac)':'var(--mu)')+'">'+s.d+'</div><div style="font-size:9px;color:'+(isToday?'var(--ac)':'var(--mu)')+'">'+ds+'</div></div>'
+      +'<div style="text-align:center;min-width:30px;flex-shrink:0"><div style="font-size:11px;font-weight:700;color:'+(isToday?'var(--ac)':'var(--mu)')+'">'+dayName+'</div><div style="font-size:9px;color:'+(isToday?'var(--ac)':'var(--mu)')+'">'+ds+'</div></div>'
       +'<div style="width:3px;height:38px;border-radius:2px;background:'+cC[s.cns]+';flex-shrink:0"></div>'
       +'<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700;color:var(--tx)">'+s.ico+' '+s.lbl+'</div><div style="font-size:10px;color:var(--mu);margin-top:2px"><span style="color:'+cC[s.cns]+';font-weight:700">'+s.cns+'</span> &middot; '+sub+(isToday?' <span style="color:var(--ac);font-weight:700">&larr; TÄNÄÄN</span>':'')+'</div></div>'
       +((isPast||isCur)?'<div style="font-size:16px;flex-shrink:0">'+(wasDone&&s.type!=='lepo'?'&#9989;':'&#11036;')+'</div>'
@@ -1217,7 +1226,7 @@ function getAdaptiveNextSession() {
 
   // ── Ohjelmaviikon mukainen tänään-tarkistus ─────────────────────
   // Käytetään pelkkiä päivämääriä (ei aikoja) timezone-ongelmien välttämiseksi
-  const todayStr = new Date().toISOString().split('T')[0];
+  const todayStr = localDate();
   const startStr = D.settings.startDate;
   const diffDays = Math.round((new Date(todayStr) - new Date(startStr)) / 86400000);
   const progDayIdx = ((diffDays % 7) + 7) % 7;
@@ -1335,9 +1344,9 @@ function sLoad(s){const r=s.rpe||7;if(s.type==='voima')return r*(s.exercises||[]
 function eLoad(e){const m={pyoraily:.6,stadion:1.2,tennis:.8,jalkapallo:.9,uinti:.7,muu_puntti:1.0}[e.activity]||.8;return(e.rpe||7)*((e.duration||60)/60)*10*m;}
 function loadForDate(ds){let l=0;D.sessions.filter(s=>s.date===ds).forEach(s=>l+=sLoad(s));D.extras.filter(e=>e.date===ds).forEach(e=>l+=eLoad(e));return l;}
 function wkLoad(ds){const d=new Date(ds),mon=new Date(d);mon.setDate(d.getDate()-(d.getDay()===0?6:d.getDay()-1));let t=0;for(let i=0;i<7;i++){const dd=new Date(mon);dd.setDate(mon.getDate()+i);t+=loadForDate(dd.toISOString().split('T')[0]);}return Math.round(t);}
-function loadLastNDays(n){let t=0;for(let i=0;i<n;i++){const d=new Date();d.setDate(d.getDate()-i);t+=loadForDate(d.toISOString().split('T')[0]);}return t;}
-function dLoads(){return Array.from({length:7},(_,i)=>{const d=new Date();d.setDate(d.getDate()-6+i);return Math.round(loadForDate(d.toISOString().split('T')[0]));});}
-function streak(){let s=0;for(let i=0;i<60;i++){const d=new Date();d.setDate(d.getDate()-i);const ds=d.toISOString().split('T')[0];if(D.sessions.some(x=>x.date===ds)||D.extras.some(x=>x.date===ds))s++;else if(i>0)break;}return s;}
+function loadLastNDays(n){let t=0;for(let i=0;i<n;i++){const d=new Date();d.setDate(d.getDate()-i);t+=loadForDate(localDate(d));}return t;}
+function dLoads(){return Array.from({length:7},(_,i)=>{const d=new Date();d.setDate(d.getDate()-6+i);return Math.round(loadForDate(localDate(d)));});}
+function streak(){let s=0;for(let i=0;i<60;i++){const d=new Date();d.setDate(d.getDate()-i);const ds=localDate(d);if(D.sessions.some(x=>x.date===ds)||D.extras.some(x=>x.date===ds))s++;else if(i>0)break;}return s;}
 
 function calcACWR(){
   const acute=loadLastNDays(7),chronic=loadLastNDays(28);
@@ -3791,7 +3800,7 @@ function exportData() {
   const blob = new Blob([json], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  const dateStr = new Date().toISOString().split('T')[0];
+  const dateStr = localDate();
   a.href = url;
   a.download = `400mpro-varmuuskopio-${dateStr}.json`;
   document.body.appendChild(a);
