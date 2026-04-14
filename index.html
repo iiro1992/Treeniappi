@@ -2368,6 +2368,10 @@ Object.entries(TMPL).forEach(([key, ids]) => {
   EX[key] = ids.map(id => ({ id, ...BANK[id] })).filter(Boolean);
 });
 
+// ══ GLOBAALIT LIIKEKATEGORIAT ══════════════════════════
+// Räjähtävät tekniikkaharjoitteet — ei kg-progressiota
+const POWER_FIXED = ['medball_throw','medball_slam','box_jump','trap_bar_jump','broad_jump','hurdle_hop'];
+
 // ══ WORKOUT STATE ═════════════════════════════════════
 // ── PRE-WORKOUT CONTEXT ──────────────────────────────
 // ── JALKAFRESHNESSARVIO — tallennetaan appStateen ──────
@@ -2582,7 +2586,6 @@ function buildWorkoutView(force) {
   const PRIMARY_LOWER   = ['squat','dl_conv'];
   const SECONDARY_UPPER = ['pullup_w','pullup_n','incline_bar'];
   const SECONDARY_LOWER = ['hipthrust','rdl'];
-  const POWER_FIXED     = ['medball_throw','medball_slam','box_jump','trap_bar_jump','broad_jump','hurdle_hop'];
   const INJURY_PREV     = ['nordic','nordic_iso','ghr'];
 
   // Toissijaiset yläkropan liikkeet (leuat, vinopenkki) per faasi:
