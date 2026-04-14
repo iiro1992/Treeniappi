@@ -3823,24 +3823,45 @@ async function importData(event) {
   const file = event.target.files[0];
   if (!file) return;
   const statusEl = document.getElementById('import-status');
+  statusEl.innerHTML = '<div class="ab ai"><span class="ic">⏳</span><span>Luetaan tiedostoa...</span></div>';
+
+  // Käytä FileReader joka toimii kaikissa iOS Safari -versioissa
+  const readFile = (f) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => resolve(e.target.result);
+    reader.onerror = () => reject(new Error('FileReader epäonnistui'));
+    reader.readAsText(f, 'UTF-8');
+  });
+
   try {
-    const text = await file.text();
-    const parsed = JSON.parse(text);
-    // Validate structure
+    const text = await readFile(file);
+    let parsed;
+    try {
+      parsed = JSON.parse(text);
+    } catch(parseErr) {
+      statusEl.innerHTML = '<div class="ab ad"><span class="ic">⚠️</span><span>Tiedosto ei ole kelvollinen JSON — tarkista että tiedosto on ehjä</span></div>';
+      event.target.value = '';
+      return;
+    }
     if (!parsed.sessions || !parsed.settings) {
       statusEl.innerHTML = '<div class="ab ad"><span class="ic">⚠️</span><span>Virheellinen tiedosto — ei ole 400M Pro varmuuskopio</span></div>';
+      event.target.value = '';
       return;
     }
     const sessionCount = parsed.sessions?.length || 0;
     const confirmed = confirm(`Tuodaan ${sessionCount} treeniä. Tämä korvaa nykyisen datan. Jatketaanko?`);
     if (!confirmed) { event.target.value = ''; return; }
     D = { ...dflt(), ...parsed };
+    // Varmista että uudet kentät (sleeps) ovat olemassa
+    if (!D.sleeps) D.sleeps = [];
+    if (!D.extras) D.extras = [];
+    if (!D.hrv) D.hrv = [];
     await cSave();
     rdDash();
     statusEl.innerHTML = `<div class="ab ag"><span class="ic">✅</span><span>Tuotu: ${sessionCount} treeniä, ${parsed.extras?.length||0} lisäaktiviteettia, ${parsed.hrv?.length||0} HRV-mittausta</span></div>`;
     snk(`✅ ${sessionCount} treeniä tuotu!`);
   } catch(e) {
-    statusEl.innerHTML = '<div class="ab ad"><span class="ic">⚠️</span><span>Tiedoston lukeminen epäonnistui</span></div>';
+    statusEl.innerHTML = '<div class="ab ad"><span class="ic">⚠️</span><span>Tiedoston lukeminen epäonnistui: ' + (e.message||'tuntematon virhe') + '</span></div>';
   }
   event.target.value = '';
 }
