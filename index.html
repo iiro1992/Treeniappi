@@ -1093,6 +1093,15 @@ function hoursSince(dateStr) {
   return (Date.now() - new Date(dateStr).getTime()) / 3600000;
 }
 
+// Laske tarkka aika sessiosta käyttäen savedAt jos saatavilla
+function hoursSinceSession(session) {
+  if (!session) return 999;
+  if (session.savedAt) return (Date.now() - new Date(session.savedAt).getTime()) / 3600000;
+  // Fallback: päivän puoliväli (12:00) timezone-turvallisesti
+  const d = new Date(session.date); d.setHours(12, 0, 0, 0);
+  return (Date.now() - d.getTime()) / 3600000;
+}
+
 // Hae viimeisin sessio tietylle treenityypille
 function lastSessionOfType(keys) {
   const keyArr = Array.isArray(keys) ? keys : [keys];
@@ -1115,7 +1124,7 @@ function getRecoveryStatus(typeKey) {
   const last = lastSessionOfType(sameKeys);
   if (!last) return { ready: true, pct: 100, hoursLeft: 0, warning: null };
 
-  const elapsed = hoursSince(last.date);
+  const elapsed = hoursSinceSession(last);
   const pct = Math.min(100, Math.round(elapsed / rec.ideal * 100));
   const hoursLeft = Math.max(0, rec.min - elapsed);
   const ready = elapsed >= rec.min;
