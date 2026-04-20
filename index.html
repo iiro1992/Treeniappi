@@ -1136,10 +1136,13 @@ function sessionToKey(s) {
   if (s.recovKey) return s.recovKey; // ← käytetään tallennettua arvoa
   // Fallback vanhoille sessioille ilman recovKey-kenttää
   if (s.type === 'voima') {
-    const lbl = (s.label||'').toLowerCase();
-    return (lbl.includes('alakroppa') || lbl.includes('ala') || lbl.includes('kyykky') || lbl.includes('maksimivoima')) ? 'voima_ala' : 'voima_yla';
+    const lbl = (s.label||s.workoutKey||'').toLowerCase();
+    return (lbl.includes('alakroppa') || lbl.includes('ala') || lbl.includes('kyykky')
+         || lbl.includes('maksimivoima') || lbl==='aa' || lbl==='ab') ? 'voima_ala' : 'voima_yla';
   }
-  return s.runType || 'aerobinen';
+  if (s.type === 'juoksu') return s.runType || 'aerobinen';
+  // Tuntematon tyyppi (vanha data, eri formaatti) → turvallinen fallback
+  return 'aerobinen';
 }
 
 // Laske tunteja sitten (negatiivinen = tulevaisuudessa)
@@ -1202,11 +1205,15 @@ function calcCNSLoad() {
   D.sessions.slice(-20).forEach(s => {
     // Käytä savedAt (täysi aikaleima) jos saatavilla, muuten päivän puoliväli
     const sessDate = s.savedAt ? new Date(s.savedAt) : (() => { const d=new Date(s.date); d.setHours(12,0,0,0); return d; })();
-    const hrs = (now - sessDate.getTime()) / 3600000;
-    if (hrs > 120) return; // Vanhemmat kuin 5pv ei vaikuta
+    const sessMs = sessDate.getTime();
+    // Guard: jos päivämäärä on virheellinen (NaN) → ohita sessio
+    if (!sessMs || isNaN(sessMs)) return;
+    const hrs = (now - sessMs) / 3600000;
+    if (hrs > 120 || hrs < 0) return; // Vanhemmat kuin 5pv tai tulevaisuudessa
     const key = sessionToKey(s);
     const baseCNS = (RECOVERY_HOURS[key]?.cns || 5);
-    const rpe = s.rpe || 7;
+    // Guard: rpe voi puuttua vanhassa datassa tai olla merkkijono
+    const rpe = Math.min(10, Math.max(1, parseFloat(s.rpe) || 7));
     // ── Todellinen volyymi laskee kuorman — ei pelkkä RPE ──────────────────
     // Salitreeni: tehty sarjat vs normaali (3 sarjaa baseline)
     // Juoksu: tehty sarjat vs ohjelma (runSetGroups.n)
@@ -1241,10 +1248,12 @@ function calcCNSLoad() {
   const extraCNS = { stadion:6, jalkapallo:5, tennis:4, muu_puntti:5, pyoraily:2, uinti:2 };
   D.extras.slice(-20).forEach(e => {
     const extDate = e.savedAt ? new Date(e.savedAt) : (() => { const d=new Date(e.date); d.setHours(12,0,0,0); return d; })();
-    const hrs = (now - extDate.getTime()) / 3600000;
-    if (hrs > 120) return;
+    const extMs = extDate.getTime();
+    if (!extMs || isNaN(extMs)) return; // Guard: virheellinen päivämäärä
+    const hrs = (now - extMs) / 3600000;
+    if (hrs > 120 || hrs < 0) return;
     const baseCNS = extraCNS[e.activity] || 3;
-    const rpe = e.rpe || 7;
+    const rpe = Math.min(10, Math.max(1, parseFloat(e.rpe) || 7));
     cnsLoad += baseCNS * (rpe / 8) * decay(hrs);
   });
 
@@ -1253,6 +1262,8 @@ function calcCNSLoad() {
   // high 10-18: täysi viikko käynnissä — tarkkaile
   // danger > 18: ylikuormitus — kevennä
   // (vanha 0-5-8 antoi danger-hälytyksen jo yhdestä treenistä)
+  // Final guard: jos jokin sessio tuotti NaN, nollataan
+  if (isNaN(cnsLoad)) cnsLoad = 0;
   const zone = cnsLoad < 10 ? 'ok' : cnsLoad < 18 ? 'high' : 'danger';
   const label = { ok: '✅ Hermosto palautunut', high: '⚠️ CNS korkea — kevennä', danger: '🔴 CNS ylikuormittunut' }[zone];
   return { load: Math.round(cnsLoad * 10) / 10, zone, label };
@@ -5556,9 +5567,11 @@ function rdDash() {
       let load=0;
       simSessions.forEach(s=>{
         const sMs=s.savedAt?new Date(s.savedAt).getTime():(() => { const d=new Date(s.date);d.setHours(12,0,0,0);return d.getTime(); })();
+        if(!sMs||isNaN(sMs))return; // Guard: virheellinen päivämäärä
         const hrs=(atMs-sMs)/3600000;
         if(hrs<0||hrs>120)return;
-        load+=(RECOVERY_HOURS[sessionToKey(s)]?.cns||5)*((s.rpe||7)/8)*decay(hrs);
+        const simRpe=Math.min(10,Math.max(1,parseFloat(s.rpe)||7));
+        load+=(RECOVERY_HOURS[sessionToKey(s)]?.cns||5)*(simRpe/8)*decay(hrs);
       });
       return Math.round(load*10)/10;
     };
