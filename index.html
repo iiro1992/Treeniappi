@@ -1359,26 +1359,45 @@ function getAdaptiveNextSession() {
 
   const warnings = [];
 
-  // Jos tänään on ohjelmaviikon lepopäivä → palauta lepo tai aerobinen
+  // Jos tänään on ohjelmaviikon lepopäivä → tarkista ensin onko jotain jäänyt tekemättä
   if (todayRecovKey === null) {
     const cnsNow = calcCNSLoad();
-    if (cnsNow.zone !== 'ok') {
-      // Korkea CNS lepopäivänä → suosittele lepoa
-      return { key:null, type:'lepo', label:'😴 Lepo', short:'😴',
-        recovKey:null, desc:'Ohjelmaviikon lepopäivä — ' + cnsNow.label,
-        recovery:null, cnsLoad:cnsNow, warnings:[], week:w, phase:ph(w),
-        allSessions: SESSION_TYPES.map(st=>({...st,rec:getRecoveryStatus(st.recovKey),lastDate:lastDone[st.key]})) };
+
+    // ── Tekemättä jäänyt sessio lepopäivänä ──────────────────────────
+    // Logiikka: käy edellinen ohjelmaviikon päivä läpi (vain 1 päivä taaksepäin).
+    // Sessio lasketaan "tekemättä" jos sitä ei ole tehty tällä kalenteriviikolla
+    // (viimeinen suoritus on yli 5 päivää sitten tai ei koskaan).
+    // Älä ehdota juoksu-sessiota lepopäivänä — vain voima.
+    const prevIdx1 = ((progDayIdx - 1) % 7 + 7) % 7;
+    const prevMap1 = PROG_MAP[prevIdx1];
+    if (prevMap1) {
+      const prevSt1 = SESSION_TYPES.find(s=>s.key===prevMap1.key) ||
+                      SESSION_TYPES.find(s=>s.recovKey===prevMap1.recovKey);
+      if (prevSt1 && prevSt1.type === 'voima') { // vain voimasessio lepopäivänä
+        const lastDoneDate = lastDone[prevSt1.key];
+        // "Tekemättä tällä viikolla" = ei tehty viimeisen 5 päivän sisällä
+        const daysSinceDone = lastDoneDate
+          ? Math.round((new Date(todayStr) - new Date(lastDoneDate)) / 86400000)
+          : 999;
+        if (daysSinceDone > 5) { // ei tehty tällä viikolla
+          const rec = getRecoveryStatus(prevSt1.recovKey);
+          if (rec.ready && cnsNow.zone !== 'danger') {
+            return { ...prevSt1, recovery:rec, cnsLoad:cnsNow,
+              warnings:[{session:prevSt1.label, hoursLeft:0,
+                warning:'Eilen tekemättä jäänyt — tehdään tänään (lepopäivän käyttö)'}],
+              week:w, phase:ph(w),
+              allSessions: SESSION_TYPES.map(st=>({...st,rec:getRecoveryStatus(st.recovKey),lastDate:lastDone[st.key]})) };
+          }
+        }
+      }
     }
-    // Matala CNS lepopäivänä → aerobinen ok aktiivisena palautumisena
-    const aerSt = SESSION_TYPES.find(s=>s.recovKey==='aerobinen'||s.recovKey==='tempo');
-    if (aerSt && getRecoveryStatus(aerSt.recovKey).ready) {
-      return { ...aerSt, recovery:getRecoveryStatus(aerSt.recovKey), cnsLoad:cnsNow,
-        warnings:[{session:'Ohjelman mukainen lepopäivä',hoursLeft:0,warning:'Zone 2 ok aktiivisena palautumisena'}],
-        week:w, phase:ph(w),
-        allSessions: SESSION_TYPES.map(st=>({...st,rec:getRecoveryStatus(st.recovKey),lastDate:lastDone[st.key]})) };
-    }
+
+    // Lepopäivä — näytä aina lepo (aerobinen on vaihtoehto, ei oletussessio)
+    const lepoDDesc = cnsNow.zone !== 'ok'
+      ? 'Ohjelmaviikon lepopäivä — ' + cnsNow.label
+      : 'Ohjelmaviikon lepopäivä. Zone 2 -kävely tai venyttely ok.';
     return { key:null, type:'lepo', label:'😴 Lepo', short:'😴',
-      recovKey:null, desc:'Ohjelmaviikon lepopäivä',
+      recovKey:null, desc:lepoDDesc,
       recovery:null, cnsLoad:cnsNow, warnings:[], week:w, phase:ph(w),
       allSessions: SESSION_TYPES.map(st=>({...st,rec:getRecoveryStatus(st.recovKey),lastDate:lastDone[st.key]})) };
   }
