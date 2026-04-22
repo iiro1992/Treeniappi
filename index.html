@@ -1387,6 +1387,36 @@ function getAdaptiveNextSession() {
   const plannedSt = todayKey
     ? SESSION_TYPES.find(s=>s.key===todayKey)
     : SESSION_TYPES.find(s=>s.recovKey===todayRecovKey);
+
+  // ── Tarkista onko tänään suunniteltu sessio JO TEHTY ─────────────
+  // Jos kyllä → näytä seuraavan ohjelmaviikko-päivän sessio (ei fallback-haku)
+  const todayDone = todayRecovKey && (() => {
+    const last = lastSessionOfType(todayRecovKey);
+    if (!last) return false;
+    const lastD = last.savedAt ? new Date(last.savedAt) : (() => { const d=new Date(last.date);d.setHours(12,0,0,0);return d; })();
+    return lastD.toISOString().slice(0,10) === todayStr; // sama päivä
+  })();
+
+  if (todayDone) {
+    // Tänään tehty — etsi seuraava ohjelmaviikon sessio
+    for (let d = 1; d <= 7; d++) {
+      const nextIdx = (progDayIdx + d) % 7;
+      const nextMap = PROG_MAP[nextIdx];
+      if (!nextMap) continue; // lepopäivä
+      const nextSt = SESSION_TYPES.find(s=>s.key===nextMap.key) ||
+                     SESSION_TYPES.find(s=>s.recovKey===nextMap.recovKey);
+      if (nextSt) {
+        const rec = getRecoveryStatus(nextSt.recovKey);
+        const daysFromNow = d;
+        return { ...nextSt, recovery:rec, cnsLoad:calcCNSLoad(),
+          warnings:[{session:nextSt.label, hoursLeft:0,
+            warning:`Tänään tehty ✅ — seuraava treeni ${daysFromNow===1?'huomenna':daysFromNow+' pv kuluttua'}`}],
+          week:w, phase:ph(w),
+          allSessions: SESSION_TYPES.map(st=>({...st,rec:getRecoveryStatus(st.recovKey),lastDate:lastDone[st.key]})) };
+      }
+    }
+  }
+
   if (plannedSt) {
     const rec = getRecoveryStatus(plannedSt.recovKey);
     if (rec.ready) {
@@ -4978,6 +5008,12 @@ function renderRunSchedule() {
     runTypes.push({ key:'aerobinen', emoji:'🟢', label:'Pe — Aerobinen', data: presc.aerobinen });
   }
 
+  // Testi_400m — aina näkyvissä (kirjaa milloin tahansa)
+  runTypes.push({ key:'testi_400m', emoji:'🏆', label:'400m — Testijuoksu', data: {
+    groups:[],
+    desc:'Kirjaa virallinen tai epävirallinen 400m-aika. Päivittää ennätyksesi ja kalibroi ohjelmaennusteet.'
+  }});
+
   // Also show kilpailuvauhti and lt_toleranssi as reference cards if this week is their week
   const lastResults = {};
   ['intervalli','aerobinen','tempo','kilpailuvauhti','lt_toleranssi','testi_400m'].forEach(rt => {
@@ -5025,14 +5061,36 @@ function renderRunSchedule() {
 
     const drillHTML = rt.data.drills ? `<div style="font-size:11px;color:var(--yw);margin-bottom:8px;padding:6px 9px;background:rgba(234,179,8,.08);border-radius:7px;border:1px solid rgba(234,179,8,.2)">${rt.data.drills}</div>` : '';
 
-    return `<div style="background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:13px;margin-bottom:10px">
+    // 400m testi -kortti: näyttää ennätyksen ja ohjelmaennusteen
+    const testi400Extra = rt.key === 'testi_400m' ? (() => {
+      const best = D.bests.run400;
+      const w = wks();
+      const exp = expAt(EXP.run400, w);
+      const lastT = D.sessions.filter(s=>s.time400).slice(-1)[0];
+      return `<div style="background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.2);border-radius:9px;padding:10px;margin-bottom:10px">
+        ${best?`<div style="display:flex;justify-content:space-between;margin-bottom:4px">
+          <span style="font-size:11px;color:var(--mu)">Paras tulos</span>
+          <span style="font-family:'DM Mono',monospace;font-weight:700;color:var(--gn)">${fmt(best)}s</span>
+        </div>`:''}
+        ${lastT?`<div style="display:flex;justify-content:space-between;margin-bottom:4px">
+          <span style="font-size:11px;color:var(--mu)">Edellinen</span>
+          <span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--tx)">${fmt(lastT.time400)}s · ${lastT.date}</span>
+        </div>`:'<div style="font-size:11px;color:var(--mu);margin-bottom:4px">Ei aiempia tuloksia</div>'}
+        <div style="display:flex;justify-content:space-between">
+          <span style="font-size:11px;color:var(--mu)">Ohjelmaennuste vk${w}</span>
+          <span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--ac)">${fmt(exp)}s</span>
+        </div>
+      </div>`;
+    })() : '';
+
+    return `<div style="background:var(--sf);border:1px solid ${rt.key==='testi_400m'?'var(--ac)':'var(--bd)'};border-radius:12px;padding:13px;margin-bottom:10px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
         <div>
           <div style="font-weight:700;font-size:14px">${rt.emoji} ${rt.label}</div>
           <div style="font-size:11px;color:var(--mu);margin-top:2px">${rt.data.desc||''}</div>
         </div>
       </div>
-      ${drillHTML}${groupsHTML}${aerDesc}${tempoDesc}${kvDesc}${ltDesc}
+      ${testi400Extra}${drillHTML}${groupsHTML}${aerDesc}${tempoDesc}${kvDesc}${ltDesc}
       <button onclick="startSessionByKey('${rt.key}','${rt.emoji} ${rt.label}')"
         style="width:100%;margin-top:10px;padding:9px;background:var(--acd);border:1px solid var(--ac);border-radius:8px;color:var(--ac);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer">
         ▶ Kirjaa tämä treeni
