@@ -1394,12 +1394,28 @@ function getAdaptiveNextSession() {
       }
     }
 
-    // Lepopäivä — näytä aina lepo (aerobinen on vaihtoehto, ei oletussessio)
-    const lepoDDesc = cnsNow.zone !== 'ok'
-      ? 'Ohjelmaviikon lepopäivä — ' + cnsNow.label
-      : 'Ohjelmaviikon lepopäivä. Zone 2 -kävely tai venyttely ok.';
+    // Lepopäivä — näytä seuraava ohjelmaviikon sessio (ei fallback)
+    // Etsi seuraava tuleva treeniohjelmaviikon sessio
+    for (let d = 1; d <= 6; d++) {
+      const nextIdx = (progDayIdx + d) % 7;
+      const nextMap = PROG_MAP[nextIdx];
+      if (!nextMap) continue; // myös lepopäivä
+      const nextSt = SESSION_TYPES.find(s=>s.key===nextMap.key) ||
+                     SESSION_TYPES.find(s=>s.recovKey===nextMap.recovKey);
+      if (nextSt) {
+        const rec = getRecoveryStatus(nextSt.recovKey);
+        const whenLabel = d===1 ? 'Huomenna' : d===2 ? 'Ylihuomenna' : d+' pv kuluttua';
+        return { ...nextSt, recovery:rec, cnsLoad:cnsNow,
+          warnings:[{session:nextSt.label, hoursLeft:0,
+            warning:'Lepopäivä tänään — ' + whenLabel + ': ' + nextSt.label}],
+          isRestDay:true, // merkitään lepopäiväksi → UI näyttää "TULEVA" eikä "SEURAAVA"
+          week:w, phase:ph(w),
+          allSessions: SESSION_TYPES.map(st=>({...st,rec:getRecoveryStatus(st.recovKey),lastDate:lastDone[st.key]})) };
+      }
+    }
+    // Ei löydy seuraavaa sessiota (ei pitäisi tapahtua)
     return { key:null, type:'lepo', label:'😴 Lepo', short:'😴',
-      recovKey:null, desc:lepoDDesc,
+      recovKey:null, desc:'Lepopäivä — ei tulevia sessioita',
       recovery:null, cnsLoad:cnsNow, warnings:[], week:w, phase:ph(w),
       allSessions: SESSION_TYPES.map(st=>({...st,rec:getRecoveryStatus(st.recovKey),lastDate:lastDone[st.key]})) };
   }
@@ -5618,9 +5634,9 @@ function rdDash() {
       : '';
 
     nsCard.innerHTML = `
-      <div style="background:linear-gradient(135deg,${next.isMakeup?'rgba(249,115,22,.08)':'var(--acd)'},#0f172a);border:1px solid ${next.isMakeup?'var(--or)':'var(--ac)'};border-radius:14px;padding:15px;margin-bottom:11px">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:${next.isMakeup?'var(--or)':'var(--ac)'};opacity:.7;margin-bottom:4px">
-          ${next.isMakeup?'⚠️ KORVAUSSESSIO — TEKEMÄTTÄ JÄÄNYT':'SEURAAVA TREENI'}
+      <div style="background:linear-gradient(135deg,${next.isMakeup?'rgba(249,115,22,.08)':next.isRestDay?'rgba(148,163,184,.05)':'var(--acd)'},#0f172a);border:1px solid ${next.isMakeup?'var(--or)':next.isRestDay?'rgba(148,163,184,.25)':'var(--ac)'};border-radius:14px;padding:15px;margin-bottom:11px">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:${next.isMakeup?'var(--or)':next.isRestDay?'var(--mu)':'var(--ac)'};opacity:.7;margin-bottom:4px">
+          ${next.isMakeup?'⚠️ KORVAUSSESSIO — TEKEMÄTTÄ JÄÄNYT':next.isRestDay?'😴 LEPOPÄIVÄ — TULEVA TREENI':'SEURAAVA TREENI'}
         </div>
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px">
           <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;color:${next.isMakeup?'var(--or)':'var(--tx)'};line-height:1.1;flex:1">${next.label}</div>
