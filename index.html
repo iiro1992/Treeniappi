@@ -579,6 +579,8 @@ svg text{font-family:'DM Sans',sans-serif}
     <div class="fg"><label class="fl">Maastaveto 1RM (kg)</label><div class="niw"><button class="nb" onclick="adj('s-dl',-2.5)">−</button><input type="number" class="nd" id="s-dl" value="120" step="2.5"><button class="nb" onclick="adj('s-dl',2.5)">+</button></div></div>
     <div class="fg"><label class="fl">OHP 1RM (kg)</label><div class="niw"><button class="nb" onclick="adj('s-oh',-2.5)">−</button><input type="number" class="nd" id="s-oh" value="70" step="2.5"><button class="nb" onclick="adj('s-oh',2.5)">+</button></div></div>
     <div class="fg"><label class="fl">Hip thrust 1RM (kg)</label><div class="niw"><button class="nb" onclick="adj('s-hi',-2.5)">−</button><input type="number" class="nd" id="s-hi" value="100" step="2.5"><button class="nb" onclick="adj('s-hi',2.5)">+</button></div></div>
+    <div style="font-size:11px;color:var(--mu);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;margin-top:12px">🏃 400m Ennätys (sekunteina)</div>
+    <div class="fg"><label class="fl">400m paras aika (s) — syötä esim. 63</label><div class="niw"><button class="nb" onclick="adj('s-r4',-0.5)">−</button><input type="number" class="nd" id="s-r4" value="" step="0.5" placeholder="esim. 63"><button class="nb" onclick="adj('s-r4',0.5)">+</button></div></div>
     <div style="font-size:11px;color:var(--mu);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;margin-top:8px">⚙️ Ohjelma-asetukset</div>
     <div class="fg"><label class="fl">Ohjelman aloituspäivä</label><input type="date" class="fi" id="s-st"></div>
     <div class="fg"><label class="fl">HRV-perustaso (Garmin/Polar arvo)</label><div class="niw"><button class="nb" onclick="adj('s-hrv',-1)">−</button><input type="number" class="nd" id="s-hrv" value="55" min="20" max="120"><button class="nb" onclick="adj('s-hrv',1)">+</button></div></div>
@@ -920,7 +922,8 @@ function _renderORoot(el){
 
 function _renderOWeek(w){
   const scheme=getMesocycleScheme(w), presc=getRunPrescription(w);
-  const useB=Math.floor((w-1)/4)%2===1;
+  // useB: vaihdetaan YA/YB mesosyklien välillä oikein uudessa 5vk rakenteessa
+  const useB = (w>=13&&w<=17)||(w>=21&&w<=22); // Real1 + Trans2 käyttää B-järjestystä
   const k1=useB?'yb':'ya', k2=useB?'ab':'aa', k3=useB?'ya':'yb';
   const isFH=presc.fridaySession==='kilpailuvauhti'||presc.fridaySession==='lt_toleranssi';
 
@@ -1301,8 +1304,7 @@ function getAdaptiveNextSession() {
   }
 
   const scheme = getMesocycleScheme(w);
-  const blockNum = Math.floor((w-1)/4);
-  const useB = blockNum % 2 === 1;
+  const useB = (w>=13&&w<=17)||(w>=21&&w<=22); // Real1 + Trans2 = B-järjestys
 
   const SESSION_TYPES = [
     { key: useB?'yb':'ya', type:'voima', label:'Voima — Yläkroppa', short:'💪 YLÄ', recovKey:'voima_yla',
@@ -1402,47 +1404,80 @@ function getAdaptiveNextSession() {
       allSessions: SESSION_TYPES.map(st=>({...st,rec:getRecoveryStatus(st.recovKey),lastDate:lastDone[st.key]})) };
   }
 
-  // Prioritisoi ohjelman mukainen sessio — etsi sekä recovKey että key jotta YA/YB ei sekoitu
+  // ── LIUKUVA OHJELMAVIIKKO ────────────────────────────────────────
+  // Logiikka:
+  // 1. Onko tänään suunniteltu sessio JO TEHTY? → näytä seuraava
+  // 2. Onko eilen tai toissapäivänä jäänyt sessio tekemättä? → make-up
+  // 3. Onko tänään suunniteltu sessio palautunut? → tee se
+  // 4. Fallback: kauimmin tekemätön palautunut sessio
+
+  // Apufunktio: onko sessio tehty tänään
+  const doneToday = (recovKey2) => {
+    const last = lastSessionOfType(recovKey2);
+    if (!last) return false;
+    const lastD = last.savedAt ? new Date(last.savedAt) : (() => {const d=new Date(last.date);d.setHours(12,0,0,0);return d;})();
+    return lastD.toISOString().slice(0,10) === todayStr;
+  };
+
+  // Apufunktio: onko sessio tehty tällä viikolla (viimeisen 6 pv sisällä)
+  const doneThisWeek = (key2) => {
+    const ld = lastDone[key2];
+    if (!ld) return false;
+    return Math.round((new Date(todayStr)-new Date(ld))/86400000) <= 6;
+  };
+
   const plannedSt = todayKey
     ? SESSION_TYPES.find(s=>s.key===todayKey)
     : SESSION_TYPES.find(s=>s.recovKey===todayRecovKey);
 
-  // ── Tarkista onko tänään suunniteltu sessio JO TEHTY ─────────────
-  // Jos kyllä → näytä seuraavan ohjelmaviikko-päivän sessio (ei fallback-haku)
-  const todayDone = todayRecovKey && (() => {
-    const last = lastSessionOfType(todayRecovKey);
-    if (!last) return false;
-    const lastD = last.savedAt ? new Date(last.savedAt) : (() => { const d=new Date(last.date);d.setHours(12,0,0,0);return d; })();
-    return lastD.toISOString().slice(0,10) === todayStr; // sama päivä
-  })();
-
-  if (todayDone) {
-    // Tänään tehty — etsi seuraava ohjelmaviikon sessio
+  // 1. Tänään suunniteltu sessio tehty → näytä seuraava ohjelmaviikon päivä
+  if (plannedSt && doneToday(plannedSt.recovKey)) {
     for (let d = 1; d <= 7; d++) {
       const nextIdx = (progDayIdx + d) % 7;
       const nextMap = PROG_MAP[nextIdx];
-      if (!nextMap) continue; // lepopäivä
+      if (!nextMap) continue;
       const nextSt = SESSION_TYPES.find(s=>s.key===nextMap.key) ||
                      SESSION_TYPES.find(s=>s.recovKey===nextMap.recovKey);
       if (nextSt) {
         const rec = getRecoveryStatus(nextSt.recovKey);
-        const daysFromNow = d;
         return { ...nextSt, recovery:rec, cnsLoad:calcCNSLoad(),
           warnings:[{session:nextSt.label, hoursLeft:0,
-            warning:`Tänään tehty ✅ — seuraava treeni ${daysFromNow===1?'huomenna':daysFromNow+' pv kuluttua'}`}],
+            warning:'Tänään tehty ✅ — seuraava treeni '+(d===1?'huomenna':d+' pv kuluttua')}],
           week:w, phase:ph(w),
           allSessions: SESSION_TYPES.map(st=>({...st,rec:getRecoveryStatus(st.recovKey),lastDate:lastDone[st.key]})) };
       }
     }
   }
 
+  // 2. Make-up: vain jos tänään on LEPO-päivä (ei omaa sessiota)
+  // Ei ohita tänään suunniteltua sessiota — make-up vain lepopäivänä
+  const todayHasOwnSession = !!todayMap;
+  if (!todayHasOwnSession) for (let d = 1; d <= 2; d++) {
+    const prevIdx = ((progDayIdx - d) % 7 + 7) % 7;
+    const prevMap = PROG_MAP[prevIdx];
+    if (!prevMap) continue; // lepopäivä
+    const prevSt = SESSION_TYPES.find(s=>s.key===prevMap.key) ||
+                   SESSION_TYPES.find(s=>s.recovKey===prevMap.recovKey);
+    if (!prevSt) continue;
+    if (doneThisWeek(prevSt.key)) continue; // tehty tällä viikolla → ei make-up
+    const rec = getRecoveryStatus(prevSt.recovKey);
+    if (!rec.ready) continue; // ei palautunut → ei voi tehdä
+    const cnsNow2 = calcCNSLoad();
+    if (cnsNow2.zone === 'danger') continue; // CNS liian korkea
+    return { ...prevSt, recovery:rec, cnsLoad:cnsNow2,
+      warnings:[{session:prevSt.label, hoursLeft:0,
+        warning:(d===1?'Eilen':'Toissapäivänä')+' tekemättä jäänyt — tee tänään korvaussessiona'}],
+      week:w, phase:ph(w), isMakeup:true,
+      allSessions: SESSION_TYPES.map(st=>({...st,rec:getRecoveryStatus(st.recovKey),lastDate:lastDone[st.key]})) };
+  } // end make-up loop
+
+  // 3. Tänään suunniteltu sessio → normaali
   if (plannedSt) {
     const rec = getRecoveryStatus(plannedSt.recovKey);
     if (rec.ready) {
       return { ...plannedSt, recovery:rec, cnsLoad:calcCNSLoad(), warnings:[], week:w, phase:ph(w),
         allSessions: SESSION_TYPES.map(st=>({...st,rec:getRecoveryStatus(st.recovKey),lastDate:lastDone[st.key]})) };
     }
-    // Ohjelmaviikon sessio ei ole palautunut → varoitus + fallback
     warnings.push({ session:plannedSt.label, hoursLeft:rec.hoursLeft,
       warning:`Ohjelman mukainen sessio — ${rec.hoursLeft}h palautuminen jäljellä` });
   }
@@ -1922,8 +1957,7 @@ function renderTimeline(){
 function showWeekDetail(w){
   const dl=isDL(w), tst=isTest(w), p=ph(w);
   const scheme = getMesocycleScheme(w);
-  const blockNum = Math.floor((w-1)/4);
-  const useB = blockNum % 2 === 1;
+  const useB = (w>=13&&w<=17)||(w>=21&&w<=22); // Real1 + Trans2 = B-järjestys
   const presc = getRunPrescription(w);
   const el = document.getElementById('ptl-detail');
   if (!el) return;
@@ -2509,8 +2543,7 @@ function getNextSession() { return getAdaptiveNextSession(); }
 // Returns upcoming sessions for the next 7 days
 function getUpcomingSessions() {
   const w = wks(), dl = isDL(w);
-  const blockNum = Math.floor((w-1)/4);
-  const useB = blockNum % 2 === 1;
+  const useB = (w>=13&&w<=17)||(w>=21&&w<=22); // Real1 + Trans2 = B-järjestys
   const upperKey = useB ? 'yb' : 'ya';
   const lowerKey = useB ? 'ab' : 'aa';
   const labels = {
@@ -3822,6 +3855,7 @@ function ldSett(){
   document.getElementById('s-dl').value=D.settings.dlRM||120;
   document.getElementById('s-oh').value=D.settings.ohpRM||70;
   document.getElementById('s-hi').value=D.settings.hipRM||100;
+  document.getElementById('s-r4').value=D.bests.run400||''
   document.getElementById('s-st').value=D.settings.startDate;
   document.getElementById('s-hrv').value=D.settings.hrvBase||55;
 }
@@ -3832,6 +3866,8 @@ async function saveSettings(){
   D.settings.dlRM=parseFloat(document.getElementById('s-dl').value)||120;
   D.settings.ohpRM=parseFloat(document.getElementById('s-oh').value)||70;
   D.settings.hipRM=parseFloat(document.getElementById('s-hi').value)||100;
+  const r4val=parseFloat(document.getElementById('s-r4').value);
+  if(r4val>0){if(!D.bests.run400||r4val<D.bests.run400)D.bests.run400=r4val;}
   D.settings.startDate=document.getElementById('s-st').value||td();
   D.settings.hrvBase=parseFloat(document.getElementById('s-hrv').value)||55;
   await cSave();
@@ -5582,10 +5618,12 @@ function rdDash() {
       : '';
 
     nsCard.innerHTML = `
-      <div style="background:linear-gradient(135deg,var(--acd),#0f172a);border:1px solid var(--ac);border-radius:14px;padding:15px;margin-bottom:11px">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:var(--ac);opacity:.7;margin-bottom:4px">SEURAAVA TREENI</div>
+      <div style="background:linear-gradient(135deg,${next.isMakeup?'rgba(249,115,22,.08)':'var(--acd)'},#0f172a);border:1px solid ${next.isMakeup?'var(--or)':'var(--ac)'};border-radius:14px;padding:15px;margin-bottom:11px">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:${next.isMakeup?'var(--or)':'var(--ac)'};opacity:.7;margin-bottom:4px">
+          ${next.isMakeup?'⚠️ KORVAUSSESSIO — TEKEMÄTTÄ JÄÄNYT':'SEURAAVA TREENI'}
+        </div>
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;color:var(--tx);line-height:1.1;flex:1">${next.label}</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;color:${next.isMakeup?'var(--or)':'var(--tx)'};line-height:1.1;flex:1">${next.label}</div>
           ${next.type==='voima'?`<div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--ac);padding:3px 8px;background:rgba(0,212,255,.1);border-radius:6px;border:1px solid rgba(0,212,255,.2);white-space:nowrap;margin-left:8px">${scheme.label.split('—')[0].trim()}</div>`:''}
         </div>
         ${mainSugLine}
@@ -5607,7 +5645,7 @@ function rdDash() {
     const days7 = ['Su','Ma','Ti','Ke','To','Pe','La'];
 
     // Laske ohjelmaviikon sessiot täsmälleen kuten _renderOWeek tekee
-    const useB = Math.floor((w-1)/4)%2===1;
+    const useB = (w>=13&&w<=17)||(w>=21&&w<=22); // Real1+Trans2 = B-järjestys
     const k1=useB?'yb':'ya', k2=useB?'ab':'aa', k3=useB?'ya':'yb';
     const presc7 = getRunPrescription(w);
     const isFH = presc7.fridaySession==='kilpailuvauhti'||presc7.fridaySession==='lt_toleranssi';
