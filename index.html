@@ -3919,10 +3919,14 @@ async function saveSettings(){
   D.settings.startDate=document.getElementById('s-st').value||td();
   D.settings.hrvBase=parseFloat(document.getElementById('s-hrv').value)||55;
   await cSave();
-  // Päivitä kaikki näkymät — aloituspäivä vaikuttaa kaikkialle
+  // Pakota UI-päivitys: resetoi _oW jotta ohjelma näyttää oikean viikon
+  _oW = wks(); _oD = null;
+  // Päivitä kaikki näkymät
   rdDash();
-  if(document.getElementById('ohjelma-content'))rdOhjelma();
-  snk('✅ Asetukset tallennettu!');
+  // Navigoi ohjelma-välilehdelle — T() on oikea tab-vaihtofunktio
+  const oBtn = document.querySelector('.tb[onclick*=ohjelma]');
+  T('ohjelma', oBtn);
+  snk('✅ Tallennettu — nyt viikko ' + wks());
 }
 function showDetailModal(type) {
   const acwr = calcACWR();
