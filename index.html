@@ -271,7 +271,7 @@ svg text{font-family:'DM Sans',sans-serif}
     <div class="sb" id="s-ready-box" onclick="showDetailModal('readiness')" style="cursor:pointer"><div class="v" id="s-ready">–</div><div class="l">Valmiustila ›</div></div>
     <div class="sb" id="s-acwr-box" onclick="showDetailModal('acwr')" style="cursor:pointer"><div class="v" id="s-acwr">–</div><div class="l">ACWR ›</div></div>
     <div class="sb" id="s-cns-box" onclick="showDetailModal('cns')" style="cursor:pointer"><div class="v" id="s-cns">–</div><div class="l">CNS ›</div></div>
-    <div class="sb gn" onclick="showDetailModal('hrv')" style="cursor:pointer"><div class="v" id="s-st">–</div><div class="l">Putki ›</div></div>
+    <div class="sb gn" onclick="showDetailModal('hrv')" style="cursor:pointer"><div class="v" id="s-streak">–</div><div class="l">Putki ›</div></div>
   </div>
   <div class="card">
     <div class="ct" onclick="T('analyysi',document.querySelector('.tb[onclick*=analyysi]')||document.querySelector('.tb'));setTimeout(()=>showATab(3),100)" style="cursor:pointer">KEHITYS TAVOITTEESEEN ›</div>
@@ -5917,7 +5917,7 @@ function rdDash() {
 
   // Stats — tappable
   document.getElementById('s-wk').textContent = w;
-  document.getElementById('s-st').textContent = streak();
+  document.getElementById('s-streak').textContent = streak();
   const rEl=document.getElementById('s-ready'),rBox=document.getElementById('s-ready-box');
   if(rEl){rEl.textContent=ready.icon+' '+ready.score;rEl.style.color=ready.color;}
   if(rBox){rBox.style.cursor='pointer';rBox.title=ready.label+' — '+ready.suggestion;rBox.onclick=()=>showDetailModal('readiness');}
