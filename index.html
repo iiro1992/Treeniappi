@@ -961,22 +961,41 @@ function _renderOWeek(w){
   const cC={'HIGH':'var(--rd)','MED':'var(--yw)','LOW':'var(--gn)'};
 
   const today = localDate();
+
+  // ── ADAPTIIVINEN SEURAAVA SESSIO ──────────────────────────────────
+  // Käytetään SAMAA logiikkaa kuin Koti-välilehti: getAdaptiveNextSession()
+  // Tämä tietää mitä on tehty, mikä on palautunut, ja mikä on oikeasti seuraava.
+  // Ohjelma-välilehti näyttää nuolen sen kohdalla — ei pelkän päivämäärän.
+  const adaptNext = isCur ? getAdaptiveNextSession() : null;
+  const adaptNextKey = adaptNext ? adaptNext.key : null;
+  // Merkitse myös tehty-päivät: hae sessiot tältä viikolta
+  const doneKeys = new Set(done_s.map(ws2 =>
+    ws2.type==='voima' ? ws2.workoutKey || ws2.key :
+    ws2.type==='juoksu' ? ws2.runType : null
+  ).filter(Boolean));
+
   const cards=SESS.map((s,i)=>{
     const sel=_oD===i;
     const dd=new Date(dates[i]);
-    const dayName=WEEKDAYS[dd.getDay()]; // oikea kalenteripäivä
+    const dayName=WEEKDAYS[dd.getDay()];
     const ds=dd.getDate()+'.'+(dd.getMonth()+1)+'.';
     const isToday=dates[i]===today;
-    const wasDone=s.type!=='lepo'&&done_s.some(ws2=>
-      s.type==='voima'?ws2.type==='voima'&&ws2.workoutKey===s.key
-                      :ws2.type==='juoksu'&&ws2.runType===s.key
-    );
+    const wasDone=s.type!=='lepo'&&doneKeys.has(s.key);
+    // ADAPTIIVINEN: "seuraava" on se jonka key vastaa adaptNextKey, TAI jos ei matchaa,
+    // ensimmäinen tekemätön sessio tällä viikolla
+    const isNext = isCur && s.key && s.key === adaptNextKey;
+    // Fallback: jos adaptNext ei matchaa mitään SESS-listalla, käytä päivämäärää
+    const isActive = isNext || (!adaptNextKey && isToday);
     const sub=s.type==='voima'?scheme.label:s.type==='juoksu'?'Juoksuharjoitus':'Lepo &mdash; palautuminen';
     const click=s.type!=='lepo';
-    return '<div onclick="'+(click?'ohjSelectDay('+i+')':'')+'" data-ohj-today="'+(isToday?'1':'0')+'" style="display:flex;align-items:center;gap:10px;padding:11px 12px;background:'+(sel?'rgba(0,212,255,.08)':isToday?'rgba(0,212,255,.04)':'var(--s2)')+';border:2px solid '+(sel?'var(--ac)':isToday?'var(--ac)':'transparent')+';border-radius:11px;margin-bottom:7px;cursor:'+(click?'pointer':'default')+';-webkit-tap-highlight-color:transparent;transition:background .12s">'
-      +'<div style="text-align:center;min-width:30px;flex-shrink:0"><div style="font-size:11px;font-weight:700;color:'+(isToday?'var(--ac)':'var(--mu)')+'">'+dayName+'</div><div style="font-size:9px;color:'+(isToday?'var(--ac)':'var(--mu)')+'">'+ds+'</div></div>'
+    const recStatus = isCur && s.key && s.type!=='lepo'
+      ? getRecoveryStatus(s.type==='voima'?( ['aa','ab'].includes(s.key)?'voima_ala':'voima_yla') : s.key)
+      : null;
+    const notReady = recStatus && !recStatus.ready && !wasDone;
+    return '<div onclick="'+(click?'ohjSelectDay('+i+')':'')+'" style="display:flex;align-items:center;gap:10px;padding:11px 12px;background:'+(sel?'rgba(0,212,255,.08)':isActive?'rgba(0,212,255,.06)':'var(--s2)')+';border:2px solid '+(sel?'var(--ac)':isActive?'var(--ac)':'transparent')+';border-radius:11px;margin-bottom:7px;cursor:'+(click?'pointer':'default')+';-webkit-tap-highlight-color:transparent;transition:background .12s">'
+      +'<div style="text-align:center;min-width:30px;flex-shrink:0"><div style="font-size:11px;font-weight:700;color:'+(isActive?'var(--ac)':isToday?'var(--yw)':'var(--mu)')+'">'+dayName+'</div><div style="font-size:9px;color:'+(isActive?'var(--ac)':isToday?'var(--yw)':'var(--mu)')+'">'+ds+'</div></div>'
       +'<div style="width:3px;height:38px;border-radius:2px;background:'+cC[s.cns]+';flex-shrink:0"></div>'
-      +'<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700;color:var(--tx)">'+s.ico+' '+s.lbl+'</div><div style="font-size:10px;color:var(--mu);margin-top:2px"><span style="color:'+cC[s.cns]+';font-weight:700">'+s.cns+'</span> &middot; '+sub+(isToday?' <span style="color:var(--ac);font-weight:700">&larr; TÄNÄÄN</span>':'')+'</div></div>'
+      +'<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700;color:var(--tx)">'+s.ico+' '+s.lbl+'</div><div style="font-size:10px;color:var(--mu);margin-top:2px"><span style="color:'+cC[s.cns]+';font-weight:700">'+s.cns+'</span> &middot; '+sub+(isActive?' <span style="color:var(--ac);font-weight:700">&larr; SEURAAVA</span>':(isToday&&wasDone?' <span style="color:var(--gn);font-weight:700">&#10003; TEHTY</span>':(isToday?' <span style="color:var(--yw);font-weight:700">TÄNÄÄN</span>':'')))+(notReady?' <span style="color:var(--or)">('+recStatus.hoursLeft+'h palautus)</span>':'')+'</div></div>'
       +((isPast||isCur)?'<div style="font-size:16px;flex-shrink:0">'+(wasDone&&s.type!=='lepo'?'&#9989;':'&#11036;')+'</div>'
                        :'<div style="color:var(--mu);font-size:18px;flex-shrink:0;line-height:1">'+(click?'&rsaquo;':'')+'</div>')
       +'</div>';
