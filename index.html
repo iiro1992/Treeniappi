@@ -582,7 +582,7 @@ svg text{font-family:'DM Sans',sans-serif}
     <div style="font-size:11px;color:var(--mu);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;margin-top:12px">🏃 400m Ennätys (sekunteina)</div>
     <div class="fg"><label class="fl">400m paras aika (s) — syötä esim. 63</label><div class="niw"><button class="nb" onclick="adj('s-r4',-0.5)">−</button><input type="number" class="nd" id="s-r4" value="" step="0.5" placeholder="esim. 63"><button class="nb" onclick="adj('s-r4',0.5)">+</button></div></div>
     <div style="font-size:11px;color:var(--mu);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;margin-top:8px">⚙️ Ohjelma-asetukset</div>
-    <div class="fg"><label class="fl">Ohjelman aloituspäivä</label><input type="date" class="fi" id="s-st"></div>
+    <div class="fg"><label class="fl">Ohjelman aloituspäivä</label><input type="date" class="fi" id="s-st"><div style="font-size:11px;color:var(--mu);margin-top:4px">Muuttaa ohjelmaviikon numeron. Vk1 alkaa tästä päivästä. Tallenna muutoksen jälkeen.</div></div>
     <div class="fg"><label class="fl">HRV-perustaso (Garmin/Polar arvo)</label><div class="niw"><button class="nb" onclick="adj('s-hrv',-1)">−</button><input type="number" class="nd" id="s-hrv" value="55" min="20" max="120"><button class="nb" onclick="adj('s-hrv',1)">+</button></div></div>
     <button class="btn bp" onclick="saveSettings()">💾 TALLENNA</button>
   </div>
@@ -3919,6 +3919,9 @@ async function saveSettings(){
   D.settings.startDate=document.getElementById('s-st').value||td();
   D.settings.hrvBase=parseFloat(document.getElementById('s-hrv').value)||55;
   await cSave();
+  // Päivitä kaikki näkymät — aloituspäivä vaikuttaa kaikkialle
+  rdDash();
+  if(document.getElementById('ohjelma-content'))rdOhjelma();
   snk('✅ Asetukset tallennettu!');
 }
 function showDetailModal(type) {
