@@ -832,7 +832,7 @@ function getMesocycleScheme(week) {
       desc:'Uusi volyymipohja korkeammalla tasolla. Sama rakenne kuin Akk1.' },
     // 4: TRANS2 vk21-22 — tiivistetty, kova
     { sets:4, reps:4,  pctMod:0.87, label:'4×4 — Transmutaatio 2',  phase:'perusvoima',
-      rpe:rpeBase+1, step:2.5, singler:true, singlerPct:0.93,
+      rpe:rpeBase+1, step:2.5, singler:true, singlerPct:0.93, singlerN:1,
       desc:'Lähes maksimi. Singles: 1×1@93% joka sessiossa. 3-5 min palautus.' },
     // 5: ei käytössä (vk23=taper=isDL, vk24=testi)
     { sets:2, reps:5,  pctMod:0.75, label:'Taper',                   phase:'taper',
@@ -1456,9 +1456,14 @@ function getAdaptiveNextSession() {
                      SESSION_TYPES.find(s=>s.recovKey===nextMap.recovKey);
       if (nextSt) {
         const rec = getRecoveryStatus(nextSt.recovKey);
+        const dayNamesArr=['Su','Ma','Ti','Ke','To','Pe','La'];
+        const nextDate=new Date(); nextDate.setDate(nextDate.getDate()+d);
+        const nextDayName=dayNamesArr[nextDate.getDay()];
+        const whenLabel=d===1?'Huomenna':nextDayName;
         return { ...nextSt, recovery:rec, cnsLoad:calcCNSLoad(),
+          whenLabel, daysFromNow:d,
           warnings:[{session:nextSt.label, hoursLeft:0,
-            warning:'Tänään tehty ✅ — seuraava treeni '+(d===1?'huomenna':d+' pv kuluttua')}],
+            warning:'Tänään tehty ✅ — seuraava treeni '+(d===1?'huomenna':nextDayName+'na')}],
           week:w, phase:ph(w),
           allSessions: SESSION_TYPES.map(st=>({...st,rec:getRecoveryStatus(st.recovKey),lastDate:lastDone[st.key]})) };
       }
@@ -5636,7 +5641,7 @@ function rdDash() {
     nsCard.innerHTML = `
       <div style="background:linear-gradient(135deg,${next.isMakeup?'rgba(249,115,22,.08)':next.isRestDay?'rgba(148,163,184,.05)':'var(--acd)'},#0f172a);border:1px solid ${next.isMakeup?'var(--or)':next.isRestDay?'rgba(148,163,184,.25)':'var(--ac)'};border-radius:14px;padding:15px;margin-bottom:11px">
         <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:${next.isMakeup?'var(--or)':next.isRestDay?'var(--mu)':'var(--ac)'};opacity:.7;margin-bottom:4px">
-          ${next.isMakeup?'⚠️ KORVAUSSESSIO — TEKEMÄTTÄ JÄÄNYT':next.isRestDay?'😴 LEPOPÄIVÄ — TULEVA TREENI':'SEURAAVA TREENI'}
+          ${next.isMakeup?'⚠️ KORVAUSSESSIO — TEKEMÄTTÄ JÄÄNYT':next.isRestDay?'😴 LEPOPÄIVÄ — TULEVA TREENI':next.whenLabel?`✅ TÄNÄÄN TEHTY — SEURAAVA ${next.whenLabel.toUpperCase()}NA`:'SEURAAVA TREENI'}
         </div>
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px">
           <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;color:${next.isMakeup?'var(--or)':'var(--tx)'};line-height:1.1;flex:1">${next.label}</div>
