@@ -267,9 +267,11 @@ svg text{font-family:'DM Sans',sans-serif}
 
   <!-- week strip removed — replaced by upcoming sessions in next card -->
   <div class="sg">
+    <div id="comp-banner"></div>
     <div class="sb bl" onclick="showDetailModal('week')" style="cursor:pointer"><div class="v" id="s-wk">–</div><div class="l">Viikko ›</div></div>
     <div class="sb" id="s-ready-box" onclick="showDetailModal('readiness')" style="cursor:pointer"><div class="v" id="s-ready">–</div><div class="l">Valmiustila ›</div></div>
     <div class="sb" id="s-acwr-box" onclick="showDetailModal('acwr')" style="cursor:pointer"><div class="v" id="s-acwr">–</div><div class="l">ACWR ›</div></div>
+    <div id="dash-acwr" style="background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:8px 12px;margin-bottom:8px"></div>
     <div class="sb" id="s-cns-box" onclick="showDetailModal('cns')" style="cursor:pointer"><div class="v" id="s-cns">–</div><div class="l">CNS ›</div></div>
     <div class="sb gn" onclick="showDetailModal('hrv')" style="cursor:pointer"><div class="v" id="s-streak">–</div><div class="l">Putki ›</div></div>
   </div>
@@ -330,6 +332,7 @@ svg text{font-family:'DM Sans',sans-serif}
         <button class="ab2" onclick="pAct(this,'tennis')"><span class="ai2">🎾</span>Tennis</button>
         <button class="ab2" onclick="pAct(this,'jalkapallo')"><span class="ai2">⚽</span>Jalkapallo</button>
         <button class="ab2" onclick="pAct(this,'uinti')"><span class="ai2">🏊</span>Uinti</button>
+        <button class="ab2" onclick="pAct(this,'sairaus')" style="border-color:var(--or)"><span class="ai2">🤒</span>Sairaus</button>
         <button class="ab2" onclick="pAct(this,'muu_puntti')"><span class="ai2">🏋️</span>Muut puntit</button>
       </div>
     </div>
@@ -576,7 +579,8 @@ svg text{font-family:'DM Sans',sans-serif}
     <div class="fg"><label class="fl">Penkkipunnerrus 1RM (kg)</label><div class="niw"><button class="nb" onclick="adj('s-be',-2.5)">−</button><input type="number" class="nd" id="s-be" value="120" step="2.5"><button class="nb" onclick="adj('s-be',2.5)">+</button></div></div>
     <div class="fg"><label class="fl">Lisäpainoleuka 1RM — lisäpaino (kg)</label><div class="niw"><button class="nb" onclick="adj('s-pu',-2.5)">−</button><input type="number" class="nd" id="s-pu" value="40" step="2.5"><button class="nb" onclick="adj('s-pu',2.5)">+</button></div></div>
     <div class="fg"><label class="fl">Takakyykky 1RM (kg)</label><div class="niw"><button class="nb" onclick="adj('s-sq',-2.5)">−</button><input type="number" class="nd" id="s-sq" value="100" step="2.5"><button class="nb" onclick="adj('s-sq',2.5)">+</button></div></div>
-    <div class="fg"><label class="fl">Maastaveto 1RM (kg)</label><div class="niw"><button class="nb" onclick="adj('s-dl',-2.5)">−</button><input type="number" class="nd" id="s-dl" value="120" step="2.5"><button class="nb" onclick="adj('s-dl',2.5)">+</button></div></div>
+    <div class="fg"><label class="fl">Etukyykky 1RM (kg)</label><div class="niw"><button class="nb" onclick="adj('s-fsq',-2.5)">−</button><input type="number" class="nd" id="s-fsq" value="100" step="2.5"><button class="nb" onclick="adj('s-fsq',2.5)">+</button></div></div>
+    <div class="fg"><label class="fl">Maastaveto 1RM (kg)</label><div class="niw"><button class="nb" onclick="adj('s-dl',-2.5)">−</button><input type="number" class="nd" id="s-dl" value="185" step="2.5"><button class="nb" onclick="adj('s-dl',2.5)">+</button></div></div>
     <div class="fg"><label class="fl">OHP 1RM (kg)</label><div class="niw"><button class="nb" onclick="adj('s-oh',-2.5)">−</button><input type="number" class="nd" id="s-oh" value="70" step="2.5"><button class="nb" onclick="adj('s-oh',2.5)">+</button></div></div>
     <div class="fg"><label class="fl">Hip thrust 1RM (kg)</label><div class="niw"><button class="nb" onclick="adj('s-hi',-2.5)">−</button><input type="number" class="nd" id="s-hi" value="100" step="2.5"><button class="nb" onclick="adj('s-hi',2.5)">+</button></div></div>
     <div style="font-size:11px;color:var(--mu);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;margin-top:12px">🏃 400m Ennätys (sekunteina)</div>
@@ -584,6 +588,8 @@ svg text{font-family:'DM Sans',sans-serif}
     <div style="font-size:11px;color:var(--mu);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;margin-top:8px">⚙️ Ohjelma-asetukset</div>
     <div class="fg"><label class="fl">Ohjelman aloituspäivä</label><input type="date" class="fi" id="s-st"><div style="font-size:11px;color:var(--mu);margin-top:4px">Muuttaa ohjelmaviikon numeron. Vk1 alkaa tästä päivästä. Tallenna muutoksen jälkeen.</div></div>
     <div class="fg"><label class="fl">HRV-perustaso (Garmin/Polar arvo)</label><div class="niw"><button class="nb" onclick="adj('s-hrv',-1)">−</button><input type="number" class="nd" id="s-hrv" value="55" min="20" max="120"><button class="nb" onclick="adj('s-hrv',1)">+</button></div></div>
+    <div class="fg"><label class="fl">Seuraava kilpailu / testi</label><input type="date" class="fi" id="s-comp"><div style="font-size:11px;color:var(--mu);margin-top:4px">Ohjelma laskee automaattisen taper-ikkunan ja varoittaa 14 pv ennen.</div></div>
+    <div class="fg"><label class="fl">Kilpailun nimi</label><input type="text" class="fi" id="s-compname" placeholder="esim. SM-kisat 2026" style="background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:10px;color:var(--tx);font-family:DM Sans,sans-serif;width:100%;box-sizing:border-box"></div>
     <button class="btn bp" onclick="saveSettings()">💾 TALLENNA</button>
   </div>
   <div class="card">
@@ -608,7 +614,28 @@ svg text{font-family:'DM Sans',sans-serif}
 const CK='treeni_v6';
 let D=dflt(), rpe={}, curEx=null, curSets=[], savedExs=[], selAct=null;
 
-function dflt(){return{settings:{benchRM:120,pullRM:40,squatRM:100,dlRM:120,ohpRM:70,hipRM:100,startDate:new Date().toISOString().split('T')[0],hrvBase:55},sessions:[],extras:[],bodyweights:[],hrv:[],sleeps:[],bests:{bench:null,pull:null,run400:null},exerciseRM:{}}}
+function dflt(){return{
+  settings:{
+    benchRM:120, pullRM:40, squatRM:100, dlRM:120, ohpRM:70, hipRM:100,
+    squatFrontRM:100, // etukyykky
+    startDate:new Date().toISOString().split('T')[0],
+    hrvBase:55,
+    blockGoal:'400m_speed', // Nykyinen blokin tavoite
+    blockNum:1,             // Monesko blokki (1 = ensimmäinen)
+    blockStartDate:null,    // Milloin nykyinen blokki alkoi (null=startDate)
+    competitionDate:null,   // Seuraava kilpailu/testi-päivä (YYYY-MM-DD)
+    competitionName:'',     // Kilpailun nimi
+  },
+  sessions:[], extras:[], bodyweights:[], hrv:[], sleeps:[],
+  bests:{bench:null,pull:null,run400:null,squat:null,dl:null,pullWeighted:null},
+  exerciseRM:{},
+  // Volyymitoleranssi — opitaan käyttäjän historiadatasta
+  volumeTolerance:{
+    rinta:1.0, selka:1.0, jalat:1.0, olkapaa:1.0, core:1.0
+  },
+  // Blokkihistoria — mitä on tehty ja milloin
+  blockHistory:[],
+}}
 
 // ── E1RM LASKENTA — Epley-kaava ─────────────────────────
 // Epley 1976: 1RM = paino × (1 + toistot/30)
@@ -620,6 +647,51 @@ function calcE1RM(weight, reps) {
 }
 
 // Laske ja tallenna e1RM per liike session jälkeen
+// ── KEHITYSKAARI — e1RM historia ───────────────────────────────
+// Palauttaa [{date, e1rm}] annetulle liikkeelle
+function getE1RMHistory(exerciseId) {
+  const epley = (w,r) => r===1 ? w : Math.round(w*(1+r/30)*10)/10;
+  const history = [];
+  (D.sessions||[]).forEach(function(sess) {
+    (sess.exercises||[]).forEach(function(ex) {
+      if (ex.id !== exerciseId) return;
+      const sets = Array.isArray(ex.sets) ? ex.sets : [];
+      const best = sets.reduce(function(mx,s) {
+        if (!s.success && s.reps!==1) return mx;
+        const e = epley(s.weight||0, s.reps||1);
+        return e > mx ? e : mx;
+      }, 0);
+      if (best > 0) history.push({date: sess.date, e1rm: best, week: Math.max(1,Math.floor((new Date(sess.date)-new Date(D.settings.startDate))/604800000)+1)});
+    });
+  });
+  return history.sort(function(a,b){return a.date.localeCompare(b.date);});
+}
+
+// ── BLOKKIHISTORIA — päivitetään kun blokki päättyy ─────────
+function endCurrentBlock(newGoal) {
+  const bn = blockNum(wks());
+  if (!D.blockHistory) D.blockHistory = [];
+  // Merkitse nykyinen blokki valmiiksi
+  const existing = D.blockHistory.findIndex(b=>b.blockNum===bn);
+  const entry = {
+    blockNum: bn,
+    goal: currentBlockGoal(),
+    endDate: new Date().toISOString().split('T')[0],
+    finalBenchRM: D.settings.benchRM,
+    finalPullRM: D.settings.pullRM,
+    finalDlRM: D.settings.dlRM,
+    finalSquatRM: D.settings.squatRM,
+  };
+  if (existing >= 0) D.blockHistory[existing] = entry;
+  else D.blockHistory.push(entry);
+  // Aloita uusi blokki
+  const newStartDate = new Date();
+  newStartDate.setDate(newStartDate.getDate() + 1); // huomenna alkaa
+  D.settings.startDate = newStartDate.toISOString().split('T')[0];
+  D.settings.blockGoal = newGoal || '400m_speed';
+  D.blockHistory.push({blockNum: bn+1, goal: D.settings.blockGoal, startDate: D.settings.startDate});
+}
+
 function updateExerciseRMs(exercises) {
   if (!D.exerciseRM) D.exerciseRM = {};
   exercises.forEach(ex => {
@@ -638,6 +710,7 @@ function updateExerciseRMs(exercises) {
     if ((ex.id === 'pullup_w' || ex.id === 'pullup_n') && best > (D.settings.pullRM || 0)) D.settings.pullRM = best;
     if (ex.id === 'squat' && best > (D.settings.squatRM || 0)) D.settings.squatRM = best;
     if (ex.id === 'dl_conv' && best > (D.settings.dlRM || 0)) D.settings.dlRM = best;
+    if (ex.id === 'squat_f' && best > (D.settings.squatFrontRM || 0)) D.settings.squatFrontRM = best;
     if (ex.id === 'ohp' && best > (D.settings.ohpRM || 0)) D.settings.ohpRM = best;
     if (ex.id === 'hipthrust' && best > (D.settings.hipRM || 0)) D.settings.hipRM = best;
   });
@@ -723,10 +796,73 @@ const tdt=()=>new Date().toISOString(); // täysi aikaleima tallennukseen
 const dow=()=>new Date().getDay();
 const fmt=s=>`${Math.floor(s/60)}:${Math.round(s%60).toString().padStart(2,'0')}`;
 const wks=()=>Math.max(1,Math.floor((new Date()-new Date(D.settings.startDate))/(1000*60*60*24*7))+1);
-const isDL=w=>[6,12,18,22,23].includes(w); // Deload vk6,12,18 + taper vk22-23 (2vk = 14pv)
+// Blokin sisäinen viikko (1-24): wks() mod 24
+// ── BLOKKI-KONFIGURAATIOT — Issurin 2010 blokki-periodisaatio ──────────
+// Jokainen blokkityyppi: kesto, deload-viikot, testi-viikko
+// Residuaali-logiikka: maksimivoima 30pv, RFD 18pv, max-nopeus 5-10pv, aerobinen 30-60pv
+const BLOCK_CONFIGS = {
+  '400m_speed':    { len:12, deloads:[6,11], testWk:12, tapWks:[11],  name:'400m Hybridblokki' },
+  'upper_strength':{ len:7,  deloads:[4,7],  testWk:7,  tapWks:[6,7], name:'Yläkropan Voima' },
+  'lower_strength':{ len:7,  deloads:[4,7],  testWk:7,  tapWks:[6,7], name:'Alakropan Voima' },
+  'power_rfd':     { len:5,  deloads:[5],    testWk:5,  tapWks:[4,5], name:'Power / RFD' },
+  'hypertrophy':   { len:8,  deloads:[4,8],  testWk:8,  tapWks:[7,8], name:'Hypertrofia' },
+  '10k_run':       { len:8,  deloads:[4,8],  testWk:8,  tapWks:[7,8], name:'10km Aerobinen' },
+};
+
+// Palauttaa nykyisen blokin konfiguraation
+function getBlockConfig(goal) {
+  const g = goal || currentBlockGoal();
+  return BLOCK_CONFIGS[g] || BLOCK_CONFIGS['400m_speed'];
+}
+
+// blockStartAbsWeek: absoluuttinen viikko startDate:sta kun nykyinen blokki alkoi
+function blockStartAbsWeek() {
+  const bsd = D.settings.blockStartDate || D.settings.startDate;
+  const sd  = D.settings.startDate;
+  if (!bsd || !sd) return 1;
+  const diff = Math.floor((new Date(bsd) - new Date(sd)) / (1000*60*60*24*7));
+  return Math.max(1, diff + 1);
+}
+
+// blockWeekFromDate: viikko nykyisen blokin sisällä laskettuna päivämäärästä
+function blockWeekFromDate(d) {
+  const bsd = D.settings.blockStartDate || D.settings.startDate;
+  if (!bsd) return 1;
+  return Math.max(1, Math.floor((d - new Date(bsd)) / (1000*60*60*24*7)) + 1);
+}
+
+// blockWeek: viikko nykyisen blokin sisällä (1-alkaen)
+// AINA käyttää blockStartDate-päivämäärää, ei absoluuttista viikkonumeroa
+// Tämä varmistaa että getMesocycleScheme toimii oikein riippumatta startDate:sta
+const blockWeek = w => {
+  const bsd = new Date(D.settings.blockStartDate || D.settings.startDate);
+  if (w === undefined || w === null) {
+    // Nykyinen viikko: laske päivistä
+    return Math.max(1, Math.floor((new Date() - bsd) / (1000*60*60*24*7)) + 1);
+  }
+  // Absoluuttinen viikko w: muunna absoluuttiseksi päivämääräksi ensin
+  const sd = new Date(D.settings.startDate);
+  const wDate = new Date(sd.getTime() + (w-1)*7*24*3600000);
+  return Math.max(1, Math.floor((wDate - bsd) / (1000*60*60*24*7)) + 1);
+};
+
+// Monesko blokki kokonaishistoriassa
+const blockNum = w => {
+  const hist = D.blockHistory || [];
+  // Laske montako blokkia on päättynyt ennen nykyistä
+  return (D.settings.blockNum || 1);
+};
+
+// Nykyinen blokkitavoite
+const currentBlockGoal = () => {
+  return D.settings.blockGoal || '400m_speed';
+};
+// isDL + isTaper + isBlockTest — goal-tietoiset, Issurin residuaali-logiikka
+const isDL      = w => { const bw=blockWeek(w); const cfg=getBlockConfig(); return cfg.deloads.includes(bw); };
+const isTaper   = w => { const bw=blockWeek(w); const cfg=getBlockConfig(); return cfg.tapWks.includes(bw); };
+const isBlockTest = w => { const bw=blockWeek(w); const cfg=getBlockConfig(); return bw >= cfg.len; };
 const ph=w=>w<=16?'PERUSTA':w<=32?'RAKENTAMINEN':'HUIPENTUMINEN';
-const TEST_WEEKS=[24]; // Vk24: virallinen 1RM-testi + 400m testi
-const isTest=w=>TEST_WEEKS.includes(w);
+const isTest=w=>isBlockTest(w); // Jokaisen blokin testikviikko
 
 // ── AALTOPERIODISAATIO — nousujohteinen voimaohjelma ──
 // Mesosykli = 4 viikkoa (3 treeniviikkoa + 1 deload)
@@ -744,102 +880,133 @@ const isTest=w=>TEST_WEEKS.includes(w);
 // ... ja jatkuu
 
 function getMesocycleScheme(week) {
-  if (isDL(week) && week !== 24) {
-    // TAPER vk22-23: volyymi -50%, INTENSITEETTI SÄILYY (ei 62% kuten deload)
-    if (week >= 22) return {
-      sets:2, reps:3, pctMod:0.85,
-      label:'TAPER — 2×3 @85% (intensiteetti säilyy)',
+  const bw   = blockWeek(week);   // viikko blokin sisällä
+  const goal = currentBlockGoal();
+  const cfg  = getBlockConfig(goal);
+
+  // ── TESTI-VIIKKO (blokin viimeinen viikko) ────────────────
+  if (isBlockTest(week)) return {
+    sets:1, reps:1, pctMod:0.97, label:cfg.name+' — 1RM TESTI',
+    phase:'testi', step:0, rpe:10,
+    desc:'1RM-testi. Lämmittele: 60%→75%→85%→92%→97–100%. Kirjaa tulos. ' +
+         (goal==='400m_speed'?'400m-testi tällä viikolla.':'Laske uuden blokin aloituspaino.')
+  };
+
+  // ── DELOAD / TAPER ────────────────────────────────────────
+  if (isDL(week)) {
+    if (isTaper(week)) return {
+      sets:2, reps:3, pctMod:0.85, label:'TAPER 2×3 @85%',
       phase:'taper', step:0, rpe:8,
-      desc:'Taper: volyymi -50% mutta paino pysyy. Hermosto terävöityy. RPE 8 — ei grindausta.'
+      desc:'Taper: volyymi -50%, intensiteetti säilyy. Hermosto terävöityy. RPE 8 max.'
     };
     return {
-      sets:2, reps:8, pctMod:0.62,
-      label:'DELOAD 2×8 @ 60%',
+      sets:2, reps:8, pctMod:0.62, label:'DELOAD 2×8 @62%',
       phase:'deload', step:0, rpe:6,
-      desc:'Erittäin kevyt — RPE 5–6 max. Tekniikka etusijalla. Hermosto palautuu.'
+      desc:'Kevyt — RPE 5-6. Tekniikka etusijalla. Hermosto palautuu.'
     };
   }
 
-  // ── TESTIVIIKKO vk24 ─────────────────────────────────────────
-  if (week === 24) return {
-    sets:1, reps:1, pctMod:0.97,
-    label:'1RM TESTI — Penkkipunnerrus + 400m',
-    phase:'testi', step:0, rpe:10,
-    desc:'1RM-testi: lämmittele huolellisesti, hyppää 90%→95%→98-100%. Kirjaa tulos. 400m-testi samalla viikolla.'
-  };
-
-  // ── VIIKKOKARTTA 5-VIIKKON BLOKKEISSA ───────────────────────
-  // Deloadit: vk6, vk12, vk18, vk23(taper)
-  // vk1-5:  Akkumulaatio 1  (korkea volyymi, pohja)
-  // vk7-11: Transmutaatio 1 (voima nousee, singlet vk9-11)
-  // vk13-17:Realisaatio 1   (peaking, raskaat singlet)
-  // vk19-20:Akkumulaatio 2  (uusi pohja korkeammalla tasolla)
-  // vk21-22:Transmutaatio 2 (tiivistetty, kova loppukausi)
-  const blockIdx =
-    week <= 5  ? 0 :  // Akk1
-    week <= 11 ? 1 :  // Trans1
-    week <= 17 ? 2 :  // Real1
-    week <= 20 ? 3 :  // Akk2
-    week <= 22 ? 4 :  // Trans2
-                 5;   // Taper (vk23 on isDL=true, vk24=testi)
-
-  // Viikko blokin sisällä (1-5) — RPE nousee progressiivisesti
-  const blockStarts = [0,6,12,18,19,21];
-  const weekInBlock = week - (blockStarts[blockIdx]||0);
-  const rpeBase = Math.min(6 + weekInBlock - 1, 9);
-
-  // ── ISSURIN BLOKKI-PERIODISAATIO ────────────────────────────
-  // Perustuu: Issurin 2010, González-Badillo & Ribas 2002, Kraemer & Ratamess 2004
-  //
-  // AKKUMULAATIO (vk 1-4, 17-20):
-  //   Korkea volyymi, kohtalainen intensiteetti → hypertrofia + aerobinen pohja
-  //   Pääliike: 3×10 @ 70%. Apuliikkeet: 3×10-15.
-  //   ENNEN nopeusvoimaa — rakennetaan lihaspohja hermostolliselle huipentumiselle
-  //
-  // TRANSMUTAATIO (vk 5-8, 21-24):
-  //   Kohtalainen volyymi, korkea intensiteetti → voima-kestävyys
-  //   Pääliike: 4×5 @ 84%. Apuliikkeet: 3×8-10.
-  //
-  // REALISAATIO (vk 9-12, 25-28):
-  //   Matala volyymi, maksimi-intensiteetti → nopeusvoimahuippu
-  //   Pääliike: 5×3 @ 90-93%. Apuliikkeet: 3×6-8.
-  //   Tässä kohtaa aerobinen pohja + hypertrofia on jo rakennettu
-  //
-  // Kierto toistuu kahdesti (+5-10kg perustasolla) → 24vk kokonaissykli
-  const schemes = [
-    // 0: AKK1 vk1-5 — volyymipohja, singles alkavat vk4 (weekInBlock>=4)
-    { sets:4, reps:10, pctMod:0.70, label:'4×10 — Akkumulaatio',    phase:'volyymi',
-      rpe:rpeBase, step:2.5,
-      singler: weekInBlock >= 4,          // Singles alkavat Akk:n lopussa (vk4-5)
-      singlerPct: 0.85,                   // 1×1@85% — ns. "touch and go single"
-      singlerN: 1,
-      desc:'Volyymipohja. vk4-5: lisätään 1×1@85% ennen työsarjoja (hermostollinen aktivointi).' },
-    // 1: TRANS1 vk7-11 — voima nousee, singles koko transmutaation ajan
-    { sets:4, reps:5,  pctMod:0.84, label:'4×5 — Transmutaatio',    phase:'voima',
-      rpe:rpeBase+1, step:2.5,
-      singler: true,                      // Singles koko Trans1:n ajan
-      singlerPct: weekInBlock<=2?0.88:weekInBlock<=4?0.90:0.92,  // progressio 88→90→92%
-      singlerN: weekInBlock<=3?1:2,       // 1-2 singlejä riippuen viikosta
-      desc:'Voima. Singles: '+( weekInBlock<=2?'1×1@88%':weekInBlock<=4?'1-2×1@90%':'2×1@92%')+' ennen työsarjoja.' },
-    // 2: REAL1 vk13-17 — peaking, raskaat singlet
-    { sets:5, reps:3,  pctMod:0.90, label:'5×3 — Realisaatio',      phase:'nopeusvoimafaasi',
-      rpe:rpeBase+1, step:1.25, singler:true, singlerPct: weekInBlock>=4?0.95:0.92,
-      singlerN: weekInBlock>=5?3:2,
-      desc:'Peaking. Singles: 2-3×1@92-95% ennen työsarjoja. 5 min palautus. Vk17: max single.' },
-    // 3: AKK2 vk19-20 — uusi pohja
-    { sets:4, reps:8,  pctMod:0.72, label:'4×8 — Akkumulaatio 2',   phase:'volyymi',
-      rpe:rpeBase, step:2.5, singler:false,
-      desc:'Uusi volyymipohja korkeammalla tasolla. Sama rakenne kuin Akk1.' },
-    // 4: TRANS2 vk21-22 — tiivistetty, kova
-    { sets:4, reps:4,  pctMod:0.87, label:'4×4 — Transmutaatio 2',  phase:'perusvoima',
-      rpe:rpeBase+1, step:2.5, singler:true, singlerPct:0.93, singlerN:1,
-      desc:'Lähes maksimi. Singles: 1×1@93% joka sessiossa. 3-5 min palautus.' },
-    // 5: ei käytössä (vk23=taper=isDL, vk24=testi)
-    { sets:2, reps:5,  pctMod:0.75, label:'Taper',                   phase:'taper',
-      rpe:7, step:0, singler:false, desc:'Taper: volyymi −50%, intensiteetti pidetään. Hermosto terävöityy.' },
-  ];
-  return schemes[blockIdx] || schemes[0];
+  // ── GOAL-TIETOISET PERIODISAATIOKAAVAT ───────────────────
+  return _getGoalScheme(goal, bw, cfg);
 }
+
+// Palauttaa periodisaatiokaavan tavoitteen ja blokkiviikon perusteella
+function _getGoalScheme(goal, bw, cfg) {
+  // RPE nousee blokin sisällä progressiivisesti
+  const rpe = Math.min(6 + Math.floor((bw-1) * 3 / (cfg.len || 12)), 9);
+
+  // ── 400m SPEED HYBRIDBLOKKI (12vk) ─────────────────────────
+  // bw1-5: Akkumulaatio | bw7-9: Transmutaatio | bw10: Realisaatio
+  if (goal === '400m_speed') {
+    if (bw <= 5) {
+      const singler = bw >= 4;
+      return { sets:4, reps:10, pctMod:0.70, label:'4×10 @70% — Akkumulaatio',
+        phase:'volyymi', rpe, step:2.5, singler, singlerPct:0.85, singlerN:1,
+        desc:'Volyymipohja. '+(singler?'1×1@85% ennen sarjoja.':'Ei singlejä vielä.') };
+    }
+    if (bw <= 9) {
+      const wib = bw - 6;
+      const spct = wib<=1?0.88:wib<=2?0.90:0.92;
+      const sn   = wib<=2?1:2;
+      return { sets:4, reps:5, pctMod:0.84, label:'4×5 @84% — Transmutaatio',
+        phase:'voima', rpe:rpe+1, step:2.5, singler:true, singlerPct:spct, singlerN:sn,
+        desc:'Voima. Singles '+sn+'×1@'+Math.round(spct*100)+'% ennen työsarjoja.' };
+    }
+    return { sets:5, reps:3, pctMod:0.90, label:'5×3 @90% — Realisaatio',
+      phase:'nopeusvoimafaasi', rpe:rpe+1, step:1.25, singler:true,
+      singlerPct:bw===10?0.92:0.95, singlerN:bw===10?2:3,
+      desc:'Peaking. Singles ennen työsarjoja. Max 5 settiä yhteensä.' };
+  }
+
+  // ── YLÄKROPAN VOIMA (7vk) ──────────────────────────────────
+  // bw1-3: Hypertrofia-pohja | bw5-6: Voima + singles
+  if (goal === 'upper_strength') {
+    if (bw <= 3) return { sets:4, reps:8, pctMod:0.75, label:'4×8 @75% — Volyymi',
+      phase:'volyymi', rpe, step:2.5, singler:false,
+      desc:'Hypertrofiapohja yläkropalle. Voima rakentuu volyymin päälle.' };
+    if (bw <= 6) {
+      const spct = bw<=5?0.88:0.93;
+      return { sets:4, reps:4, pctMod:0.87, label:'4×4 @87% — Voima',
+        phase:'perusvoima', rpe:rpe+1, step:2.5, singler:true, singlerPct:spct, singlerN:1,
+        desc:'Maksimivoimatyö. 1×1@'+Math.round(spct*100)+'% ennen työsarjoja.' };
+    }
+    return { sets:3, reps:3, pctMod:0.93, label:'3×3 @93% — Huippu',
+      phase:'nopeusvoimafaasi', rpe:9, step:1.25, singler:true, singlerPct:0.97, singlerN:1,
+      desc:'Huipentumisviikko. 1×1@97% ennen työsarjoja.' };
+  }
+
+  // ── ALAKROPAN VOIMA (7vk) ──────────────────────────────────
+  if (goal === 'lower_strength') {
+    if (bw <= 3) return { sets:4, reps:6, pctMod:0.78, label:'4×6 @78% — Volyymi',
+      phase:'volyymi', rpe, step:2.5, singler:false,
+      desc:'Jalka-pohja. Kyykky + maastaveto pääliikkeinä.' };
+    if (bw <= 6) {
+      const spct = bw<=5?0.88:0.93;
+      return { sets:4, reps:3, pctMod:0.88, label:'4×3 @88% — Voima',
+        phase:'perusvoima', rpe:rpe+1, step:2.5, singler:true, singlerPct:spct, singlerN:1,
+        desc:'Kyykky/mave maksimivoimatyö. 1×1@'+Math.round(spct*100)+'%.' };
+    }
+    return { sets:3, reps:2, pctMod:0.93, label:'3×2 @93% — Huippu',
+      phase:'nopeusvoimafaasi', rpe:9, step:1.25, singler:true, singlerPct:0.97, singlerN:1,
+      desc:'Huipentumisviikko. 1×1@97% ennen työsarjoja.' };
+  }
+
+  // ── POWER / RFD (5vk) — Verkhoshansky transmutaatio ───────
+  // bw1-3: Plyometriikka + submax olympiset + sprintit
+  if (goal === 'power_rfd') {
+    if (bw <= 3) return { sets:5, reps:3, pctMod:0.78, label:'5×3 @78% — Power',
+      phase:'voima', rpe, step:2.5, singler:false,
+      desc:'Submax vauhdi. Maksimaalinen bar speed. Ei grindausta — nopeus on kriteeri.' };
+    return { sets:4, reps:2, pctMod:0.83, label:'4×2 @83% — RFD Huippu',
+      phase:'nopeusvoimafaasi', rpe:rpe+1, step:1.25, singler:true, singlerPct:0.90, singlerN:1,
+      desc:'Räjähtävyyshuippu. 1×1@90% + 4×2@83%. Täysi palautus.' };
+  }
+
+  // ── HYPERTROFIA (8vk) — Israetel MAV-MRV ──────────────────
+  if (goal === 'hypertrophy') {
+    if (bw <= 4) return { sets:4, reps:12, pctMod:0.65, label:'4×12 @65% — Hypertrofia',
+      phase:'volyymi', rpe, step:2.5, singler:false,
+      desc:'Korkea volyymi. Kontrolloitu eksentrinen 3s. Lihaspohja tulevalle voimalle.' };
+    return { sets:4, reps:8, pctMod:0.72, label:'4×8 @72% — Volyymi+',
+      phase:'volyymi', rpe:rpe+1, step:2.5, singler:false,
+      desc:'Volyymi jatkuu korkeammalla intensiteetillä. Progressiivinen overload.' };
+  }
+
+  // ── 10KM AEROBINEN (8vk) ───────────────────────────────────
+  if (goal === '10k_run') {
+    if (bw <= 4) return { sets:3, reps:10, pctMod:0.68, label:'3×10 @68% — Ylläpito',
+      phase:'volyymi', rpe:6, step:2.5, singler:false,
+      desc:'Voima ylläpidossa. Fokus on aerobisessa kehityksessä.' };
+    return { sets:3, reps:8, pctMod:0.72, label:'3×8 @72% — Ylläpito',
+      phase:'volyymi', rpe:7, step:2.5, singler:false,
+      desc:'Voima ylläpidossa. Juoksuvolyymi kasvaa tällä blokilla.' };
+  }
+
+  // Fallback
+  return { sets:4, reps:8, pctMod:0.72, label:'4×8 — Perus',
+    phase:'volyymi', rpe:7, step:2.5, singler:false, desc:'Perusharjoittelu.' };
+}
+
 
 // Get scheme label for display
 function getSchemeLabel(week) {
@@ -904,11 +1071,19 @@ function _renderORoot(el){
   const cur=wks();
   // ── 5VK BLOKKIRAKENNE (vk1-5=Akk1, vk6=DL, vk7-11=Trans1, vk12=DL,
   //    vk13-17=Real1, vk18=DL, vk19-20=Akk2, vk21=Trans2, vk22-23=Taper, vk24=Testi)
+  // Luo BLOCKS-taulukko nykyisen blokin pituuden mukaan
+  const cfg   = getBlockConfig(currentBlockGoal());
+  const bsAbs = blockStartAbsWeek(); // Absoluuttinen viikko josta tämä blokki alkaa
+  // Jaa blokin viikot kolmeen faasiin: kehitys / huipennus / testi+deload
+  const bLen  = cfg.len;
+  const third = Math.floor(bLen / 3);
   const BLOCKS = [
-    {label:'Akkumulaatio 1',  color:'var(--bl)', weeks:[1,2,3,4,5,6]},
-    {label:'Transmutaatio 1', color:'var(--or)', weeks:[7,8,9,10,11,12]},
-    {label:'Realisaatio 1',   color:'var(--rd)', weeks:[13,14,15,16,17,18]},
-    {label:'Sykli 2',         color:'var(--pu)', weeks:[19,20,21,22,23,24]},
+    {label:'Faasi 1 — Pohja',    color:'var(--bl)',
+     weeks:Array.from({length:third},(_,i)=>bsAbs+i)},
+    {label:'Faasi 2 — Kehitys',  color:'var(--or)',
+     weeks:Array.from({length:third},(_,i)=>bsAbs+third+i)},
+    {label:'Faasi 3 — Huippu',   color:'var(--rd)',
+     weeks:Array.from({length:bLen-2*third},(_,i)=>bsAbs+2*third+i)},
   ];
   let grid='';
   for(let bi=0;bi<BLOCKS.length;bi++){
@@ -923,14 +1098,36 @@ function _renderORoot(el){
     grid+='<div style="margin-bottom:10px"><div style="font-size:10px;font-weight:700;color:'+blk.color+';text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">'+blk.label+'</div><div style="display:flex;gap:6px">'+cells+'</div></div>';
   }
   const body=_oW?_renderOWeek(_oW):'<div style="text-align:center;padding:24px;color:var(--mu);font-size:13px">Valitse viikko ylt&auml;</div>';
-  el.innerHTML='<div style="padding:12px"><div style="font-family:Bebas Neue,sans-serif;font-size:22px;letter-spacing:2px;color:var(--ac);margin-bottom:14px">&#128197; TREENIOHJELMA</div>'+grid+'<div id="_oDays">'+body+'</div></div>';
+  // Blokkitieto-header
+  const bwNow = blockWeek(cur);
+  const goalInfo = (typeof BLOCK_GOALS !== 'undefined') ? (BLOCK_GOALS.find(g=>g.key===currentBlockGoal())||{emoji:'⚡',label:currentBlockGoal()}) : {emoji:'⚡',label:''};
+  const blockHeader = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">'
+    + '<div><div style="font-family:Bebas Neue,sans-serif;font-size:22px;letter-spacing:2px;color:var(--ac)">&#128197; TREENIOHJELMA</div>'
+    + '<div style="font-size:11px;color:var(--mu);margin-top:2px">' + goalInfo.emoji + ' ' + goalInfo.label + ' · Blokki ' + blockNum(cur) + ' · Blokkiviikko ' + bwNow + '/24</div></div>'
+    + '<button onclick="showBlockSelector()" style="padding:6px 12px;background:var(--acd);border:1px solid var(--ac);border-radius:8px;color:var(--ac);font-family:DM Sans,sans-serif;font-size:11px;font-weight:700;cursor:pointer">Vaihda tavoite</button>'
+    + '</div>';
+
+  // Kehityskaari-kortti
+  const arcCard = '<div style="background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:13px;margin-top:12px;margin-bottom:4px">'
+    + '<div style="font-family:Bebas Neue,sans-serif;font-size:12px;letter-spacing:2px;color:var(--mu);margin-bottom:10px">&#128200; KEHITYSKAARI — E1RM HISTORIA</div>'
+    + '<div id="arc-chart"></div></div>';
+
+  // Blokkivaihto-nappi kun lähestyy loppua
+  const blockEndBanner = bwNow >= 22
+    ? '<div onclick="showBlockSelector()" style="background:linear-gradient(135deg,rgba(0,212,255,.1),rgba(0,212,255,.02));border:1px solid var(--ac);border-radius:12px;padding:12px;margin-bottom:10px;cursor:pointer">'
+      + '<div style="font-family:Bebas Neue,sans-serif;font-size:13px;letter-spacing:2px;color:var(--ac)">🎯 BLOKKI ' + blockNum(cur) + ' PÄÄTTYY PIAN</div>'
+      + '<div style="font-size:11px;color:var(--tx);margin-top:3px">Viikko ' + bwNow + '/24 — Valitse seuraavan blokin tavoite</div></div>'
+    : '';
+
+  el.innerHTML='<div style="padding:12px">' + blockHeader + blockEndBanner + grid + '<div id="_oDays">'+body+'</div>' + arcCard + '</div>';
+  setTimeout(()=>renderDevelopmentArc('arc-chart'), 80);
 }
 
 function _renderOWeek(w){
   const scheme=getMesocycleScheme(w), presc=getRunPrescription(w);
   // useB: sama logiikka kuin getAdaptiveNextSession — blockIdx parillinen/pariton
   // Akk1(blk0)=A, Trans1(blk1)=B, Real1(blk2)=A, Akk2(blk3)=B, Trans2(blk4)=A
-  const blockIdx = w<=5?0:w<=11?1:w<=17?2:w<=20?3:4;
+  const blockIdx = blockWeek(w)<=5?0:blockWeek(w)<=11?1:blockWeek(w)<=17?2:blockWeek(w)<=20?3:4;
   const useB = blockIdx%2===1; // parillinen blokki=A, pariton=B
   const k1=useB?'yb':'ya', k2=useB?'ab':'aa', k3=useB?'ya':'yb';
   const isFH=presc.fridaySession==='kilpailuvauhti'||presc.fridaySession==='lt_toleranssi';
@@ -1146,6 +1343,33 @@ function _renderOExDetail(dayIdx,session,scheme,presc){
 
 // ── TREENITYYPPIKOHTAISET PALAUTUMISAJAT (tuntia) ──
 // Perustuu: Bishop et al. 2008, Leveritt et al. 1999
+// ── EXTRA-AKTIVITEETTIEN LIHASRYHMÄKARTTA ──────────────────────
+// Mitkä recovery-avaimet kuormittuvat per aktiviteetti
+// Vaikuttaa getRecoveryStatus:iin → ohjelma ottaa extras huomioon
+const EXTRA_MUSCLE_MAP = {
+  pyoraily:    ['voima_ala'],              // Reisi, pakara — ei yläkroppa
+  uinti:       ['voima_yla'],              // Olkapää, selkä, rinta — ei jalat merkittävästi
+  tennis:      ['voima_yla','voima_ala'],  // Koko keho, painotus ylä
+  jalkapallo:  ['voima_ala'],              // Reisi, vasikka — sprintti + hyppely
+  stadion:     ['voima_ala'],              // Reisi, pakara, vasikka
+  muu_puntti:  ['voima_yla','voima_ala'],  // Riippuu — oletetaan koko keho
+  sairaus:     [],                         // Ei lihasryhmäkohtainen
+};
+
+// Lisäkuorman vaikutusaika lihasryhmälle (tuntia)
+// Pitkä kestävyys ei rasita yhtä paljon kuin voimaharjoitus
+// mutta hidastaa palautumista silti
+const EXTRA_RECOVERY_IMPACT = {
+  pyoraily:  { voima_ala: { mild: 12, moderate: 24, hard: 36 } },
+  uinti:     { voima_yla: { mild: 8,  moderate: 16, hard: 24 } },
+  tennis:    { voima_yla: { mild: 12, moderate: 24, hard: 36 },
+               voima_ala: { mild: 8,  moderate: 16, hard: 24 } },
+  jalkapallo:{ voima_ala: { mild: 16, moderate: 28, hard: 40 } },
+  stadion:   { voima_ala: { mild: 20, moderate: 36, hard: 48 } },
+  muu_puntti:{ voima_yla: { mild: 18, moderate: 30, hard: 42 },
+               voima_ala: { mild: 18, moderate: 30, hard: 42 } },
+};
+
 const RECOVERY_HOURS = {
   voima_yla:     { min:36, ideal:48,  cns:8  },  // Yläkroppa voima
   voima_ala:     { min:48, ideal:72,  cns:10 },  // Alakroppa voima (kyykky/maastaveto)
@@ -1210,23 +1434,109 @@ function getRecoveryStatus(typeKey) {
     : [typeKey];
 
   const last = lastSessionOfType(sameKeys);
-  if (!last) return { ready: true, pct: 100, hoursLeft: 0, warning: null };
 
-  const elapsed = hoursSinceSession(last);
+  // ── Extras-kuorman vaikutus lihasryhmälle ──────────────────
+  // Jos extras-aktiviteetti on kuormittanut samaa lihasryhmää,
+  // se lisää efektiivisen palautumisajan päälle
+  const extraLoadHours = (() => {
+    let maxExtra = 0;
+    (D.extras || []).forEach(e => {
+      const muscleGroups = EXTRA_MUSCLE_MAP[e.activity] || [];
+      if (!muscleGroups.includes(typeKey)) return; // Ei vaikuta tähän ryhmään
+      const eDate = e.savedAt ? new Date(e.savedAt) : (() => { const d=new Date(e.date); d.setHours(12,0,0,0); return d; })();
+      const hrsAgo = (Date.now() - eDate.getTime()) / 3600000;
+      if (hrsAgo > 72 || hrsAgo < 0) return; // Yli 3pv sitten ei vaikuta
+      const rpe = parseFloat(e.rpe) || 7;
+      const impact = EXTRA_RECOVERY_IMPACT[e.activity]?.[typeKey];
+      if (!impact) return;
+      // RPE 1-5 = mild, 6-7 = moderate, 8-10 = hard
+      const level = rpe <= 5 ? 'mild' : rpe <= 7 ? 'moderate' : 'hard';
+      const impactH = impact[level] || 0;
+      // Skaalaa keston mukaan: sqrt(kesto_h)
+      const durH = (parseFloat(e.duration) || 60) / 60;
+      const durationScale = Math.sqrt(Math.max(0.5, durH));
+      // Decay: vaikutus vähenee ajan myötä
+      const remainingImpact = impactH * durationScale * Math.max(0, 1 - hrsAgo / 72);
+      maxExtra = Math.max(maxExtra, remainingImpact);
+    });
+    return Math.round(maxExtra);
+  })();
+
+  if (!last && extraLoadHours === 0) return { ready: true, pct: 100, hoursLeft: 0, warning: null };
+
+  // Efektiivinen "viimeinen sessio": jos extras on tuoreempi, käytä sitä
+  let elapsed, extraOnly = false;
+  if (!last) {
+    // Ei voimasessiota, mutta extras on kuormittanut — simuloi viimeinen sessio
+    elapsed = Math.max(0, 48 - extraLoadHours); // Oletetaan ettei ole palautunut täysin
+    extraOnly = true;
+  } else {
+    elapsed = hoursSinceSession(last);
+    // Vähennä extraLoadHours efektiivisestä kuluneesta ajasta
+    // (extras hidastaa palautumista, ei nollaa sitä)
+    elapsed = Math.max(0, elapsed - extraLoadHours * 0.5);
+  }
   const pct = Math.min(100, Math.round(elapsed / rec.ideal * 100));
   const hoursLeft = Math.max(0, rec.min - elapsed);
   const ready = elapsed >= rec.min;
-  const warning = !ready
-    ? `Vain ${Math.round(elapsed)}h sitten — suositus vähintään ${rec.min}h`
+  // Löydä aktiviteetit jotka kuormittivat tätä ryhmää
+  const causingExtras = Object.keys(EXTRA_MUSCLE_MAP)
+    .filter(k => EXTRA_MUSCLE_MAP[k].includes(typeKey)
+      && (D.extras||[]).some(e => e.activity===k
+        && (Date.now()-new Date(e.savedAt||e.date).getTime())/3600000 < 72))
+    .join('/');
+  const extraNote = extraLoadHours > 0
+    ? ` (+${extraLoadHours}h ${causingExtras})`
+    : '';
+  const warning = extraOnly
+    ? `Lihasryhmä kuormittunut (${causingExtras}) — ${extraLoadHours}h lisäkuorma${extraNote}`
+    : !ready
+    ? `Vain ${Math.round(elapsed + extraLoadHours * 0.5)}h efektiivisesti — suositus ${rec.min}h${extraNote}`
     : elapsed < rec.ideal
-    ? `Lähes palautunut (${Math.round(elapsed)}h/${rec.ideal}h)`
-    : null;
+    ? `Lähes palautunut${extraNote}`
+    : extraLoadHours > 0 ? `Palautunut ✓${extraNote}` : null;
 
   return { ready, pct, hoursLeft: Math.round(hoursLeft), warning, elapsed: Math.round(elapsed), last };
 }
 
 // ── CNS-KUORMA (hermostollinen väsymys) ──
 // Laskee yhteisen hermostollisen kuorman voima + juoksu
+// ── VOLYYMITOLERANSSIN OPPIMINEN ────────────────────────────────
+// Katsoo 4 viikon historiaa: jos RPE aina alle 8 → toleranssi nousee
+// Jos usein faileja → toleranssi laskee
+// Vaikuttaa suggest()-funktiooon perustason laskuun
+function updateVolumeTolerance() {
+  if (!D.volumeTolerance) D.volumeTolerance = {rinta:1.0,selka:1.0,jalat:1.0,olkapaa:1.0,core:1.0};
+  const cutoff = new Date(Date.now() - 28*24*3600000); // 4 viikkoa
+  const recent = (D.sessions||[]).filter(s=>new Date(s.date)>=cutoff&&s.type==='voima');
+  if (recent.length < 4) return; // Ei tarpeeksi dataa
+
+  // Laske keskimääräinen RPE suhde (toteutunut/suunniteltu) lihasryhmittäin
+  const muscleMap = {bench:'rinta',pullup_w:'selka',pullup_n:'selka',squat:'jalat',
+    dl_conv:'jalat',ohp:'olkapaa',hipthrust:'jalat'};
+  const rpeSums = {rinta:0,selka:0,jalat:0,olkapaa:0,core:0};
+  const rpeCounts = {rinta:0,selka:0,jalat:0,olkapaa:0,core:0};
+
+  recent.forEach(function(sess) {
+    const rpe = parseFloat(sess.rpe)||7;
+    (sess.exercises||[]).forEach(function(ex) {
+      const mg = muscleMap[ex.id];
+      if (mg) { rpeSums[mg]+=rpe; rpeCounts[mg]++; }
+    });
+  });
+
+  Object.keys(rpeSums).forEach(function(mg) {
+    if (rpeCounts[mg] < 2) return;
+    const avgRPE = rpeSums[mg] / rpeCounts[mg];
+    const current = D.volumeTolerance[mg] || 1.0;
+    // RPE < 7 systemaattisesti → voi lisätä volyymia
+    // RPE > 9 systemaattisesti → vähennä volyymia
+    if (avgRPE < 7) D.volumeTolerance[mg] = Math.min(1.3, current + 0.05);
+    else if (avgRPE > 9) D.volumeTolerance[mg] = Math.max(0.7, current - 0.05);
+    else D.volumeTolerance[mg] = current; // Tasapainoinen — pidä ennallaan
+  });
+}
+
 function calcCNSLoad() {
   const now = Date.now();
   let cnsLoad = 0;
@@ -1249,7 +1559,7 @@ function calcCNSLoad() {
     // Juoksu: tehty sarjat vs ohjelma (runSetGroups.n)
     let volumeRatio = 1.0;
     if (s.type === 'voima' && Array.isArray(s.exercises) && s.exercises.length > 0) {
-      const doneSets = s.exercises.reduce((sum, ex) => sum + (ex.sets || 1), 0);
+      const doneSets = s.exercises.reduce((sum, ex) => sum + (Array.isArray(ex.sets) ? ex.sets.length : (ex.sets || 1)), 0);
       const normalSets = s.exercises.length * 3; // baseline 3 sarjaa/liike
       volumeRatio = Math.min(1.5, Math.max(0.5, doneSets / normalSets));
     } else if (s.type === 'juoksu' && Array.isArray(s.runSetGroups) && s.runSetGroups.length > 0) {
@@ -1267,24 +1577,45 @@ function calcCNSLoad() {
     }
     // RPE on ±20% korjaustekijä — ei pääsignaali
     const rpeAdj = 0.8 + (rpe / 10) * 0.4; // RPE 5→0.8, RPE 8→1.0, RPE 10→1.2
+    // Uni-korjaus: heikko uni hidastaa palautumista → sama kuorma tuntuu raskaammalta
+    // Walker 2017: alle 6h uni → merkittävä palautumishaitta
+    const sleepH = Math.min(12, Math.max(3, parseFloat(s.sleep) || 7.5));
+    const sleepFactor = sleepH >= 8 ? 0.9   // Hyvin nukuttu → palautuu nopeammin
+                      : sleepH >= 7 ? 1.0   // Normaali → ei korjausta
+                      : sleepH >= 6 ? 1.15  // Vajaauni → +15% CNS-kuorma
+                      : 1.35;               // Alle 6h → +35% CNS-kuorma
     // Lisäliikkeet nostavat CNS-kuormaa (0.5 pistettä per lisäliike)
     const extraBonus = (s.extraExCount||0) * 0.5;
-    cnsLoad += (baseCNS + extraBonus) * volumeRatio * rpeAdj * decay(hrs);
+    cnsLoad += (baseCNS + extraBonus) * volumeRatio * rpeAdj * sleepFactor * decay(hrs);
   });
 
   // Lisäaktiviteetit vaikuttavat CNS-kuormaan
   // Hermostollinen kerroin per aktiviteetti: stadion/porrasjuoksu ja jalkapallo korkea,
   // pyöräily ja uinti matala (ei iskukuormaa), tennis ja muu punttitreeni keskitasoa
-  const extraCNS = { stadion:6, jalkapallo:5, tennis:4, muu_puntti:5, pyoraily:2, uinti:2 };
+  // Sairaus ei kuormita CNS:ää suoraan mutta se hidastaa kaikkea palautumista
+  // Mallinnetaan: sairaus antaa negatiivisen käytettävissäolevan kapasiteetin
+  const extraCNS = { stadion:6, jalkapallo:5, tennis:4, muu_puntti:5, pyoraily:2, uinti:2, sairaus:0 };
+  // Kestävyysaktiviteettien CNS-kerroin: matala hermostokuorma, korkea energiakuorma
+  // durationFactor: sqrt(kesto_h) normalisoituna 1h:een
+  const durationCNSFactor = (e, baseH=1) => {
+    const durMin = parseFloat(e.duration) || 60; // minuuttia, oletus 1h
+    const durH = durMin / 60;
+    // sqrt-malli: 1h=1.0, 2h=1.41, 3h=1.73, 5h=2.24
+    return Math.sqrt(Math.max(0.25, durH) / baseH);
+  };
+
   D.extras.slice(-20).forEach(e => {
     const extDate = e.savedAt ? new Date(e.savedAt) : (() => { const d=new Date(e.date); d.setHours(12,0,0,0); return d; })();
     const extMs = extDate.getTime();
-    if (!extMs || isNaN(extMs)) return; // Guard: virheellinen päivämäärä
+    if (!extMs || isNaN(extMs)) return;
     const hrs = (now - extMs) / 3600000;
     if (hrs > 120 || hrs < 0) return;
-    const baseCNS = extraCNS[e.activity] || 3;
+    // Huom: 0 on falsy → käytetään explicit null-tarkistusta
+    const baseCNS = (extraCNS[e.activity] !== undefined) ? extraCNS[e.activity] : 3;
     const rpe = Math.min(10, Math.max(1, parseFloat(e.rpe) || 7));
-    cnsLoad += baseCNS * (rpe / 8) * decay(hrs);
+    // Kestovaikutus: pyöräily/uinti on matalampi hermostokuorma kuin juoksu/tennis
+    const durF = durationCNSFactor(e);
+    cnsLoad += baseCNS * (rpe / 8) * durF * decay(hrs);
   });
 
   // CNS-vyöhykkeet:
@@ -1305,14 +1636,69 @@ function shouldForceDeload() {
   if (isDL(wks())) return { force: true, reason: 'Ohjelmoitu deload viikko' };
   const ready = calcReadiness();
   const cns = calcCNSLoad();
-  // 2 peräkkäistä heikon valmiuden päivää (score < 45)
-  const recentLowReadiness = D.sessions.slice(-4).filter(s => {
-    // Heuristiikka: matala uni tai korkea RPE viittaa heikkoon valmiuteen
-    return (s.sleep || 7.5) < 6 || (s.rpe || 7) >= 9;
-  }).length >= 3;
+
+  // ── E1RM-laskun tarkistus (Zourdos 2016) ──────────────────────────────
+  // 2 peräkkäistä laskua samassa pääliikkeessä → ehdota deloadia
+  const checkE1RMDecline = () => {
+    const epley = (w,r) => r===1 ? w : w*(1+r/30);
+    const mainLifts = ['bench','squat','dl_conv','pullup_w'];
+    for (const exId of mainLifts) {
+      const hist = (D.sessions||[])
+        .filter(s=>s.type==='voima')
+        .map(s=>{
+          const ex=(s.exercises||[]).find(e=>e.id===exId);
+          if(!ex) return null;
+          const sets=Array.isArray(ex.sets)?ex.sets:[];
+          const bestSet=sets.reduce((mx,s2)=>s2.success!==false&&epley(s2.weight||0,s2.reps||1)>mx?epley(s2.weight,s2.reps):mx,0);
+          return bestSet>0?{date:s.date,e1rm:bestSet}:null;
+        }).filter(Boolean).slice(-3); // Viimeiset 3 sessiota
+      if (hist.length >= 3) {
+        const [a,b,c] = hist;
+        if (c.e1rm < b.e1rm && b.e1rm < a.e1rm) {
+          return { decline: true, lift: exId, pct: Math.round((1-c.e1rm/a.e1rm)*100) };
+        }
+      }
+    }
+    return { decline: false };
+  };
+
+  // ── Tarkistukset ────────────────────────────────────────────────────────
+  // Sairaus → pakota lepo akuutin vaiheen aikana
+  const illCheck = (() => {
+    const sick = (D.extras||[]).filter(e=>e.activity==='sairaus');
+    if(!sick.length) return null;
+    const last = sick.map(e=>e.savedAt?new Date(e.savedAt):new Date(e.date)).sort((a,b)=>b-a)[0];
+    const hrsAgo = (Date.now()-last.getTime())/3600000;
+    return hrsAgo < 48 ? 'Akuutti sairaus — lepo on tärkein treeni nyt' :
+           hrsAgo < 96 ? 'Toipumisvaihe — vain erittäin kevyttä' : null;
+  })();
+  if (illCheck && (D.extras||[]).some(e=>e.activity==='sairaus'&&(Date.now()-new Date(e.savedAt||e.date).getTime())/3600000<48)) {
+    return { force: true, reason: illCheck };
+  }
+
   if (cns.zone === 'danger') return { force: true, reason: 'CNS ylikuormittunut — useita kovia treeniä peräkkäin' };
-  if (ready.score < 35) return { force: true, reason: 'Valmiustila kriittisen matala' };
+  // Valmiustila-tarkistus: sairaustoipuminen ohitetaan (se saa oman viestinsä)
+  const isSickRecovering = (D.extras||[]).some(e => {
+    if(e.activity!=='sairaus') return false;
+    const hrsAgo=(Date.now()-new Date(e.savedAt||e.date).getTime())/3600000;
+    return hrsAgo>=48&&hrsAgo<96; // Toipumisvaihe
+  });
+  if (ready.score < 35 && !isSickRecovering) return { force: true, reason: 'Valmiustila kriittisen matala' };
+  if (ready.score < 35 && isSickRecovering) return { force: false, suggest: true, reason: 'Toipumisvaihe — erittäin kevyttä tai lepoa, ei intervalliharjoittelua' };
+
+  // E1RM-lasku 2 peräkkäin (ei pakota, mutta ehdottaa)
+  const e1rmCheck = checkE1RMDecline();
+  if (e1rmCheck.decline) {
+    return { force: false, suggest: true,
+      reason: e1rmCheck.lift + ' e1RM laskenut 3 sessiota peräkkäin (−'+e1rmCheck.pct+'%) — harkitse deloadia' };
+  }
+
+  // 3/4 viimeisistä treenistä heikko uni tai korkea RPE
+  const recentLowReadiness = D.sessions.slice(-4).filter(s =>
+    (s.sleep || 7.5) < 6 || (s.rpe || 7) >= 9
+  ).length >= 3;
   if (recentLowReadiness) return { force: true, reason: '3/4 viimeisestä treenistä heikko uni tai korkea RPE' };
+
   return { force: false, reason: null };
 }
 
@@ -1320,6 +1706,24 @@ function shouldForceDeload() {
 // Ei kiinteitä viikonpäiviä — katsoo mitä on tehty ja milloin
 function getAdaptiveNextSession() {
   const w = wks();
+
+  // ── KILPAILUKALENTERI: automaattinen taper-varoitus ──────────
+  const compDate = D.settings.competitionDate;
+  if (compDate) {
+    const daysToComp = Math.round((new Date(compDate) - new Date()) / 86400000);
+    // 14-10 pv ennen: aloita taper (kevennä automaattisesti)
+    if (daysToComp >= 0 && daysToComp <= 14) {
+      const taperPhase = daysToComp <= 3 ? 'KILPAILU' : daysToComp <= 7 ? 'TAPER HUIPPU' : 'TAPER ALKU';
+      // Pakota kevyt sessio jos ollaan taper-ikkunassa
+      if (daysToComp <= 7 && !isDL(w)) {
+        return { type:'deload', key:null,
+          label:'🏆 ' + taperPhase + (D.settings.competitionName ? ' — '+D.settings.competitionName : ''),
+          short:'🏆 TAPER', desc:daysToComp===0?'KILPAILUPÄIVÄ!':'Kilpailu '+daysToComp+' pv päästä — hermosto terävöityy kevennöksellä.',
+          recovery:null, warnings:['Kilpailu '+daysToComp+' pv päästä — taper käynnissä'], week:w, phase:'taper',
+          competitionDays: daysToComp };
+      }
+    }
+  }
   const forceDeload = shouldForceDeload();
 
   if (forceDeload.force) {
@@ -1331,7 +1735,7 @@ function getAdaptiveNextSession() {
   }
 
   const scheme = getMesocycleScheme(w);
-  const useB = (w<=5?0:w<=11?1:w<=17?2:w<=20?3:4)%2===1; // blockIdx%2 = yhtenäinen kaikissa funktioissa
+  const useB = (blockWeek(w)<=5?0:blockWeek(w)<=11?1:blockWeek(w)<=17?2:blockWeek(w)<=20?3:4)%2===1; // blockIdx%2 = yhtenäinen kaikissa funktioissa
 
   const SESSION_TYPES = [
     { key: useB?'yb':'ya', type:'voima', label:'Voima — Yläkroppa', short:'💪 YLÄ', recovKey:'voima_yla',
@@ -1581,7 +1985,7 @@ function startToday() { startRecommended(); }
 // Perustuu: Gabbett 2016, Hulin et al. 2016
 // ══════════════════════════════════════════════════════
 
-function sLoad(s){const r=s.rpe||7;if(s.type==='voima')return r*(s.exercises||[]).reduce((a,e)=>a+(e.sets?.length||0),0)*1.2;return r*(s.dist||5)*2.5;}
+function sLoad(s){const r=s.rpe||7;if(s.type==='voima')return r*(s.exercises||[]).reduce((a,e)=>a+(Array.isArray(e.sets)?e.sets.length:e.sets||1),0)*1.2;return r*(s.dist||5)*2.5;}
 function eLoad(e){const m={pyoraily:.6,stadion:1.2,tennis:.8,jalkapallo:.9,uinti:.7,muu_puntti:1.0}[e.activity]||.8;return(e.rpe||7)*((e.duration||60)/60)*10*m;}
 function loadForDate(ds){let l=0;D.sessions.filter(s=>s.date===ds).forEach(s=>l+=sLoad(s));D.extras.filter(e=>e.date===ds).forEach(e=>l+=eLoad(e));return l;}
 function wkLoad(ds){const d=new Date(ds),mon=new Date(d);mon.setDate(d.getDate()-(d.getDay()===0?6:d.getDay()-1));let t=0;for(let i=0;i<7;i++){const dd=new Date(mon);dd.setDate(mon.getDate()+i);t+=loadForDate(dd.toISOString().split('T')[0]);}return Math.round(t);}
@@ -1592,7 +1996,9 @@ function streak(){let s=0;for(let i=0;i<60;i++){const d=new Date();d.setDate(d.g
 function calcACWR(){
   const acute=loadLastNDays(7),chronic=loadLastNDays(28);
   if(chronic<1)return{ratio:null,zone:'nodata',acute,chronic};
-  const ratio=acute/chronic;
+  // ACWR: päivittäinen kuorma viim.7pv / päivittäinen kuorma viim.28pv
+  // Gabbett 2016: normalisoitu päivittäisellä kuormalla (ei raakasummalla)
+  const ratio=(acute/7)/(chronic/28);
   let zone,label,color;
   if(ratio<0.6){zone='low';label='Alikuormitus';color='var(--bl)';}
   else if(ratio<0.8){zone='moderate';label='Hieman matala';color='var(--mu)';}
@@ -1655,6 +2061,57 @@ function getHRVStatus(){
 
 function calcReadiness(){
   const acwr=calcACWR(), hrv=getHRVStatus(), cns=calcCNSLoad();
+
+  // ── Glykogeenidepletio (pitkä kestävyyssuoritus) ──────────────────────
+  // 5h pyöräily tai >90min juoksu → glykogeeni tyhjä → -15-25 pistettä
+  // ── Sairaspenalty ────────────────────────────────────────────────────────
+  // Sairaus → immunijärjestelmä kilpailee resurssista lihasten kanssa
+  // Fysiologia: VO2max laskee 10-15% per päivä sairaana, palautuminen 2-3pv per sairauspäivä
+  // Tibbetts & Sheel 2007: harjoittelu akuutin infektion aikana voi pahentaa sairautta
+  const illnessPenalty = (() => {
+    const illnessExtras = (D.extras||[]).filter(e => e.activity === 'sairaus');
+    if (!illnessExtras.length) return { penalty: 0, daysSick: 0, recovering: false };
+    // Löydä viimeisin sairauspäivä
+    const sorted = illnessExtras.map(e => {
+      const d = e.savedAt ? new Date(e.savedAt) : new Date(e.date);
+      return { date: d, severity: parseFloat(e.rpe) || 5 }; // RPE = oireiden vakavuus (1-10)
+    }).sort((a,b) => b.date - a.date);
+    const lastSick = sorted[0];
+    const hrsAgo = (Date.now() - lastSick.date.getTime()) / 3600000;
+    const daysSick = illnessExtras.length; // Montako sairauspäivää kirjattu
+    if (hrsAgo > 96) return { penalty: 0, daysSick: 0, recovering: false }; // >4pv sitten → ok
+    // Akuutti sairaus (0-48h): älä treeni
+    // Palautuminen (48-96h): erittäin kevyttä
+    const severity = lastSick.severity; // 1-10, matala=lievä, korkea=vakava
+    const isAcute = hrsAgo < 48;
+    const penalty = isAcute
+      ? Math.min(80, 30 + severity * 5)  // Akuutti: 35-80 pistettä
+      : Math.min(50, 15 + severity * 3); // Toipuminen: 18-45 pistettä
+    return { penalty, daysSick, recovering: !isAcute, severity, hrsAgo: Math.round(hrsAgo) };
+  })();
+
+  const glycogenPenalty = (() => {
+    const recent = (D.extras||[]).filter(e => {
+      const eDate = e.savedAt ? new Date(e.savedAt) : new Date(e.date);
+      const hrsAgo = (Date.now() - eDate.getTime()) / 3600000;
+      if (hrsAgo > 48 || hrsAgo < 0) return false;
+      const durMin = parseFloat(e.duration) || 60;
+      const durH = durMin / 60;
+      // Pitkä kestävyys: >2h pyöräily/uinti tai >90min juoksu
+      const isLong = (e.activity==='pyoraily'||e.activity==='uinti') && durH > 2
+                  || (e.activity==='juoksu'||e.activity==='stadion') && durH > 1.5;
+      return isLong;
+    });
+    if (!recent.length) return 0;
+    // Suurin yksittäinen depleetiokuorma
+    const worst = recent.reduce((mx, e) => {
+      const durH = (parseFloat(e.duration)||60)/60;
+      // Pyöräily 5h ≈ -20 pistettä, 3h ≈ -12 pistettä
+      const penalty = Math.min(25, Math.round((durH - 1.5) * 5));
+      return Math.max(mx, penalty);
+    }, 0);
+    return worst;
+  })();
   const lastSession=D.sessions.slice(-1)[0];
 
   // Uni: käytä erillistä seurantaa ensin, sitten sessiota
@@ -1700,7 +2157,8 @@ function calcReadiness(){
   // Palautumisaika 0-10
   const recovScore=daysSince>=2?10:daysSince===1?6:3;
 
-  const total=Math.min(100,Math.round(acwrScore+hrvScore+sleepScore+cnsScore+recovScore));
+  // Glykogeenidepletio vähentää valmiuspisteitä (pitkä kestävyys tyhjentää varastot)
+  const total=Math.max(0,Math.min(100,Math.round(acwrScore+hrvScore+sleepScore+cnsScore+recovScore-glycogenPenalty-illnessPenalty.penalty)));
 
   // ── 5 Vireystilatasoa (Garminin logiikka) ───────────────────────
   let zone, label, icon, color, suggestion, rpeAdj, volumeAdj;
@@ -1734,9 +2192,17 @@ function calcReadiness(){
   if(cns.zone==='high')reasons.push('CNS kuormittunut ('+cns.load+')');
   if(cns.zone==='danger')reasons.push('CNS ylikuormittunut ('+cns.load+')');
   if(daysSince===0)reasons.push('Treeni juuri tehty');
+  if(illnessPenalty.penalty>0){
+    if(illnessPenalty.recovering)
+      reasons.push('Toipumassa sairaudesta ('+illnessPenalty.hrsAgo+'h sitten) — erittäin kevyttä tai lepoa');
+    else
+      reasons.push('Akuutti sairaus — ÄLÄ TREENI. Lepo nopeuttaa toipumista (Tibbetts & Sheel 2007)');
+  }
+  if(glycogenPenalty>0)reasons.push('Pitkä kestävyyssuoritus — glykogeenivarastot vajaat (−'+glycogenPenalty+'p). Syö hiilihydraatteja.');
 
-  return{score:total,zone,label,icon,color,suggestion,rpeAdj,volumeAdj,
-    reasons,acwrScore,hrvScore,sleepScore,cnsScore,recovScore,
+  return{score:total,zone,label,icon,color,suggestion,rpeAdj,
+    volumeAdj:volumeAdj-(glycogenPenalty>10?0.1:0)-(illnessPenalty.penalty>20?0.3:0),
+    reasons,glycogenPenalty,illnessPenalty,acwrScore,hrvScore,sleepScore,cnsScore,recovScore,
     sleep,sleepAvg,hrv,acwr,cns};
 }
 
@@ -2005,7 +2471,7 @@ function renderTimeline(){
 function showWeekDetail(w){
   const dl=isDL(w), tst=isTest(w), p=ph(w);
   const scheme = getMesocycleScheme(w);
-  const useB = (w<=5?0:w<=11?1:w<=17?2:w<=20?3:4)%2===1; // blockIdx%2 = yhtenäinen kaikissa funktioissa
+  const useB = (blockWeek(w)<=5?0:blockWeek(w)<=11?1:blockWeek(w)<=17?2:blockWeek(w)<=20?3:4)%2===1; // blockIdx%2 = yhtenäinen kaikissa funktioissa
   const presc = getRunPrescription(w);
   const el = document.getElementById('ptl-detail');
   if (!el) return;
@@ -2174,6 +2640,15 @@ function renderTestCal(){
 
 // ══ ADAPTIIVINEN PAINOEHDOTUS ═════════════════════════
 function lastPerf(id){for(let i=D.sessions.length-1;i>=0;i--){const ex=(D.sessions[i].exercises||[]).find(e=>e.id===id);if(ex)return ex;}return null;}
+
+
+// Liikespesifi RPE — globaali helper
+function getExerciseRPE(exId) {
+  const last=(D.sessions||[]).slice(-10).reverse().find(s=>(s.exercises||[]).some(e=>e.id===exId));
+  if(!last)return 7;
+  const ex=(last.exercises||[]).find(e=>e.id===exId);
+  return ex?.exRpe||last.rpe||7;
+}
 
 function suggest(ex, scheme){
   // Nordic curl — aina konservatiivinen (polvi/takareisi-historia)
@@ -2591,7 +3066,7 @@ function getNextSession() { return getAdaptiveNextSession(); }
 // Returns upcoming sessions for the next 7 days
 function getUpcomingSessions() {
   const w = wks(), dl = isDL(w);
-  const useB = (w<=5?0:w<=11?1:w<=17?2:w<=20?3:4)%2===1; // blockIdx%2 = yhtenäinen kaikissa funktioissa
+  const useB = (blockWeek(w)<=5?0:blockWeek(w)<=11?1:blockWeek(w)<=17?2:blockWeek(w)<=20?3:4)%2===1; // blockIdx%2 = yhtenäinen kaikissa funktioissa
   const upperKey = useB ? 'yb' : 'ya';
   const lowerKey = useB ? 'ab' : 'aa';
   const labels = {
@@ -3890,7 +4365,13 @@ async function saveRun(){
 
 // ══ EXTRA ════════════════════════════════════════════
 function pAct(btn,type){document.querySelectorAll('.ab2').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');selAct=type;document.getElementById('e-pf').style.display=type==='muu_puntti'?'block':'none';updEPrev();}
-function updEPrev(){const r=rpe['erpe'];if(!selAct||!r)return;const dur=parseFloat(document.getElementById('e-du').value)||60;const load=eLoad({activity:selAct,duration:dur,rpe:r});document.getElementById('e-pv').style.display='flex';document.getElementById('e-pt').textContent=`Kuormituspisteet: ${Math.round(load)} (${load>80?'kova':load>50?'kohtalainen':'kevyt'}). Huomioidaan seuraavan treenin ehdotuksissa.`;}
+function updEPrev(){const r=rpe['erpe'];if(!selAct||!r)return;
+  if(selAct==='sairaus'){
+    document.getElementById('e-pv').style.display='flex';
+    document.getElementById('e-pt').textContent='🤒 Sairaus kirjattu. Ohjelma siirtää treenin ja ehdottaa lepoa. Akuutti (<48h): ÄLÄ TREENI. Toipuminen (2-4pv): erittäin kevyttä.';
+    return;
+  }
+  const dur=parseFloat(document.getElementById('e-du').value)||60;const load=eLoad({activity:selAct,duration:dur,rpe:r});document.getElementById('e-pv').style.display='flex';document.getElementById('e-pt').textContent=`Kuormituspisteet: ${Math.round(load)} (${load>80?'kova':load>50?'kohtalainen':'kevyt'}). Huomioidaan seuraavan treenin ehdotuksissa.`;}
 async function saveExtra(){if(!selAct){snk('Valitse aktiviteetti!');return;}const r=rpe['erpe'];if(!r){snk('Valitse intensiteetti!');return;}D.extras.push({id:Date.now(),date:document.getElementById('e-dt').value||td(),savedAt:tdt(),activity:selAct,duration:parseFloat(document.getElementById('e-du').value)||60,rpe:r,exercises:document.getElementById('e-ex')?.value||''});await cSave();selAct=null;rpe['erpe']=null;document.querySelectorAll('.ab2').forEach(b=>b.classList.remove('sel'));document.getElementById('e-pv').style.display='none';snk('✅ Lisäaktiviteetti kirjattu!');setTimeout(()=>T('dash',document.querySelector('.tb')),700);}
 
 // ══ BW & SETTINGS ════════════════════════════════════
@@ -3903,9 +4384,12 @@ function ldSett(){
   document.getElementById('s-dl').value=D.settings.dlRM||120;
   document.getElementById('s-oh').value=D.settings.ohpRM||70;
   document.getElementById('s-hi').value=D.settings.hipRM||100;
+  document.getElementById('s-fsq').value=D.settings.squatFrontRM||100;
   document.getElementById('s-r4').value=D.bests.run400||''
   document.getElementById('s-st').value=D.settings.startDate;
   document.getElementById('s-hrv').value=D.settings.hrvBase||55;
+  if(D.settings.competitionDate)document.getElementById('s-comp').value=D.settings.competitionDate;
+  if(D.settings.competitionName)document.getElementById('s-compname').value=D.settings.competitionName||'';
 }
 async function saveSettings(){
   D.settings.benchRM=parseFloat(document.getElementById('s-be').value)||120;
@@ -3918,6 +4402,12 @@ async function saveSettings(){
   if(r4val>0){if(!D.bests.run400||r4val<D.bests.run400)D.bests.run400=r4val;}
   D.settings.startDate=document.getElementById('s-st').value||td();
   D.settings.hrvBase=parseFloat(document.getElementById('s-hrv').value)||55;
+  D.settings.squatFrontRM=parseFloat(document.getElementById('s-fsq').value)||100;
+  const newBSD=document.getElementById('s-st').value;
+  if(newBSD){D.settings.blockStartDate=newBSD;}
+  const compD=document.getElementById('s-comp').value;
+  D.settings.competitionDate=compD||null;
+  D.settings.competitionName=document.getElementById('s-compname').value||'';
   await cSave();
   // Pakota UI-päivitys: resetoi _oW jotta ohjelma näyttää oikean viikon
   _oW = wks(); _oD = null;
@@ -3970,7 +4460,7 @@ function showDetailModal(type) {
       return { key:k, label:{voima_yla:'💪 Voima ylä',voima_ala:'🦵 Voima ala',intervalli:'🔴 Flying + Intervallit',tempo:'⚡ Tempo',aerobinen:'🟢 Zone 2 Aerobinen',nopeus:'🟠 Nopeus',kilpailuvauhti:'🏆 Kisavauhti',lt_toleranssi:'🔥 LA Toleranssi'}[k]||k, rec, last };
     }).filter(x => x.last);
     // Lisää myös extras palautumistilaan
-    const extraLabels={stadion:'🏗️ Porrasjuoksu',jalkapallo:'⚽ Jalkapallo',tennis:'🎾 Tennis',muu_puntti:'🏋️ Lisätreeni',pyoraily:'🚴 Pyöräily',uinti:'🏊 Uinti'};
+    const extraLabels={stadion:'🏗️ Porrasjuoksu',jalkapallo:'⚽ Jalkapallo',tennis:'🎾 Tennis',muu_puntti:'🏋️ Lisätreeni',pyoraily:'🚴 Pyöräily',uinti:'🏊 Uinti',sairaus:'🤒 Sairaus'};
     const extraCNSMap={stadion:6,jalkapallo:5,tennis:4,muu_puntti:5,pyoraily:2,uinti:2};
     const recentExtras=[...D.extras].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,10)
       .filter(e=>{const ms=e.savedAt?new Date(e.savedAt).getTime():(()=>{const d=new Date(e.date);d.setHours(12,0,0,0);return d.getTime();})();return(Date.now()-ms)/3600000<120;});
@@ -3993,7 +4483,8 @@ function showDetailModal(type) {
         recentExtras.map(e=>{
           const ms=e.savedAt?new Date(e.savedAt).getTime():(()=>{const d=new Date(e.date);d.setHours(12,0,0,0);return d.getTime();})();
           const hrs=Math.round((Date.now()-ms)/3600000);
-          const cnsContrib=Math.round((extraCNSMap[e.activity]||3)*((e.rpe||7)/8)*Math.exp(-hrs/48)*10)/10;
+          // Sairaus: CNS-kuorma = 0 (ei harjoituskuormaa), mutta valmiuspenalty on erillinen
+    const cnsContrib=e.activity==='sairaus'?0:Math.round((extraCNSMap[e.activity]||3)*((e.rpe||7)/8)*Math.exp(-hrs/48)*10)/10;
           return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--bd)">
             <div><div style="font-size:12px;font-weight:600">${extraLabels[e.activity]||e.activity}</div><div style="font-size:11px;color:var(--mu)">${hrs}h sitten · RPE ${e.rpe||7} · ${e.duration||60}min</div></div>
             <div style="text-align:right"><div style="font-size:12px;font-weight:600;color:var(--yw)">+${cnsContrib}</div><div style="font-size:10px;color:var(--mu)">CNS-piste</div></div>
@@ -4128,7 +4619,7 @@ function showDetailModal(type) {
     title = '📅 Viikko '+wks()+' — '+getMesocycleScheme(wks()).label;
     const scheme2=getMesocycleScheme(wks());
     const presc2=getRunPrescription(wks());
-    const ww=wks(); const useB2=(ww<=5?0:ww<=11?1:ww<=17?2:ww<=20?3:4)%2===1;
+    const ww=wks(); const useB2=(blockWeek(ww)<=5?0:blockWeek(ww)<=11?1:blockWeek(ww)<=17?2:blockWeek(ww)<=20?3:4)%2===1;
     const sd2=new Date(D.settings.startDate);
     const ws2=new Date(sd2);ws2.setDate(sd2.getDate()+(wks()-1)*7);
     const weekDates=Array.from({length:7},(_,i)=>{const d=new Date(ws2);d.setDate(ws2.getDate()+i);return d.toISOString().split('T')[0];});
@@ -4744,275 +5235,99 @@ function calcTestProtocol() {
 // Weekly run prescription — 48 viikon ohjelma
 // Jokainen viikko: intervalli, aerobinen, nopeus/kilpailuvauhti
 function getRunPrescription(week) {
-  // ── ADAPTIIVINEN SARJAMÄÄRÄ ──────────────────────────
-  const lastInt = D.sessions.filter(s=>s.runType==='intervalli'&&s.runSetGroups?.length).slice(-1)[0];
-  const lastRPE = lastInt?.rpe || 8;
-  const lastN = lastInt?.runSetGroups?.find(g=>g.phase==='intervalli')?.n || 0;
-  const nAdj = lastRPE <= 7 ? 1 : lastRPE >= 9 ? -1 : 0;
-  const adj = (n, min=2, max=10) => Math.min(max, Math.max(min, n + (lastN>0?nAdj:0)));
+  const bw   = blockWeek(week);
+  const goal = currentBlockGoal();
+  const cfg  = getBlockConfig(goal);
 
-  if (isDL(week)) return {
-    type:'deload',
-    intervalli: null,
-    aerobinen: {min:25, zone:2, desc:'Kevyt aerobinen 25 min — Zone 2, pulssi alle 140'},
-    kilpailuvauhti: null, lt_toleranssi: null, fridaySession:'aerobinen',
-  };
+  if (isDL(week)) return { type:'deload', fridaySession:'aerobinen',
+    aerobinen:{groups:[{dist:'30min',n:1,tgt:null,rest:0,phase:'aerobinen',
+      label:'Zone 2 30 min — palautuminen'}]}, intervalli:null, tempo:null };
 
-  // ════════════════════════════════════════════════════
-  // TUTKIMUSPERUSTA:
-  // - Haugen et al. 2019: Flying sprints kehittävät max velocity parhaiten
-  //   (20m vauhdinotolla + 30-40m täysivauhti)
-  // - Morin & Samozino 2016: Maksiminopeus vaatii täyden palautuksen (3-6 min)
-  //   Alle 95% teho → ei max velocity adaptaatiota
-  // - Hanon & Thomas 2011: 400m harjoittelun jako
-  //   ACCELERATION (0-30m), MAX VELOCITY (30-70m flying),
-  //   SE1/150-300m @ 95%, SE2/300-500m @ 98%
-  // - Duffield et al. 2005: 400m energiajärjestelmät
-  //   ~45% anaerobinen glykolyysi, ~30% alaktinen, ~25% aerobinen
-  // - Charlie Francis 1992: High-Low CNS rakenne
-  //   Tiistai = HIGH (sprintit), Perjantai = LOW (aerobinen/tempo)
-  // - Seiler 2010: Zone 2 kriittinen vk 1-12, vähenee myöhemmin
-  // ════════════════════════════════════════════════════
+  return _getGoalRun(goal, bw, week, cfg);
+}
 
-  let p;
+function _getGoalRun(goal, bw, week, cfg) {
+  const adj = (base,mn,mx) => Math.min(mx, Math.max(mn, base));
 
-  // ── FLYING SPRINT RAKENNE ─────────────────────────────
-  // flying phase: 20m vauhdinotto + 30-40m täysivauhti TIMEABLE osuus
-  // Tärkeää: palautus 4-5 min (hermostollinen täysi palautus)
-  // Ei tarvita sekuntikelloa — käytetään GPS tai visuaalista arviota
-  // Ensin flyingit, sitten kiihdytykset, sitten SE-työ
-
-  // ── JUOKSUVOLYYMI KOORDINOITU VOIMABLOKKIEN KANSSA ──────────────
-  // Akkumulaatio (vk 1-4, 13-16): korkea voimavolyymi → juoksuvolyymi MATALA
-  //   Kehon tulee adaptoitua concurrent-kuormaan ensin — ei kahta volyymihuippua
-  // Transmutaatio (vk 5-8, 17-20): volyymi laskee voimassa → juoksu KASVAA
-  // Realisaatio (vk 9-12, 21-24): max voimaintensiteetti → juoksuvolyymi ALAS, intensiteetti YLÖS
-  //   5×3 @ 90% + max juoksuvolyymi = liikaa CNS samanaikaisesti
-
-  // ── UUSI VIIKKOKARTTA (5vk blokki, deload vk6,12,18,22-23) ────────────────
-  // Akk1 vk1-5 | Trans1 vk7-11 | Real1 vk13-17 | Akk2 vk19-20 | Trans2 vk21 | Taper vk22-23 | Testi vk24
-  // 60m MAKSIMISPRINTS: alkavat vk3, lisääntyvät Trans1:ssä ja Real1:ssä
-  // Realisaatiossa TEMPO POISTETAAN → PE=aerobinen (palautuminen)
-
-  if (week <= 5) {
-    // AKKUMULAATIO 1 — volyymipohja
-    // V7: lisätty 10-20m lähtöakseleraatio (Haugen 2019: eri adaptaatio kuin 60m)
-    // Kompensaatio: SE1 sarjat vähennetty adj(3→2) → kokonaismetrit pysyy vakiona
-    const has60m = week >= 3;
-    p = {
-      int:[
-        {dist:'20m', n:4, tgt:null, rest:180, phase:'kiihdytys', label:'20m LÄHTÖ — räjähtävä akseleraatio, 3min palautus'},
-        has60m
-          ? {dist:'60m', n:2, tgt:null, rest:360, phase:'kiihdytys', label:'60m MAKSIMI — täysi teho, 6min palautus'}
-          : {dist:'30m', n:2, tgt:null, rest:240, phase:'kiihdytys', label:'Kiihdytys 0-30m'},
-        {dist:'30m', n:3, tgt:null, rest:300, phase:'flying',    label:'Flying 30m — max velocity'},
-        {dist:'150m',n:adj(2,2,3),tgt:25,rest:300,phase:'intervalli',label:'SE1 — 90% tavoitevauhdista (-1s V7 kompensaatio)'},
-      ], aer:35
-    };
-  } else if (week <= 11) {
-    // TRANSMUTAATIO 1 — 60m sprints + 20m akseleraatio + SE1 200m
-    // V7: 20m vedot lisätty, flying 3→2 kompensaatioksi (global constraint)
-    p = {
-      int:[
-        {dist:'20m', n:5, tgt:null, rest:180, phase:'kiihdytys', label:'20m LÄHTÖ — 5 toistoa, räjähtävä akseleraatio'},
-        {dist:'60m', n:3, tgt:null, rest:360, phase:'kiihdytys', label:'60m MAKSIMI — 3 toistoa, 6min palautus'},
-        {dist:'30m', n:2, tgt:null, rest:300, phase:'flying',    label:'Flying 30m — max velocity (2→ kompensaatio)'},
-        {dist:'200m',n:adj(5,4,7),tgt:33,rest:270,phase:'intervalli',label:'SE1 — 91% tavoitevauhdista'},
-      ], aer:40
-    };
-  } else if (week <= 17) {
-    // REALISAATIO 1 — 20m akseleraatio + 60m sprints + SE2
-    // V7: 20m lisätty, SE2 -1 sarja kompensaatioksi (kokonaismetrit vakio)
-    p = {
-      int:[
-        {dist:'20m', n:4, tgt:null, rest:180, phase:'kiihdytys', label:'20m LÄHTÖ — 4 toistoa räjähtävä akseleraatio'},
-        {dist:'60m', n:3, tgt:null, rest:420, phase:'kiihdytys', label:'60m MAKSIMI — 3 toistoa (4→3 kompensaatio)'},
-        {dist:'40m', n:2, tgt:null, rest:360, phase:'flying',    label:'Flying 40m — max velocity'},
-        {dist:'300m',n:adj(3,2,4),tgt:48,rest:360,phase:'intervalli',label:'SE2 — 93% (-1s kompensaatio)'},
-      ], aer:25
-    };
-  } else if (week <= 20) {
-    // AKKUMULAATIO 2 — uusi volyymipohja korkeammalla tasolla
-    p = {
-      int:[
-        {dist:'60m', n:3, tgt:null, rest:360, phase:'kiihdytys', label:'60m MAKSIMI'},
-        {dist:'40m', n:3, tgt:null, rest:360, phase:'flying',    label:'Flying 40m'},
-        {dist:'300m',n:adj(4,3,5),tgt:48,rest:360,phase:'intervalli',label:'SE2 — 93% tavoitevauhdista'},
-        {dist:'200m',n:adj(3,2,4),tgt:32,rest:240,phase:'intervalli',label:'SE1 täydennys'},
-      ], aer:40
-    };
-  } else if (week <= 21) {
-    // TRANSMUTAATIO 2 — kilpailuspecifinen 400m
-    p = {
-      int:[
-        {dist:'60m', n:3, tgt:null, rest:360, phase:'kiihdytys', label:'60m MAKSIMI'},
-        {dist:'40m', n:3, tgt:null, rest:360, phase:'flying',    label:'Flying 40m'},
-        {dist:'400m',n:adj(3,2,4),tgt:62,rest:540,phase:'intervalli',label:'SE2 — 97% tavoitevauhdista'},
-      ], aer:35
-    };
-  } else if (week <= 23) {
-    // TAPER vk22-23 — volyymi -50%, intensiteetti säilyy
-    p = {
-      int:[
-        {dist:'40m', n:2, tgt:null, rest:360, phase:'flying',    label:'Flying 40m — terävyys ylläpito'},
-        {dist:'200m',n:2, tgt:32,   rest:420, phase:'intervalli', label:'SE taper — 2×200m terävyys'},
-      ], aer:20
-    };
-  } else if (week <= 24) {
-    // TESTIVIIKKO — 400m virallinen testi
-    p = {
-      int:[
-        {dist:'40m', n:2, tgt:null, rest:360, phase:'flying',    label:'Lämmittely flying'},
-      ], aer:0
-    };
-  } else if (week <= 28) {
-    // SE2 raskaimmillaan, Zone 2 vähenee merkittävästi (Seiler 2010)
-    p = {
-      int:[
-        {dist:'40m',  n:3, tgt:null, rest:360, phase:'flying',     label:'Flying 40m'},
-        {dist:'400m', n:adj(4,3,5), tgt:61, rest:540, phase:'intervalli', label:'SE2 kehittyy'},
-      ], aer:30
-    };
-  } else if (week <= 32) {
-    p = {
-      int:[
-        {dist:'40m',  n:3, tgt:null, rest:360, phase:'flying',     label:'Flying 40m'},
-        {dist:'400m', n:adj(4,3,5), tgt:61, rest:540, phase:'intervalli', label:'SE2'},
-        {dist:'200m', n:adj(2,2,3), tgt:31, rest:240, phase:'intervalli', label:'Nopeudellisuus ylös'},
-      ], aer:25
-    };
-  } else if (week <= 36) {
-    // Kilpailukausi lähestyy: volyymi alas, intensiteetti ylös
-    p = {
-      int:[
-        {dist:'30m',  n:4, tgt:null, rest:360, phase:'flying',     label:'Flying 30m — terävyys'},
-        {dist:'500m', n:adj(3,2,4), tgt:80, rest:600, phase:'intervalli', label:'Pitkä SE2'},
-      ], aer:20
-    };
-  } else if (week <= 40) {
-    p = {
-      int:[
-        {dist:'30m',  n:4, tgt:null, rest:360, phase:'flying',     label:'Flying 30m'},
-        {dist:'400m', n:adj(4,3,5), tgt:61, rest:540, phase:'intervalli', label:'SE2 huippu'},
-      ], aer:20
-    };
-  } else {
-    // Taper: volyymi ½, intensiteetti sama
-    p = {
-      int:[
-        {dist:'30m',  n:3, tgt:null, rest:360, phase:'flying',     label:'Flying 30m'},
-        {dist:'400m', n:adj(2,2,3), tgt:62, rest:600, phase:'intervalli', label:'Kilpailuvauhti SE2'},
-      ], aer:15
-    };
+  if (goal === '400m_speed') {
+    const has60m = bw >= 3;
+    let p = {};
+    if (bw <= 5) {
+      p.int = { groups:[
+        has60m ? {dist:'60m',n:2,tgt:null,rest:360,phase:'kiihdytys',label:'60m MAKSIMI — täysi teho'}
+               : {dist:'20m',n:4,tgt:null,rest:180,phase:'kiihdytys',label:'20m lähtö'},
+        {dist:'30m',n:3,tgt:null,rest:300,phase:'flying',label:'Flying 30m — max velocity'},
+        {dist:'150m',n:adj(2,2,3),tgt:25,rest:300,phase:'intervalli',label:'SE1 150m @90%'},
+      ], aer:35 };
+      p.fridaySession='tempo';
+      p.tempo={groups:[{dist:'150m',n:6,tgt:30,rest:120,phase:'tempo',label:'Tempo 150m @80-85%'}]};
+    } else if (bw <= 9) {
+      p.int = { groups:[
+        {dist:'20m',n:5,tgt:null,rest:180,phase:'kiihdytys',label:'20m akseleraatiovedot'},
+        {dist:'60m',n:3,tgt:null,rest:360,phase:'kiihdytys',label:'60m MAKSIMI'},
+        {dist:'30m',n:2,tgt:null,rest:300,phase:'flying',label:'Flying 30m'},
+        {dist:'200m',n:adj(5,4,7),tgt:33,rest:270,phase:'intervalli',label:'SE1 200m @91%'},
+      ], aer:40 };
+      p.fridaySession='tempo';
+      p.tempo={groups:[{dist:'200m',n:7,tgt:40,rest:120,phase:'tempo',label:'Tempo 200m @80-85%'}]};
+    } else {
+      p.int = { groups:[
+        {dist:'20m',n:4,tgt:null,rest:180,phase:'kiihdytys',label:'20m akseleraatiovedot'},
+        {dist:'60m',n:3,tgt:null,rest:420,phase:'kiihdytys',label:'60m MAKSIMI'},
+        {dist:'40m',n:2,tgt:null,rest:360,phase:'flying',label:'Flying 40m'},
+        {dist:'300m',n:adj(3,2,4),tgt:48,rest:360,phase:'intervalli',label:'SE2 300m @93%'},
+      ], aer:25 };
+      const kPos=(bw-10)%3;
+      p.fridaySession=kPos===0?'kilpailuvauhti':kPos===1?'lt_toleranssi':'aerobinen';
+      p.kilpailuvauhti={groups:[{dist:'400m',n:2,tgt:62,rest:540,phase:'kilpailuvauhti',label:'Kisavauhti @62s'}]};
+      p.lt_toleranssi={groups:[{dist:'400m',n:2,tgt:59,rest:600,phase:'lt_toleranssi',label:'LA toleranssi @59s'}]};
+    }
+    p.aerobinen={groups:[{dist:'25min',n:1,tgt:null,rest:0,phase:'aerobinen',label:'Zone 2 25 min'}]};
+    return p;
   }
 
-  const adaptNote = lastN>0 && nAdj!==0
-    ? ` · ${nAdj>0?'RPE matala → +1 sarja':'RPE korkea → -1 sarja'}`
-    : '';
-
-  // ── TEMPOKESTÄVYYS Pe vk1-16 ──────────────────────────────────────────────
-  // Submaksimaalinen (75-85% max) — kehittää anaerobista kynnystä ilman täyttä
-  // hermostokuormaa. Eri päivä kuin tiistain HIGH-intensity intervallit.
-  // CNS: MED (cns=5, palautuu 24-36h) → ei häiritse lauantain YB-harjoitusta.
-  // Lähde: Francis 1992 High-Low; Laursen & Jenkins 2002 (submax threshold work)
-  // LA Tolerance — 1-2x per 2 viikkoa vk17+ (Laursen & Jenkins 2002)
-  const lat = week >= 17 ? {
-    groups: [{ dist:'400m', n: week<=28?2:week<=40?3:2,
-      tgt: week<=24?59:week<=32?58:week<=40?57:57,  // LA toleranssi: ~2% tavoitetta kovempi (60s→59s)
-      rest:600,
-      phase:'intervalli', label:'LA Toleranssi — ylivauhti' }],
-    desc: `${week<=28?2:3}×400m @ alle kilpailuvauhdin, 10 min palautus`
-  } : null;
-
-  // Kilpailuvauhti
-  const kvTgt = week<=24?62:week<=32?61:week<=40?60:60;  // 60s tavoite: kisavauhti
-  const kvN   = week<=24?2:week<=32?3:4;
-  const kv = week >= 17 ? {
-    groups:[{ dist:'400m', n:kvN, tgt:kvTgt, rest:480, phase:'intervalli', label:'Kilpailuvauhti' }],
-    desc:`${kvN}×400m @ ${kvTgt}s, 8 min palautus`
-  } : null;
-
-  // Pe-sessio: 3-viikon kierto vk17+
-  // Kierto lasketaan EI-DELOAD-viikoista — deload ei kuulu kiertoon
-  // Kierto: 1. Kisavauhti → 2. LA Toleranssi → 3. Aerobinen → 1. Kisavauhti...
-  // Vk17=kisavauhti, vk18=LA, vk19=aerobinen, vk20=DELOAD(aerobinen),
-  // vk21=kisavauhti (kierto jatkuu), vk22=LA, vk23=aerobinen, vk24=DELOAD(aerobinen)
-  // Pe-sessio: Akk=tempo | Real=aerobinen (palautuminen) | vk17+=kisavauhti-kierto
-  // Realisaatiossa (vk13-17) priorisoidaan palautuminen tiistain kovien intervallin jälkeen
-  let fridaySession = week <= 12 ? 'tempo' : week <= 17 ? 'aerobinen' : 'aerobinen';
-  if (week >= 17) {
-    if (isDL(week)) {
-      fridaySession = 'aerobinen';
-    } else {
-      // Laske deload-viikot ohitse
-      let nonDLcount = 0;
-      for (let w = 17; w <= week; w++) {
-        if (!isDL(w)) nonDLcount++;
-      }
-      const c = (nonDLcount - 1) % 3;
-      fridaySession = c === 0 ? 'kilpailuvauhti' : c === 1 ? 'lt_toleranssi' : 'aerobinen';
-    }
+  if (goal === 'upper_strength') {
+    return { fridaySession:'tempo', int:null,
+      tempo:{groups:[{dist:'200m',n:5,tgt:40,rest:90,phase:'tempo',label:'Kevyt tempo 200m @75% — ylläpito'}]},
+      aerobinen:{groups:[{dist:'30min',n:1,tgt:null,rest:0,phase:'aerobinen',label:'Zone 2 30 min'}]} };
   }
 
-  // Alkulämmittely + koordinaatiodrillaus
-  const drillDesc = week <= 8
-    ? '🔥 Alkulämmittely: 10min hölkkä → 2×20m A-skip → 2×20m B-skip → 2×20m polvennostojuoksu → 2×20m kantapääpotku → 3×30m nouseva kiihdytys (70/80/90%)'
-    : '🔥 Alkulämmittely: 12min hölkkä → A-skip → B-skip → Bounding 2×20m → 4×40m kiihdytys (70/80/90/95%)';
+  if (goal === 'lower_strength') {
+    return { fridaySession:'tempo', int:null,
+      tempo:{groups:[{dist:'200m',n:4,tgt:42,rest:90,phase:'tempo',label:'Kevyt tempo — jalat lepäävät'}]},
+      aerobinen:{groups:[{dist:'25min',n:1,tgt:null,rest:0,phase:'aerobinen',label:'Zone 2 25 min'}]} };
+  }
 
-  // ── TEMPOKESTÄVYYS Pe vk1-16 ─────────────────────────────────────────────
-  const tempoGroups = week <= 4
-    ? [{dist:'150m',n:6,tgt:null,rest:120,phase:'intervalli',label:'Tempo 150m @ 75-80% — submaksimaalinen'}]
-    : week <= 8
-    ? [{dist:'200m',n:7,tgt:null,rest:120,phase:'intervalli',label:'Tempo 200m @ 80-85%'}]
-    : week <= 12
-    ? [{dist:'200m',n:7,tgt:null,rest:90, phase:'intervalli',label:'Tempo 200m @ 85% — tiukennettu palautus'}]
-    : [{dist:'300m',n:6,tgt:null,rest:180,phase:'intervalli',label:'Tempo 300m @ 80-85% — pitkä tempo'}];
+  if (goal === 'power_rfd') {
+    return { fridaySession:bw<=3?'tempo':'aerobinen',
+      int:{ groups:[
+        {dist:'20m',n:6,tgt:null,rest:240,phase:'kiihdytys',label:'20m kiihdytys 6 toistoa — räjähtävä lähtö'},
+        {dist:'60m',n:3,tgt:null,rest:420,phase:'kiihdytys',label:'60m MAKSIMI 3 toistoa'},
+        {dist:'30m',n:3,tgt:null,rest:300,phase:'flying',label:'Flying 30m'},
+      ], aer:20 },
+      tempo:{groups:[{dist:'150m',n:5,tgt:30,rest:120,phase:'tempo',label:'Tempo 150m — ei lactatia'}]},
+      aerobinen:{groups:[{dist:'20min',n:1,tgt:null,rest:0,phase:'aerobinen',label:'Zone 2 20 min'}]} };
+  }
 
-  // Adaptiivinen tempo-n: edellinen suoritus ohjaa seuraavan sarjamäärää
-  const lastTempoSess = D.sessions.filter(s=>s.runType==='tempo'&&s.runSetGroups?.length).slice(-1)[0];
-  const tempoGroupsAdapted = tempoGroups.map((g, gi) => {
-    if (!lastTempoSess?.runSetGroups?.[gi]) return g; // Ei historiaa → käytä ohjelmaa
-    const lastG = lastTempoSess.runSetGroups[gi];
-    const lastN = lastG.n || g.n;
-    const prescN = g.n;
-    // Teki kaikki ohjelmoitu sarjat → voi lisätä (max +2 sarjaa yli ohjelmoitua)
-    // Ei teh.yt kaikkia → pidä entinen taso
-    let adaptN = g.n; // default: ohjelmoitu
-    if (lastN >= prescN) {
-      // Suoritti ohjelmoidut → +1 sarja ensi kerralla (max prescN+2)
-      adaptN = Math.min(prescN + 2, lastN + 1);
-    } else {
-      // Ei teh.yt ohjelmoituja → säilytä edellinen taso
-      adaptN = Math.max(prescN - 1, lastN);
-    }
-    return {...g, n: adaptN,
-      label: g.label + (adaptN > prescN ? ' +'+( adaptN-prescN)+' (edellisestä)' : adaptN < prescN ? ' (kevennys)' : '')};
-  });
-  // Realisaatiossa (vk13-17) ei enää tempoa — priorisoidaan SE-intensiteetti
-  // Tempo säilyy Akk1 ja Trans1:ssä, poistetaan Real1:stä
-  const isRealFaasi = !isDL(week) && week >= 13 && week <= 17;
-  const tempoPresc = !isDL(week) && week <= 12 ? {
-    groups: tempoGroupsAdapted,
-    drills: drillDesc,
-    desc: tempoGroupsAdapted.map(g=>'⚡ '+g.n+'×'+g.dist+' @ 80-85% ('+Math.round(g.rest/60)+'min palautus)').join(' → ')
-      + ' — EI täyttä maksimia, pystyisit puhua',
-  } : null;
+  if (goal === 'hypertrophy') {
+    return { fridaySession:'aerobinen',
+      int:{ groups:[{dist:'200m',n:adj(5,4,7),tgt:38,rest:180,phase:'intervalli',
+        label:'Tempo-intervalli 200m @85%'}], aer:35 },
+      aerobinen:{groups:[{dist:'40min',n:1,tgt:null,rest:0,phase:'aerobinen',label:'Zone 2 40 min'}]} };
+  }
 
-  // Zone 2 vähenee realisaatiovaiheessa (Seiler 2010: pohja rakennettu)
-  const aerMin = p.aer;
+  if (goal === '10k_run') {
+    const isLate=bw>4;
+    return { fridaySession:'tempo',
+      int:{ groups:[{dist:'1000m',n:adj(isLate?5:4,4,8),tgt:isLate?270:290,rest:180,phase:'intervalli',
+        label:(isLate?'5×1000m @4:30/km':'4×1000m @4:50/km')+' — VO2max'}], aer:45 },
+      tempo:{groups:[{dist:'5000m',n:1,tgt:null,rest:0,phase:'tempo',
+        label:isLate?'5km @5:00/km':'5km @5:30/km'}]},
+      aerobinen:{groups:[{dist:'50min',n:1,tgt:null,rest:0,phase:'aerobinen',label:'Pitkä hidas 50 min'}]} };
+  }
 
-  return {
-    intervalli: p.int ? {
-      groups: p.int,
-      drills: drillDesc,
-      desc: p.int.map(g=>`${g.phase==='flying'?'🟡':g.phase==='kiihdytys'?'⚡':'🔴'} ${g.n}×${g.dist}${g.tgt?' @ '+g.tgt+'s':''}${g.rest?' ('+Math.round(g.rest/60)+'min palautus)':''}`).join(' → ') + adaptNote
-    } : null,
-    aerobinen:  { min: aerMin, zone: 2, desc: `${aerMin} min Zone 2 — pulssi 65-75% max, pystyt puhumaan` },
-    tempo:      tempoPresc,
-    kilpailuvauhti: kv,
-    lt_toleranssi: lat,
-    fridaySession,
-  };
+  return { fridaySession:'aerobinen', int:null,
+    aerobinen:{groups:[{dist:'30min',n:1,tgt:null,rest:0,phase:'aerobinen',label:'Zone 2 30 min'}]} };
 }
 
 // Render voima schedule tab
@@ -5700,7 +6015,7 @@ function rdDash() {
     const days7 = ['Su','Ma','Ti','Ke','To','Pe','La'];
 
     // Laske ohjelmaviikon sessiot täsmälleen kuten _renderOWeek tekee
-    const useB = (w<=5?0:w<=11?1:w<=17?2:w<=20?3:4)%2===1; // yhtenäinen kaikissa
+    const useB = (blockWeek(w)<=5?0:blockWeek(w)<=11?1:blockWeek(w)<=17?2:blockWeek(w)<=20?3:4)%2===1; // yhtenäinen kaikissa
     const k1=useB?'yb':'ya', k2=useB?'ab':'aa', k3=useB?'ya':'yb';
     const presc7 = getRunPrescription(w);
     const isFH = presc7.fridaySession==='kilpailuvauhti'||presc7.fridaySession==='lt_toleranssi';
@@ -5916,7 +6231,26 @@ function rdDash() {
   }
 
   // Stats — tappable
-  document.getElementById('s-wk').textContent = w;
+  document.getElementById('s-wk').textContent = w + ' (Blokki ' + blockNum(w) + ')';
+
+  // ACWR-palaute dashboardiin (jos elementti löytyy)
+  const acwrEl = document.getElementById('dash-acwr');
+  if (acwrEl) {
+    const acwr = calcACWR();
+    const ready = calcReadiness();
+    if (acwr.ratio !== null) {
+      acwrEl.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--bd)">'
+        + '<span style="font-size:11px;color:var(--mu)">⚖️ ACWR (kuormitussuhde)</span>'
+        + '<span style="font-size:12px;font-weight:700;color:'+acwr.color+'">'+acwr.ratio+' — '+acwr.label+'</span></div>'
+        + '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0">'
+        + '<span style="font-size:11px;color:var(--mu)">💪 Valmiustila</span>'
+        + '<span style="font-size:12px;font-weight:700;color:'+(ready.score>=70?'var(--gn)':ready.score>=50?'var(--yw)':'var(--rd)')+'">'+ready.score+'/100</span></div>';
+    } else {
+      acwrEl.innerHTML = '<div style="font-size:11px;color:var(--mu);padding:8px 0">ACWR: kerää vähintään 4 vk dataa</div>';
+    }
+  }
+  // Päivitä volyymitoleranssi kun dashboard renderöidään
+  updateVolumeTolerance();
   document.getElementById('s-streak').textContent = streak();
   const rEl=document.getElementById('s-ready'),rBox=document.getElementById('s-ready-box');
   if(rEl){rEl.textContent=ready.icon+' '+ready.score;rEl.style.color=ready.color;}
@@ -5926,6 +6260,23 @@ function rdDash() {
   if(aBox){aBox.style.cursor='pointer';aBox.onclick=()=>showDetailModal('acwr');}
   // CNS load
   const cnsNow = calcCNSLoad();
+  // Kilpailukalenteri-banner
+  const compBannerEl = document.getElementById('comp-banner');
+  if (compBannerEl && D.settings.competitionDate) {
+    const daysToComp = Math.round((new Date(D.settings.competitionDate) - new Date()) / 86400000);
+    if (daysToComp >= 0 && daysToComp <= 30) {
+      const name = D.settings.competitionName || 'Kilpailu';
+      const color = daysToComp <= 7 ? 'var(--rd)' : daysToComp <= 14 ? 'var(--yw)' : 'var(--ac)';
+      compBannerEl.innerHTML = '<div style="background:'+color+'22;border:1px solid '+color+';border-radius:10px;padding:10px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center">'
+        + '<div><div style="font-size:12px;font-weight:700;color:'+color+'">🏆 '+name+'</div>'
+        + '<div style="font-size:11px;color:var(--mu);margin-top:2px">'+(daysToComp===0?'TÄNÄÄN!':daysToComp+' päivää')+(daysToComp<=14?' — TAPER KÄYNNISSÄ':'')+' </div></div>'
+        + '<div style="font-size:22px;font-weight:700;color:'+color+'">'+(daysToComp<=0?'🔥':daysToComp)+'</div></div>';
+      compBannerEl.style.display = 'block';
+    } else {
+      compBannerEl.innerHTML = '';
+    }
+  }
+
   const cnsEl = document.getElementById('s-cns');
   if(cnsEl){cnsEl.textContent=cnsNow.load;cnsEl.style.color=cnsNow.zone==='ok'?'var(--gn)':cnsNow.zone==='high'?'var(--yw)':'var(--rd)';}
   // Alerts
@@ -5942,7 +6293,9 @@ function rdDash() {
   if(az) az.innerHTML = alerts.map(a=>`<div class="ab ${a.t}"><span class="ic">${a.ic}</span><span>${a.m}</span></div>`).join('');
 
   // Test alert
-  const nextTest=TEST_WEEKS.find(tw=>tw>=w);
+  // Seuraava testi = seuraavan blokin vk24 (absoluuttinen)
+  const nextTestW=blockStartAbsWeek()+getBlockConfig().len-1; // seuraava testi = blokin viimeinen viikko
+  const nextTest=nextTestW>=w?nextTestW:null;
   const ta=document.getElementById('test-alert');
   if(nextTest&&(nextTest-w)<=1)ta.innerHTML=`<div class="ab ag"><span class="ic">🏆</span><span>Testausviikko ${nextTest} lähestyy!</span></div>`;
   else ta.innerHTML='';
@@ -5986,7 +6339,7 @@ function showDayDetail(ds) {
 
 
 // ══ HISTORY ═══════════════════════════════════════════
-const AN={pyoraily:'🚴 Pyöräily',stadion:'🏟️ Stadion',tennis:'🎾 Tennis',jalkapallo:'⚽ Jalkapallo',uinti:'🏊 Uinti',muu_puntti:'🏋️ Muut puntit'};
+const AN={pyoraily:'🚴 Pyöräily',stadion:'🏟️ Stadion',tennis:'🎾 Tennis',jalkapallo:'⚽ Jalkapallo',uinti:'🏊 Uinti',muu_puntti:'🏋️ Muut puntit',sairaus:'🤒 Sairaus'};
 
 let histFilter = 'all';
 function setFilter(f) {
@@ -6125,6 +6478,238 @@ async function init(){
   ldSett();rdDash();
 }
 init();
+
+// ── BLOKKITAVOITTEET ────────────────────────────────────────
+const BLOCK_GOALS = [
+  {key:'400m_speed',   emoji:'⚡', label:'400m Nopeus',      color:'var(--ac)',
+   desc:'Sprinttinopeus + yläkropan voima. Juoksu 2x/vk, bench + leuat pääfokus.',
+   runVol:'Korkea', strengthVol:'Kohtalainen', highlight:['bench','pullup','400m']},
+  {key:'upper_strength',emoji:'🏋️',label:'Yläkropan Voima',  color:'var(--or)',
+   desc:'Penkkipunnerrus + lisäpainoleuat + OHP maksimivoima. Juoksu 1x/vk ylläpitona.',
+   runVol:'Matala', strengthVol:'Korkea', highlight:['bench','pullup','ohp']},
+  {key:'lower_strength',emoji:'🦵',label:'Alakropan Voima',  color:'var(--pu)',
+   desc:'Takakyykky + etukyykky + maastaveto. Juoksu 1x/vk. Massivisin voimakehitys.',
+   runVol:'Matala', strengthVol:'Korkea', highlight:['squat','dl_conv','squat_f']},
+  {key:'hypertrophy',  emoji:'💪',label:'Hypertrofia',       color:'var(--gn)',
+   desc:'Korkea volyymi kauttaaltaan. Pohja tuleville huippusykleille. Juoksu 2x/vk aerobisena.',
+   runVol:'Kohtalainen', strengthVol:'Korkea', highlight:['bench','squat','pullup']},
+  {key:'power_rfd',   emoji:'⚡', label:'Power / RFD',       color:'var(--or)',
+   desc:'Räjähtävyys ja voimantuottonopeus. Issurin transmutaatio — pakollinen ennen 400m-blokkia. Juoksu 2x/vk (sprints).',
+   runVol:'Kohtalainen', strengthVol:'Submax', highlight:['sprint','power','rfd']},
+  {key:'10k_run',      emoji:'🏃',label:'10km Juoksu',       color:'var(--yw)',
+   desc:'Aerobinen perusta + nopeuskestävyys. Juoksu 3x/vk. Voima ylläpito (2x/vk).',
+   runVol:'Korkea', strengthVol:'Ylläpito', highlight:['10km','tempo','aerobic']},
+];
+
+function showBlockSelector() {
+  const modal = document.getElementById('block-selector-modal');
+  const cards = document.getElementById('block-goal-cards');
+  if (!modal || !cards) return;
+  const currentGoal = currentBlockGoal();
+  const bn = blockNum(wks());
+  
+  // Hae viimeisimmät 1RM:t edellisestä blokista
+  const prevBench = D.settings.benchRM;
+  const prevDl = D.settings.dlRM;
+  const prevSq = D.settings.squatRM;
+
+  cards.innerHTML = BLOCK_GOALS.map(g => {
+    const isCurrent = g.key === currentGoal;
+    return '<div onclick="selectBlockGoal(\'' + g.key + '\')" style="background:var(--s2);border:2px solid ' + (isCurrent?g.color:'var(--bd)') + ';border-radius:12px;padding:13px;margin-bottom:10px;cursor:pointer">'
+      + '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">'
+      + '<span style="font-size:24px">' + g.emoji + '</span>'
+      + '<div><div style="font-family:Bebas Neue,sans-serif;font-size:16px;letter-spacing:2px;color:' + g.color + '">' + g.label + (isCurrent?' ← NYKYINEN':'') + '</div>'
+      + '<div style="font-size:10px;color:var(--mu)">Juoksu: ' + g.runVol + ' · Voima: ' + g.strengthVol + '</div></div></div>'
+      + '<div style="font-size:11px;color:var(--tx);line-height:1.5">' + g.desc + '</div>'
+      + '</div>';
+  }).join('');
+  modal.style.display = 'block';
+}
+
+async function selectBlockGoal(goalKey) {
+  const bn = blockNum(wks());
+  // Tallenna nykyisen blokin loppusaavutukset
+  if (!D.blockHistory) D.blockHistory = [];
+  const existingIdx = D.blockHistory.findIndex(b=>b.blockNum===bn);
+  const histEntry = {blockNum:bn, goal:currentBlockGoal(),
+    endDate:new Date().toISOString().split('T')[0],
+    finalBenchRM:D.settings.benchRM, finalPullRM:D.settings.pullRM,
+    finalDlRM:D.settings.dlRM, finalSquatRM:D.settings.squatRM,
+    finalSquatFrontRM:D.settings.squatFrontRM||0};
+  if (existingIdx>=0) D.blockHistory[existingIdx]=histEntry;
+  else D.blockHistory.push(histEntry);
+
+  // Aloita uusi blokki — blockStartDate = tänään (startDate pysyy koko ohjelman alkupäivänä)
+  const newStart = new Date();
+  D.settings.blockStartDate = newStart.toISOString().split('T')[0];
+  D.settings.blockGoal = goalKey;
+  D.settings.blockNum = (D.settings.blockNum||1) + 1;
+  D.blockHistory.push({blockNum:bn+1, goal:goalKey, startDate:D.settings.startDate});
+
+  await cSave();
+  document.getElementById('block-selector-modal').style.display = 'none';
+  _oW = wks(); _oD = null;
+  const oBtn = document.querySelector('.tb[onclick*=ohjelma]');
+  T('ohjelma', oBtn);
+  snk('✅ Uusi blokki aloitettu: ' + (BLOCK_GOALS.find(g=>g.key===goalKey)||{label:goalKey}).label);
+}
+
+// ── KEHITYSKAARI — visualisointi ────────────────────────────
+function renderDevelopmentArc(containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+
+  const exercises = [
+    {id:'bench',    label:'Penkki',  color:'var(--ac)', rmKey:'benchRM'},
+    {id:'pullup_w', label:'Leuat',   color:'var(--gn)', rmKey:'pullRM'},
+    {id:'squat',    label:'Kyykky',  color:'var(--or)', rmKey:'squatRM'},
+    {id:'dl_conv',  label:'Mave',    color:'var(--pu)', rmKey:'dlRM'},
+  ];
+
+  // Voimaliikehistoria
+  const allHistory = {};
+  exercises.forEach(ex => { allHistory[ex.id] = getE1RMHistory(ex.id); });
+
+  // 400m-aikahistoria
+  const run400Hist = (D.sessions||[])
+    .filter(s => s.time400 && s.date)
+    .map(s => ({ date: s.date, val: parseFloat(s.time400) }))
+    .filter(p => p.val > 0)
+    .sort((a,b) => a.date.localeCompare(b.date));
+
+  const hasStrength = exercises.some(ex => allHistory[ex.id].length > 0);
+  const hasRun = run400Hist.length > 0;
+
+  if (!hasStrength && !hasRun) {
+    el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--mu);font-size:12px">Kehityskaari näkyy kun olet kirjannut vähintään 2 sessiota</div>';
+    return;
+  }
+
+  const W = 340, H = 200, padL = 36, padR = 12, padT = 12, padB = 32;
+  const cW = W-padL-padR, cH = H-padT-padB;
+
+  // Kerää kaikki päivämäärät
+  let allDates = [];
+  exercises.forEach(ex => allHistory[ex.id].forEach(p => allDates.push(p.date)));
+  run400Hist.forEach(p => allDates.push(p.date));
+  allDates = [...new Set(allDates)].sort();
+  if (allDates.length < 1) { el.innerHTML = '<div style="text-align:center;padding:20px;color:var(--mu);font-size:11px">Lisää sessioita kehityskaarta varten</div>'; return; }
+
+  const dateMin = new Date(allDates[0]).getTime();
+  // Laajenna X-akseli blokin loppuun (ennustetta varten)
+  const bsd = new Date(D.settings.blockStartDate || D.settings.startDate);
+  const cfg = getBlockConfig();
+  const blockEndDate = new Date(bsd.getTime() + cfg.len * 7 * 86400000);
+  const dateMax = Math.max(new Date(allDates[allDates.length-1]).getTime(), blockEndDate.getTime());
+  const dateRange = Math.max(dateMax - dateMin, 86400000 * 7);
+
+  // Y-akseli: voimalle kg, 400m:lle sekunteina (erillinen akseli)
+  let allVals = [];
+  exercises.forEach(ex => allHistory[ex.id].forEach(p => allVals.push(p.e1rm)));
+  const valMin = allVals.length ? Math.max(0, Math.min(...allVals) * 0.92) : 0;
+  const valMax = allVals.length ? Math.max(...allVals) * 1.06 : 200;
+  const valRange = valMax - valMin || 1;
+
+  const px = d => padL + ((new Date(d).getTime()-dateMin)/dateRange)*cW;
+  const py = v => padT + cH - ((v-valMin)/valRange)*cH;
+
+  // 400m-akseli (oikealla, käänteinen: pienempi = parempi)
+  let run400Min = run400Hist.length ? Math.min(...run400Hist.map(p=>p.val)) * 0.97 : 55;
+  let run400Max = run400Hist.length ? Math.max(...run400Hist.map(p=>p.val)) * 1.03 : 70;
+  const run400Range = run400Max - run400Min || 1;
+  const pyR = v => padT + ((v - run400Min) / run400Range) * cH; // käänteinen!
+
+  let paths = '', dots = '', legend = '', yTicks = '', ennusteet = '';
+
+  // Y-akseli viivat
+  for (let i=0; i<=4; i++) {
+    const v = valMin + (valRange/4)*i;
+    const y = py(v);
+    yTicks += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${padL+cW}" y2="${y.toFixed(1)}" stroke="var(--bd)" stroke-width=".4"/>`;
+    yTicks += `<text x="${padL-4}" y="${(y+3).toFixed(1)}" fill="var(--mu)" font-size="8" text-anchor="end" font-family="DM Mono">${Math.round(v)}</text>`;
+  }
+
+  // X-akseli: tänään-viiva
+  const todayX = padL + ((Date.now()-dateMin)/dateRange)*cW;
+  if (todayX > padL && todayX < padL+cW) {
+    yTicks += `<line x1="${todayX.toFixed(1)}" y1="${padT}" x2="${todayX.toFixed(1)}" y2="${padT+cH}" stroke="var(--ac)" stroke-width=".8" stroke-dasharray="3 3" opacity=".5"/>`;
+    yTicks += `<text x="${todayX.toFixed(1)}" y="${(padT+cH+10).toFixed(1)}" fill="var(--ac)" font-size="7" text-anchor="middle">NYT</text>`;
+  }
+
+  // Blokin loppuviiva
+  const blockEndX = padL + ((blockEndDate.getTime()-dateMin)/dateRange)*cW;
+  if (blockEndX > padL && blockEndX < padL+cW+20) {
+    yTicks += `<line x1="${blockEndX.toFixed(1)}" y1="${padT}" x2="${blockEndX.toFixed(1)}" y2="${padT+cH}" stroke="var(--yw)" stroke-width=".8" stroke-dasharray="2 4" opacity=".6"/>`;
+    yTicks += `<text x="${blockEndX.toFixed(1)}" y="${(padT+cH+10).toFixed(1)}" fill="var(--yw)" font-size="7" text-anchor="middle">TESTI</text>`;
+  }
+
+  // Voimaliikepolut + ennustelinja
+  exercises.forEach(ex => {
+    const pts = allHistory[ex.id];
+    if (pts.length === 0) return;
+
+    const pathD = pts.map((p,i) => `${i===0?'M':'L'}${px(p.date).toFixed(1)},${py(p.e1rm).toFixed(1)}`).join(' ');
+    paths += `<path d="${pathD}" fill="none" stroke="${ex.color}" stroke-width="2" opacity=".85"/>`;
+
+    // Ennustelinja (linearTrend → blokin loppuun)
+    if (pts.length >= 2) {
+      const trendPts = pts.map((p,i) => ({x: i, y: p.e1rm}));
+      const tr = linearTrend(trendPts);
+      if (tr.r2 > 0.3 && tr.slope > 0) { // Vain nouseva trendi
+        const lastX = pts.length - 1;
+        const lastPx = px(pts[pts.length-1].date);
+        const targetRm = D.settings[ex.rmKey] || 120;
+        const forecastE1rm = Math.min(
+          tr.intercept + tr.slope * (lastX + cfg.len), // Ekstrapoloitu
+          targetRm * 1.05 // Ei yli 105% nykytason
+        );
+        const forecastY = py(forecastE1rm);
+        const lastPy = py(pts[pts.length-1].e1rm);
+        ennusteet += `<line x1="${lastPx.toFixed(1)}" y1="${lastPy.toFixed(1)}" x2="${blockEndX.toFixed(1)}" y2="${forecastY.toFixed(1)}" stroke="${ex.color}" stroke-width="1.2" stroke-dasharray="4 3" opacity=".5"/>`;
+        ennusteet += `<text x="${(blockEndX+3).toFixed(1)}" y="${(forecastY+3).toFixed(1)}" fill="${ex.color}" font-size="8" font-family="DM Mono" opacity=".7">${Math.round(forecastE1rm)}</text>`;
+      }
+    }
+
+    const last = pts[pts.length-1];
+    dots += `<circle cx="${px(last.date).toFixed(1)}" cy="${py(last.e1rm).toFixed(1)}" r="3.5" fill="${ex.color}"/>`;
+    legend += `<span style="display:inline-flex;align-items:center;gap:4px;margin-right:8px;font-size:10px;color:${ex.color}"><span style="width:10px;height:2px;background:${ex.color};display:inline-block"></span>${ex.label} ${Math.round(last.e1rm)}kg</span>`;
+  });
+
+  // 400m-aikapolku (oikealla y-akselilla)
+  if (run400Hist.length > 0) {
+    const r400path = run400Hist.map((p,i) => `${i===0?'M':'L'}${px(p.date).toFixed(1)},${pyR(p.val).toFixed(1)}`).join(' ');
+    paths += `<path d="${r400path}" fill="none" stroke="var(--rd)" stroke-width="2" opacity=".85" stroke-dasharray="6 2"/>`;
+    const last400 = run400Hist[run400Hist.length-1];
+    dots += `<circle cx="${px(last400.date).toFixed(1)}" cy="${pyR(last400.val).toFixed(1)}" r="3.5" fill="var(--rd)"/>`;
+    dots += `<text x="${(px(last400.date)+5).toFixed(1)}" y="${(pyR(last400.val)+3).toFixed(1)}" fill="var(--rd)" font-size="8" font-family="DM Mono">${last400.val}s</text>`;
+    legend += `<span style="display:inline-flex;align-items:center;gap:4px;margin-right:8px;font-size:10px;color:var(--rd)"><span style="width:10px;height:2px;background:var(--rd);display:inline-block;border-top:2px dashed var(--rd)"></span>400m ${last400.val}s</span>`;
+    // 400m tavoitelinja
+    const goal = parseFloat(D.bests?.run400Goal || 60);
+    const goalY = pyR(goal);
+    if (goalY > padT && goalY < padT+cH) {
+      yTicks += `<line x1="${padL}" y1="${goalY.toFixed(1)}" x2="${padL+cW}" y2="${goalY.toFixed(1)}" stroke="var(--rd)" stroke-width=".8" stroke-dasharray="2 4" opacity=".4"/>`;
+      yTicks += `<text x="${(padL+cW+2).toFixed(1)}" y="${(goalY+3).toFixed(1)}" fill="var(--rd)" font-size="7" opacity=".6">${goal}s</text>`;
+    }
+  }
+
+  el.innerHTML = `<div style="font-size:10px;color:var(--mu);margin-bottom:8px;line-height:1.6">${legend}</div>
+    <div style="font-size:9px;color:var(--mu);margin-bottom:6px">Katkoviiva = trendi-ennuste blokin loppuun</div>
+    <svg viewBox="0 0 ${W} ${H}" style="width:100%;overflow:visible">
+      ${yTicks}${paths}${ennusteet}${dots}
+    </svg>`;
+}
+
+
 </script>
+
+<!-- Blokkivalinta-modaali -->
+<div id="block-selector-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;overflow-y:auto;padding:20px">
+  <div style="max-width:480px;margin:0 auto;background:var(--sf);border:1px solid var(--bd);border-radius:16px;padding:20px">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:var(--ac);margin-bottom:4px">SEURAAVA BLOKKI</div>
+    <div style="font-size:12px;color:var(--mu);margin-bottom:16px">Valitse ensi 24 viikon päätavoite. Ohjelma sisältää aina sekä juoksua että voimaa — painotus muuttuu.</div>
+    <div id="block-goal-cards"></div>
+    <button onclick="document.getElementById('block-selector-modal').style.display='none'" style="width:100%;padding:10px;background:transparent;border:1px solid var(--bd);border-radius:10px;color:var(--mu);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;margin-top:8px">Päätä myöhemmin</button>
+  </div>
+</div>
 </body>
 </html>
