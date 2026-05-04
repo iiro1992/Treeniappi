@@ -96,7 +96,7 @@ body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-
 .ag2{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .ab2{padding:11px 5px;border-radius:9px;border:1px solid var(--bd);background:var(--s2);color:var(--mu);font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;cursor:pointer;text-align:center;transition:all .15s}
 .ab2 .ai2{font-size:20px;display:block;margin-bottom:3px}
-.ab2.sel{background:var(--bld);border-color:var(--bl);color:var(--bl)}
+.ab2.sel{background:var(--bld);border-color:var(--bl);color:var(--bl)}.ab2.sick-btn{border-color:var(--or);color:var(--or)}.ab2.sick-btn.sel{border-color:var(--ac);color:var(--ac);background:var(--bld)}
 .niw{display:flex;align-items:center;border:1px solid var(--bd);border-radius:8px;overflow:hidden}
 .nb{width:38px;height:40px;background:var(--s2);border:none;color:var(--tx);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .nb:active{background:var(--bd)}
@@ -332,7 +332,7 @@ svg text{font-family:'DM Sans',sans-serif}
         <button class="ab2" onclick="pAct(this,'tennis')"><span class="ai2">🎾</span>Tennis</button>
         <button class="ab2" onclick="pAct(this,'jalkapallo')"><span class="ai2">⚽</span>Jalkapallo</button>
         <button class="ab2" onclick="pAct(this,'uinti')"><span class="ai2">🏊</span>Uinti</button>
-        <button class="ab2" onclick="pAct(this,'sairaus')" style="border-color:var(--or)"><span class="ai2">🤒</span>Sairaus</button>
+        <button class="ab2 sick-btn" onclick="pAct(this,'sairaus')"><span class="ai2">🤒</span>Sairaus</button>
         <button class="ab2" onclick="pAct(this,'muu_puntti')"><span class="ai2">🏋️</span>Muut puntit</button>
       </div>
     </div>
@@ -1027,7 +1027,17 @@ function T(id,btn){
   if(btn)btn.classList.add('active');
   if(id==='dash')rdDash();
   else if(id==='ohjelma')rdOhjelma();
-  else if(id==='extra'){if(!document.getElementById('e-dt').value)document.getElementById('e-dt').value=td();}
+  else if(id==='extra'){
+    if(!document.getElementById('e-dt').value)document.getElementById('e-dt').value=td();
+    // Nollaa aiempi valinta joka kerta kun avataan
+    selAct=null;
+    document.querySelectorAll('#sec-extra .ab2').forEach(b=>b.classList.remove('sel'));
+    rpe['erpe']=null;
+    document.querySelectorAll('#sec-extra .rb').forEach(b=>b.className='rb');
+    document.getElementById('e-pv').style.display='none';
+    document.getElementById('e-pf').style.display='none';
+    document.getElementById('e-du').value='60';
+  }
   else if(id==='analyys')rdAnalysis();
   else if(id==='historia')rdHist();
   else if(id==='asetukset')ldSett();
@@ -4364,7 +4374,16 @@ async function saveRun(){
 }
 
 // ══ EXTRA ════════════════════════════════════════════
-function pAct(btn,type){document.querySelectorAll('.ab2').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');selAct=type;document.getElementById('e-pf').style.display=type==='muu_puntti'?'block':'none';updEPrev();}
+function pAct(btn,type){
+  // Poista sel vain extras-osion napeista (ei muiden osioiden ab2-napit)
+  document.querySelectorAll('#sec-extra .ab2').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  selAct=type;
+  document.getElementById('e-pf').style.display=type==='muu_puntti'?'block':'none';
+  // Sairaus: kesto-kenttä selitys
+  const duLabel=document.querySelector('#sec-extra .fg label[for="e-du"],#sec-extra label.fl');
+  updEPrev();
+}
 function updEPrev(){const r=rpe['erpe'];if(!selAct||!r)return;
   if(selAct==='sairaus'){
     document.getElementById('e-pv').style.display='flex';
