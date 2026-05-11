@@ -1456,7 +1456,9 @@ function hoursSinceSession(session) {
 // Hae viimeisin sessio tietylle treenityypille
 function lastSessionOfType(keys) {
   const keyArr = Array.isArray(keys) ? keys : [keys];
+  const todayStr = new Date().toISOString().split('T')[0];
   return [...D.sessions]
+    .filter(s => s.date <= todayStr)   // suodata tulevaisuuden päivämäärät (importointivirhe)
     .sort((a,b) => b.date.localeCompare(a.date))
     .find(s => keyArr.includes(sessionToKey(s))) || null;
 }
@@ -1631,7 +1633,21 @@ function calcCNSLoad() {
                       : 1.35;               // Alle 6h → +35% CNS-kuorma
     // Lisäliikkeet nostavat CNS-kuormaa (0.5 pistettä per lisäliike)
     const extraBonus = (s.extraExCount||0) * 0.5;
-    cnsLoad += (baseCNS + extraBonus) * volumeRatio * rpeAdj * sleepFactor * decay(hrs);
+    // Lihasryhmäspesifinen CNS-interferenssi (Wilson et al. 2012)
+    // Jos sessio käyttää eri lihasryhmää kuin nykyinen suunniteltu sessio,
+    // CNS-kuorma on pienempi (ei täysi kumuloituminen)
+    // Tarkistetaan: onko sessio samaa lihasryhmää kuin tulevasuunnitelma
+    const sKey = sessionToKey(s);
+    const plannedKey = appState && appState.voima && appState.voima.type
+      ? (['ya','yb'].includes(appState.voima.type) ? 'voima_yla' : 'voima_ala')
+      : null;
+    // Eri lihasryhmä tai juoksu vs voima: CNS ei kumuloidu täysillä
+    // Esim: yläkroppa + intervalli = eri rasitukset, ei suora interferenssi
+    const isRunSession = s.type === 'juoksu';
+    const isStrengthSession = s.type === 'voima';
+    const sameMuscleGroup = plannedKey && sKey === plannedKey;
+    const crossModeReduction = (isRunSession !== (plannedKey === null)) && !sameMuscleGroup ? 0.6 : 1.0;
+    cnsLoad += (baseCNS + extraBonus) * volumeRatio * rpeAdj * sleepFactor * decay(hrs) * crossModeReduction;
   });
 
   // Lisäaktiviteetit vaikuttavat CNS-kuormaan
@@ -2406,11 +2422,14 @@ function actualBench(){
   const pts=[{w:0,v:D.settings.benchRM||120,label:'Lähtötaso'}];
   D.sessions.filter(s=>s.type==='voima').forEach(s=>{
     const bench=s.exercises?.find(e=>e.id==='bench');
-    if(bench&&bench.weight&&bench.sets?.length){
-      const w=Math.floor((new Date(s.date)-new Date(D.settings.startDate))/(1000*60*60*24*7))+1;
-      const best1rm=Math.max(...bench.sets.filter(st=>st.success!==false).map(st=>epley(st.weight||bench.weight,st.reps||5)));
-      pts.push({w,v:best1rm,label:s.date});
-    }
+    if(!bench) return;
+    const sets=Array.isArray(bench.sets)?bench.sets:[];
+    // Hyväksy myös importoitu data: sets[].weight riittää (bench.weight voi puuttua)
+    const workingSets=sets.filter(st=>st.success!==false&&(st.weight||bench.weight)>0&&(st.reps||1)>0);
+    if(!workingSets.length) return;
+    const w=Math.max(1,Math.floor((new Date(s.date)-new Date(D.settings.startDate))/(1000*60*60*24*7))+1);
+    const best1rm=Math.max(...workingSets.map(st=>epley(st.weight||bench.weight||0,st.reps||5)));
+    if(best1rm>0) pts.push({w,v:best1rm,label:s.date});
   });
   return pts.sort((a,b)=>a.w-b.w);
 }
@@ -2419,11 +2438,14 @@ function actualPull(){
   const pts=[{w:0,v:D.settings.pullRM||40,label:'Lähtötaso'}];
   D.sessions.filter(s=>s.type==='voima').forEach(s=>{
     const pull=s.exercises?.find(e=>e.id&&e.id.startsWith('pullup'));
-    if(pull&&pull.weight&&pull.sets?.length){
-      const w=Math.floor((new Date(s.date)-new Date(D.settings.startDate))/(1000*60*60*24*7))+1;
-      const best1rm=Math.max(...pull.sets.filter(st=>st.success!==false).map(st=>epley((st.weight||0)+(pull.weight||0),st.reps||4)));
-      pts.push({w,v:best1rm,label:s.date});
-    }
+    if(!pull) return;
+    const sets=Array.isArray(pull.sets)?pull.sets:[];
+    const workingSets=sets.filter(st=>st.success!==false&&(st.reps||1)>0);
+    if(!workingSets.length) return;
+    const w=Math.max(1,Math.floor((new Date(s.date)-new Date(D.settings.startDate))/(1000*60*60*24*7))+1);
+    // Lisäpaino: st.weight (sarjakohtainen) tai pull.weight (session taso)
+    const best1rm=Math.max(...workingSets.map(st=>epley((st.weight||pull.weight||0),st.reps||4)));
+    if(best1rm>0) pts.push({w,v:best1rm,label:s.date});
   });
   return pts.sort((a,b)=>a.w-b.w);
 }
@@ -2800,24 +2822,32 @@ function suggest(ex, scheme){
     reasons.push('uusi mesosykli');
   } else {
     // SAMA MESOSYKLI — lineaarinen progressio edellisestä suorituksesta
-    const maxW = last.weight || (Array.isArray(last.sets) ? Math.max(...last.sets.map(s => s.weight||0), 0) : 0);
-    const failed = (Array.isArray(last.sets) ? last.sets : []).filter(s => s.success === false).length;
+    const allSets = Array.isArray(last.sets) ? last.sets.filter(s => s.weight > 0) : [];
+    const maxW = last.weight || (allSets.length ? Math.max(...allSets.map(s => s.weight||0)) : 0);
+    const lastSetW = allSets.length ? allSets[allSets.length-1].weight || 0 : maxW;
+    const failed = allSets.filter(s => s.success === false).length;
+    // Laskeva paino sarjoissa: jos viimeinen sarja < korkein sarja → ei pystytty pitämään painoa
+    const weightDropped = lastSetW < maxW;
     const rpe2 = last.rpe || 8;
     const sch = currentScheme;
     const step = sch.step || 2.5;
     w2 = maxW; dir = 'same';
-    basis = `edellinen ${maxW}kg`;
+    basis = 'edellinen '+maxW+'kg';
 
-    if (failed === 0) {
-      // Kaikki sarjat onnistui → nouse (RPE vaikuttaa askeleeseen, ei suuntaan)
-      const rpeStep = rpe2 >= 9 ? Math.max(step/2, 1.25) : step; // RPE 9+ → pienempi askel
+    if (weightDropped) {
+      // Paino laski sarjojen aikana → pidä korkein paino, älä nouse
+      // Esim: 100, 100, 95 → ehdota 100kg uudelleen
+      w2 = maxW; dir = 'same';
+      reasons.push('Paino laski sarjoissa ('+maxW+'→'+lastSetW+'kg) → pidä '+maxW+'kg');
+    } else if (failed === 0) {
+      // Kaikki sarjat samalla painolla, kaikki onnistui → nouse
+      const rpeStep = rpe2 >= 9 ? Math.max(step/2, 1.25) : step;
       dir = 'up'; w2 = Math.round((maxW + rpeStep) / 2.5) * 2.5;
       reasons.push('kaikki ✓ → +'+rpeStep+'kg'+(rpe2 >= 9 ? ' (RPE '+rpe2+' → puoliaskel)' : ''));
     } else if (failed >= 2 || rpe2 >= 10) {
       dir = 'down'; w2 = Math.round(maxW * 0.95 / 2.5) * 2.5;
-      reasons.push(failed > 0 ? failed+' epäonnistui' : 'RPE '+rpe2);
+      reasons.push(failed > 0 ? failed+' epäonnistui → -5%' : 'RPE '+rpe2);
     } else if (failed === 1) {
-      // 1 epäonnistuminen → pidä sama paino (ei lasku)
       reasons.push('1 sarja epäonnistui → sama paino');
     } else {
       reasons.push('RPE '+rpe2+' → sama paino');
@@ -2833,7 +2863,7 @@ function suggest(ex, scheme){
     if (ready.zone === 'poor' || ready.zone === 'low') {
       if (dir === 'up') { dir = 'same'; w2 = maxW; reasons.push(`valmiustila ${ready.score}/100`); }
       else if (dir === 'same') { w2 = Math.round(maxW*0.95/2.5)*2.5; dir = 'down'; reasons.push(`valmiustila ${ready.score}/100`); }
-    } else if (ready.zone === 'peak' && dir === 'same' && failed === 0) {
+    } else if (ready.zone === 'peak' && dir === 'same' && failed === 0 && !weightDropped) {
       dir = 'up'; w2 = maxW + step; reasons.push(`huippuvalmiustila ${ready.score}`);
     }
 
@@ -5147,10 +5177,12 @@ function renderRunAnalysis() {
 
   const intervals = getRunSessions('intervalli');
   const race = getRunSessions('kilpailuvauhti');
-  const speed = [];  // nopeus merged into intervalli
+  // Myös 400m-testit joissa time400 on kirjattu
+  const tests400 = D.sessions.filter(s=>s.time400&&parseFloat(s.time400)>0)
+    .sort((a,b)=>a.date.localeCompare(b.date));
 
-  if (!intervals.length && !race.length) {
-    el.innerHTML = '<p style="color:var(--mu);font-size:12px">Ei vielä juoksukirjauksia. Kirjaa intervalliharjoituksia nähdäksesi analyysin.</p>';
+  if (!intervals.length && !race.length && !tests400.length) {
+    el.innerHTML = '<p style="color:var(--mu);font-size:12px">Ei vielä juoksukirjauksia. Kirjaa intervalliharjoituksia tai 400m-testi nähdäksesi analyysin.</p>';
     return;
   }
 
@@ -5189,9 +5221,9 @@ function renderRunAnalysis() {
     }
   }
 
-  // 400m race pace trend
-  if (race.length >= 1) {
-    const r400 = D.sessions.filter(s=>s.time400).map((s,i)=>({x:i,y:s.time400,date:s.date}));
+  // 400m kehitys — näytä kaikki time400-kirjaukset (myös ilman kilpailuvauhti-tagia)
+  if (tests400.length >= 1) {
+    const r400 = tests400.map((s,i)=>({x:i,y:parseFloat(s.time400),date:s.date}));
     if (r400.length >= 2) {
       const tr = linearTrend(r400);
       const latest = r400[r400.length-1];
