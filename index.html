@@ -1050,6 +1050,144 @@ function T(id,btn){
 
 function pRPE(v,gid){rpe[gid]=v;const ctx=document.getElementById('workout-modal')||document;ctx.querySelectorAll('#'+gid+' .rb').forEach(b=>{b.className='rb';if(parseInt(b.textContent)===v)b.classList.add('r'+v);});if(gid==='erpe')updEPrev();}
 
+
+// ── VIIKKORAKENNE PER BLOKKITYYPPI ──────────────────────────────────
+// Wilson et al. 2012: voima ennen kestävyys, eri lihasryhmät 24h välein OK
+// Zatsiorsky 2006: voima_yla min 48h, voima_ala min 72h
+// Haugen 2016: intervallit vaativat tuoreet jalat (48h+ jaloista)
+// Issurin 2010: korkean intensiteetin sessiot eivät peräkkäin
+
+function getWeekStructure(goal, k1, k2, k3, presc) {
+  const LEPO = {ico:'😴', lbl:'Lepo', cns:'LOW', type:'lepo', recovKey:null};
+
+  if (goal === '400m_speed') {
+    // Ma: YA (raskas yläkroppa)
+    // Ti: Alakroppa (24h YA:sta, eri lihakset → OK Zatsiorsky)
+    // Ke: LEPO (CNS palautuu 2 kovasta peräkkäisestä)
+    // To: Intervallit (48h jaloista → Haugen: tuoreet jalat pakollinen)
+    // Pe: YB (yläkroppa, ei rasita jalkoja → ei häiritse lauantain tempoa)
+    // La: Tempo/AER (96h jaloista >> 72h min → täysin palautunut)
+    // Su: LEPO
+    const latSess = presc && presc.fridaySession && presc.fridaySession !== 'tempo'
+      ? {ico:'🏁', lbl: presc.fridaySession==='kilpailuvauhti'?'Kilpailuvauhti':'LA Toleranssi',
+         cns:'HIGH', type:'juoksu', key:presc.fridaySession, recovKey:'tempo'}
+      : {ico:'⚡', lbl:'Tempokestävyys', cns:'MED', type:'juoksu', key:'tempo', recovKey:'tempo'};
+    return [
+      {ico:'💪', lbl:'Yläkroppa A', cns:'HIGH', type:'voima', key:k1, recovKey:'voima_yla'},
+      {ico:'🦵', lbl:'Alakroppa', cns:'HIGH', type:'voima', key:k2, recovKey:'voima_ala'},
+      LEPO,
+      {ico:'⚡', lbl:'Juoksu — Flying + Intervallit', cns:'HIGH', type:'juoksu', key:'intervalli', recovKey:'intervalli'},
+      {ico:'💪', lbl:'Yläkroppa B', cns:'MED', type:'voima', key:k3, recovKey:'voima_yla'},
+      latSess,
+      LEPO,
+    ];
+  }
+
+  if (goal === 'upper_strength') {
+    // Fokus: penkki + leuat maksimaalisesti
+    // Ma: YA raskas (bench singles)
+    // Ti: YB raskas (speed bench + pull-up painotus)
+    // Ke: LEPO
+    // To: Alakroppa ylläpito (kevyempi — ei häiritse yläkropan kehitystä)
+    // Pe: LEPO
+    // La: Tempo ylläpito (48h jaloista, 96h yläkropasta)
+    // Su: LEPO
+    return [
+      {ico:'💪', lbl:'Yläkroppa A — Raskas', cns:'HIGH', type:'voima', key:k1, recovKey:'voima_yla'},
+      {ico:'💪', lbl:'Yläkroppa B — Raskas', cns:'HIGH', type:'voima', key:k3, recovKey:'voima_yla'},
+      LEPO,
+      {ico:'🦵', lbl:'Alakroppa — Ylläpito', cns:'MED', type:'voima', key:k2, recovKey:'voima_ala'},
+      LEPO,
+      {ico:'🏃', lbl:'Tempo — Ylläpito', cns:'LOW', type:'juoksu', key:'tempo', recovKey:'tempo'},
+      LEPO,
+    ];
+  }
+
+  if (goal === 'lower_strength') {
+    // Fokus: kyykky + mave
+    // Ma: AA raskas kyykky
+    // Ti: YA ylläpito (eri lihasryhmä)
+    // Ke: LEPO
+    // To: AB raskas mave (72h Ma:sta → min täyttyy juuri)
+    // Pe: LEPO (jalat palautuvat)
+    // La: Tempo ylläpito (96h To:sta → täysin palautunut)
+    // Su: LEPO
+    return [
+      {ico:'🦵', lbl:'Alakroppa A — Kyykky', cns:'HIGH', type:'voima', key:k2, recovKey:'voima_ala'},
+      {ico:'💪', lbl:'Yläkroppa A — Ylläpito', cns:'MED', type:'voima', key:k1, recovKey:'voima_yla'},
+      LEPO,
+      {ico:'🦵', lbl:'Alakroppa B — Maastaveto', cns:'HIGH', type:'voima', key:k2==='aa'?'ab':'aa', recovKey:'voima_ala'},
+      LEPO,
+      {ico:'🏃', lbl:'Tempo — Ylläpito', cns:'LOW', type:'juoksu', key:'tempo', recovKey:'tempo'},
+      LEPO,
+    ];
+  }
+
+  if (goal === 'power_rfd') {
+    // Fokus: räjähtävyys, RFD — Verkhoshansky transmutaatio
+    // Ma: Power voima (submax bench + squat + plyot)
+    // Ti: Sprintit (max velocity, 60m — 24h voimasta, eri ominaisuus)
+    // Ke: LEPO
+    // To: Power voima 2 (speed bench + trap bar jumps)
+    // Pe: LEPO
+    // La: Lyhyt tempo (jalat 48h+, ei lactatia — sprinttipohja säilyy)
+    // Su: LEPO
+    return [
+      {ico:'⚡', lbl:'Power Voima A (submax + plyot)', cns:'HIGH', type:'voima', key:k1, recovKey:'voima_yla'},
+      {ico:'🏁', lbl:'Juoksu — Sprints MAX', cns:'HIGH', type:'juoksu', key:'intervalli', recovKey:'intervalli'},
+      LEPO,
+      {ico:'⚡', lbl:'Power Voima B (speed + jumps)', cns:'HIGH', type:'voima', key:k2, recovKey:'voima_ala'},
+      LEPO,
+      {ico:'🏃', lbl:'Tempo — Ei lactatia', cns:'LOW', type:'juoksu', key:'tempo', recovKey:'tempo'},
+      LEPO,
+    ];
+  }
+
+  if (goal === 'hypertrophy') {
+    // Wilson 2012: interferenssi sallittu — molemmat kehittyvät
+    // Ma: YA korkea volyymi (4×12)
+    // Ti: Alakroppa korkea volyymi
+    // Ke: Intervalli (aerobinen pohja — interferenssi hyväksytty hypertrofiassa)
+    // To: YB korkea volyymi
+    // Pe: LEPO
+    // La: Zone 2 aerobinen (laktaattipohja kasvaa)
+    // Su: LEPO
+    return [
+      {ico:'💪', lbl:'Yläkroppa A — Volyymi', cns:'HIGH', type:'voima', key:k1, recovKey:'voima_yla'},
+      {ico:'🦵', lbl:'Alakroppa — Volyymi', cns:'HIGH', type:'voima', key:k2, recovKey:'voima_ala'},
+      {ico:'⚡', lbl:'Intervalli — Aerobinen pohja', cns:'MED', type:'juoksu', key:'intervalli', recovKey:'intervalli'},
+      {ico:'💪', lbl:'Yläkroppa B — Volyymi', cns:'HIGH', type:'voima', key:k3, recovKey:'voima_yla'},
+      LEPO,
+      {ico:'🏃', lbl:'Zone 2 — Aerobinen', cns:'LOW', type:'juoksu', key:'aerobinen', recovKey:'aerobinen'},
+      LEPO,
+    ];
+  }
+
+  if (goal === '10k_run') {
+    // Fokus: aerobinen kapasiteetti + VO2max
+    // Ma: YA ylläpito (voima ei häviä aerobisella blokilla)
+    // Ti: Intervallit 1000m VO2max
+    // Ke: LEPO
+    // To: Alakroppa ylläpito
+    // Pe: Tempo 5km (48h jaloista → OK)
+    // La: Pitkä hidas Zone 2 (aerobinen pohja)
+    // Su: LEPO
+    return [
+      {ico:'💪', lbl:'Yläkroppa A — Ylläpito', cns:'MED', type:'voima', key:k1, recovKey:'voima_yla'},
+      {ico:'🔴', lbl:'Intervallit — VO2max', cns:'HIGH', type:'juoksu', key:'intervalli', recovKey:'intervalli'},
+      LEPO,
+      {ico:'🦵', lbl:'Alakroppa — Ylläpito', cns:'MED', type:'voima', key:k2, recovKey:'voima_ala'},
+      {ico:'🟠', lbl:'Tempo 5km', cns:'MED', type:'juoksu', key:'tempo', recovKey:'tempo'},
+      {ico:'🟢', lbl:'Zone 2 — Pitkä hidas', cns:'LOW', type:'juoksu', key:'aerobinen', recovKey:'aerobinen'},
+      LEPO,
+    ];
+  }
+
+  // Fallback: 400m_speed rakenne
+  return getWeekStructure('400m_speed', k1, k2, k3, presc);
+}
+
+
 // ══ OHJELMA-VÄLILEHTI ══════════════════════════════════════════════
 let _oW=null,_oD=null;
 
@@ -1158,17 +1296,7 @@ function _renderOWeek(w){
   // Laske oikeat kalenteripäivien nimet päivämääristä
   const WEEKDAYS=['Su','Ma','Ti','Ke','To','Pe','La'];
 
-  const SESS=[
-    {ico:'&#128170;',lbl:'Yl&auml;kroppa A',cns:'HIGH',type:'voima',key:k1},
-    {ico:'&#9889;',lbl:'Juoksu &mdash; Flying + Intervallit',cns:'HIGH',type:'juoksu',key:'intervalli'},
-    {ico:'&#128564;',lbl:'Lepo',cns:'LOW',type:'lepo'},
-    {ico:'&#129461;',lbl:'Alakroppa',cns:'HIGH',type:'voima',key:k2},
-    isFH?{ico:'&#128170;',lbl:'Yl&auml;kroppa B',cns:'MED',type:'voima',key:k3}
-        :{ico:'&#9889;',lbl:'Tempokest&auml;vyys',cns:'MED',type:'juoksu',key:'tempo'},
-    isFH?{ico:'&#127942;',lbl:presc.fridaySession==='kilpailuvauhti'?'Kilpailuvauhti':'LA Toleranssi',cns:'HIGH',type:'juoksu',key:presc.fridaySession}
-        :{ico:'&#128170;',lbl:'Yl&auml;kroppa B',cns:'MED',type:'voima',key:k3},
-    {ico:'&#128564;',lbl:'Lepo',cns:'LOW',type:'lepo'},
-  ];
+  const SESS = getWeekStructure(goal, k1, k2, k3, presc);
 
   const cC={'HIGH':'var(--rd)','MED':'var(--yw)','LOW':'var(--gn)'};
 
@@ -1798,27 +1926,8 @@ function getAdaptiveNextSession() {
   const scheme = getMesocycleScheme(w);
   const useB = (blockWeek(w)<=5?0:blockWeek(w)<=11?1:blockWeek(w)<=17?2:blockWeek(w)<=20?3:4)%2===1; // blockIdx%2 = yhtenäinen kaikissa funktioissa
 
-  const SESSION_TYPES = [
-    { key: useB?'yb':'ya', type:'voima', label:'Voima — Yläkroppa', short:'💪 YLÄ', recovKey:'voima_yla',
-      desc:`${scheme.label} · Penkki + leuat` },
-    { key: 'intervalli',   type:'juoksu', label:'Juoksu — Flying + Intervallit', short:'🔴 FLY', recovKey:'intervalli',
-      desc: w<=8?'8–10×200m':w<=16?'6×300m+4×200m':w<=32?'5×400m':'4×400m' },
-    { type:'juoksu', key:'tempo', label:'Juoksu — Tempokestävyys', short:'⚡ TMP',
-      recovKey:'tempo', desc:w<=16?'4-5×150-300m @ 80-85% — submaksimaalinen':'25–30 min @ 75–85% HRmax' },
-    { type:'juoksu', key:'aerobinen', label:'Juoksu — Zone 2 Aerobinen', short:'🟢 AER',
-      recovKey:'aerobinen', desc:'45–55 min Zone 2 — aktiivinen palautuminen' },
-    { key: useB?'ab':'aa', type:'voima', label:'Voima — Alakroppa', short:'🦵 ALA', recovKey:'voima_ala',
-      desc:`${scheme.label} · Kyykky + maastaveto` },
-    { key: useB?'ya':'yb', type:'voima', label:'Voima — Yläkroppa B', short:'💪 YLÄ2', recovKey:'voima_yla',
-      desc:`${scheme.label} · OHP + leuat kapea` },
-  ];
 
-  if (w >= 17) {
-    SESSION_TYPES.push({
-      key:'lt_toleranssi', type:'juoksu', label:'Juoksu — LA Toleranssi', short:'🔥 LAT',
-      recovKey:'lt_toleranssi', desc:'2–4×400m @ yli kilpailuvauhdin, 10 min palautus'
-    });
-  }
+  // SESSION_TYPES defined after weekPlan below
 
   // ── Ohjelmaviikon mukainen tänään-tarkistus ─────────────────────
   // Käytetään pelkkiä päivämääriä (ei aikoja) timezone-ongelmien välttämiseksi
@@ -1828,19 +1937,29 @@ function getAdaptiveNextSession() {
   const progDayIdx = ((diffDays % 7) + 7) % 7;
   const presc = getRunPrescription(w);
   const isFH = presc.fridaySession==='kilpailuvauhti'||presc.fridaySession==='lt_toleranssi';
-  // 0=Ma 1=Ti 2=Ke(lepo) 3=To 4=Pe 5=La 6=Su(lepo)
-  // PROG_MAP sisältää sekä recovKey että key jotta YA/YB ei sekoitu
-  const PROG_MAP = [
-    { recovKey:'voima_yla',  key: useB?'yb':'ya' },   // 0: Ma → Yläkroppa A/B
-    { recovKey:'intervalli', key:'intervalli' },         // 1: Ti → Juoksu
-    null,                                                // 2: Ke → Lepo
-    { recovKey:'voima_ala',  key: useB?'ab':'aa' },    // 3: To → Alakroppa
-    isFH ? { recovKey:'voima_yla',         key: useB?'ya':'yb' }  // 4: Pe (isFH)
-         : { recovKey:'tempo',             key:'tempo' },           // 4: Pe (ei isFH) → Tempokestävyys
-    isFH ? { recovKey:presc.fridaySession||'voima_yla', key:presc.fridaySession||(useB?'ya':'yb') }  // 5: La (isFH)
-         : { recovKey:'voima_yla',          key: useB?'ya':'yb' }, // 5: La (ei isFH) → YB
-    null,                                                // 6: Su → Lepo
-  ];
+  // SESSION_TYPES ja PROG_MAP johdetaan getWeekStructure():sta — yksi totuus
+  const goal = currentBlockGoal();
+  const k1 = useB?'yb':'ya', k2 = useB?'ab':'aa', k3 = useB?'ya':'yb';
+  const weekPlan = getWeekStructure(goal, k1, k2, k3, presc);
+  const SESSION_TYPES = weekPlan
+    .filter(s => s.type !== 'lepo')
+    .map(s => ({
+      key: s.key, type: s.type,
+      label: s.lbl, short: s.ico+' '+(s.key||'').toUpperCase().slice(0,3),
+      recovKey: s.recovKey || s.key,
+      desc: s.type==='voima' ? scheme.label+' · '+s.lbl : s.lbl,
+    }));
+  if (goal==='400m_speed' && blockWeek(w) >= 10) {
+    if (!SESSION_TYPES.find(s=>s.key==='lt_toleranssi')) {
+      SESSION_TYPES.push({key:'lt_toleranssi',type:'juoksu',label:'LA Toleranssi',
+        short:'🔥 LAT',recovKey:'lt_toleranssi',desc:'2–4×400m @ yli kilpailuvauhdin'});
+    }
+  }
+  // PROG_MAP johdetaan getWeekStructure():sta — yksi totuus, ei duplikaattia
+  // weekPlan[0]=Ma, [1]=Ti, ..., [6]=Su
+  const PROG_MAP = weekPlan.map(s =>
+    s.type === 'lepo' ? null : { recovKey: s.recovKey || s.key, key: s.key }
+  );
   const todayMap = PROG_MAP[progDayIdx];
   const todayRecovKey = todayMap ? todayMap.recovKey : null;
   const todayKey      = todayMap ? todayMap.key : null;
@@ -2568,6 +2687,10 @@ function showWeekDetail(w){
   const startDate = new Date(D.settings.startDate);
   const weekStart = new Date(startDate);
   weekStart.setDate(startDate.getDate() + (w-1)*7);
+  // Pyöristä maanantaihin: SESS-lista on järjestyksessä Ma→Su
+  // Jos startDate on ke, ilman korjausta alakroppa (SESS[3]) osuisi su:lle
+  const wsDay = weekStart.getDay(); // 0=Su, 1=Ma, ..., 6=La
+  weekStart.setDate(weekStart.getDate() - (wsDay === 0 ? 6 : wsDay - 1));
   const weekDates = Array.from({length:7},(_,i)=>{
     const d=new Date(weekStart); d.setDate(weekStart.getDate()+i);
     return d.toISOString().split('T')[0];
