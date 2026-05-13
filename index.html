@@ -1296,6 +1296,7 @@ function _renderOWeek(w){
   // Laske oikeat kalenteripäivien nimet päivämääristä
   const WEEKDAYS=['Su','Ma','Ti','Ke','To','Pe','La'];
 
+  const goal = currentBlockGoal();
   const SESS = getWeekStructure(goal, k1, k2, k3, presc);
 
   const cC={'HIGH':'var(--rd)','MED':'var(--yw)','LOW':'var(--gn)'};
