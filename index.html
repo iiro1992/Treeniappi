@@ -504,7 +504,10 @@ svg text{font-family:'DM Sans',sans-serif}
         </div>
         <div><label class="fl">Päivämäärä</label><input type="date" class="fi" id="hrv-date" style="height:40px;padding:0 8px;font-size:13px"></div>
       </div>
-      <button class="btn bsm bs" onclick="saveHRV()" style="margin-top:8px">Tallenna HRV</button>
+      <div style="margin-top:10px"><label class="fl">Uni (h) — kirjataan samalla kertaa</label>
+        <div class="niw" style="width:140px"><button class="nb" onclick="adj('hrv-sleep-in',-0.5)">−</button><input type="number" class="nd" id="hrv-sleep-in" value="7.5" step="0.5" min="3" max="12"><button class="nb" onclick="adj('hrv-sleep-in',0.5)">+</button></div>
+      </div>
+      <button class="btn bsm bs" onclick="saveHRV()" style="margin-top:8px">Tallenna HRV + Uni</button>
       <div id="hrv-graph" style="margin-top:12px"></div>
     </div>
     <div class="card" style="margin-top:11px">
@@ -1559,6 +1562,23 @@ function hoursSince(dateStr) {
   return (Date.now() - new Date(dateStr).getTime()) / 3600000;
 }
 
+// Helper: palauttaa harjoituksen oikean ajanhetken
+// Jos savedAt on eri päivä kuin date → käytä date-kenttää (harjoituspäivä)
+// Jos savedAt on sama päivä kuin date → käytä savedAt (tarkempi aika)
+function sessionDateTime(session) {
+  if (!session) return new Date();
+  const sessionDateStr = session.date || '';
+  if (session.savedAt) {
+    const saved = new Date(session.savedAt);
+    const savedDateStr = saved.toISOString().split('T')[0];
+    if (savedDateStr === sessionDateStr) return saved; // sama päivä → käytä savedAt
+  }
+  // Eri päivä tai ei savedAt → käytä date-kenttää klo 12:00
+  const d = new Date(sessionDateStr);
+  d.setHours(12, 0, 0, 0);
+  return d;
+}
+
 // Laske aika sessiosta käyttäen date-kenttää (harjoituspäivä)
 // savedAt = milloin tallennettiin laitteelle — EI harjoitusaika
 // Käytetään savedAt vain jos se on SAMA päivä kuin date (eli tarkennettu aika)
@@ -1577,8 +1597,9 @@ function hoursSinceSession(session) {
     // savedAt on eri päivä kuin date → käytä vain date-kenttää
     // (tallennusaika voi olla myöhempi synkronoinnin takia)
   }
-  // Oletus: treeni tehty päivän lopussa (18:00) — konservatiivinen arvio
-  sessionDate.setHours(18, 0, 0, 0);
+  // Fallback: käytä päivän puoliväliä (12:00) koska emme tiedä tarkkaa aikaa
+  // Tämä antaa tasapuolisen arvion riippumatta siitä milloin treeni tehtiin
+  sessionDate.setHours(12, 0, 0, 0);
   return (Date.now() - sessionDate.getTime()) / 3600000;
 }
 
@@ -1613,7 +1634,7 @@ function getRecoveryStatus(typeKey) {
     (D.extras || []).forEach(e => {
       const muscleGroups = EXTRA_MUSCLE_MAP[e.activity] || [];
       if (!muscleGroups.includes(typeKey)) return; // Ei vaikuta tähän ryhmään
-      const eDate = e.savedAt ? new Date(e.savedAt) : (() => { const d=new Date(e.date); d.setHours(12,0,0,0); return d; })();
+      const eDate = e.savedAt ? (()=>{ const s=new Date(e.savedAt); return s.toISOString().split('T')[0]===e.date?s:(()=>{const d=new Date(e.date);d.setHours(12,0,0,0);return d;})(); })() : (()=>{const d=new Date(e.date);d.setHours(12,0,0,0);return d;})();
       const hrsAgo = (Date.now() - eDate.getTime()) / 3600000;
       if (hrsAgo > 72 || hrsAgo < 0) return; // Yli 3pv sitten ei vaikuta
       const rpe = parseFloat(e.rpe) || 7;
@@ -1720,7 +1741,7 @@ function calcCNSLoad() {
 
   D.sessions.slice(-20).forEach(s => {
     // Käytä savedAt (täysi aikaleima) jos saatavilla, muuten päivän puoliväli
-    const sessDate = s.savedAt ? new Date(s.savedAt) : (() => { const d=new Date(s.date); d.setHours(12,0,0,0); return d; })();
+    const sessDate = sessionDateTime(s);  // Käyttää date-kenttää jos savedAt on eri päivältä
     const sessMs = sessDate.getTime();
     // Guard: jos päivämäärä on virheellinen (NaN) → ohita sessio
     if (!sessMs || isNaN(sessMs)) return;
@@ -1795,7 +1816,7 @@ function calcCNSLoad() {
   };
 
   D.extras.slice(-20).forEach(e => {
-    const extDate = e.savedAt ? new Date(e.savedAt) : (() => { const d=new Date(e.date); d.setHours(12,0,0,0); return d; })();
+    const extDate = (()=>{ if(!e.savedAt){const d=new Date(e.date);d.setHours(12,0,0,0);return d;} const s=new Date(e.savedAt);return s.toISOString().split('T')[0]===e.date?s:(()=>{const d=new Date(e.date);d.setHours(12,0,0,0);return d;})(); })();
     const extMs = extDate.getTime();
     if (!extMs || isNaN(extMs)) return;
     const hrs = (now - extMs) / 3600000;
@@ -2275,7 +2296,7 @@ function calcReadiness(){
     if (!illnessExtras.length) return { penalty: 0, daysSick: 0, recovering: false };
     // Löydä viimeisin sairauspäivä
     const sorted = illnessExtras.map(e => {
-      const d = e.savedAt ? new Date(e.savedAt) : new Date(e.date);
+      const d = (()=>{ if(!e.savedAt){const dd=new Date(e.date);dd.setHours(12,0,0,0);return dd;} const s=new Date(e.savedAt);return s.toISOString().split('T')[0]===e.date?s:(()=>{const dd=new Date(e.date);dd.setHours(12,0,0,0);return dd;})(); })();
       return { date: d, severity: parseFloat(e.rpe) || 5 }; // RPE = oireiden vakavuus (1-10)
     }).sort((a,b) => b.date - a.date);
     const lastSick = sorted[0];
@@ -2294,7 +2315,7 @@ function calcReadiness(){
 
   const glycogenPenalty = (() => {
     const recent = (D.extras||[]).filter(e => {
-      const eDate = e.savedAt ? new Date(e.savedAt) : new Date(e.date);
+      const eDate = (()=>{ if(!e.savedAt){const d=new Date(e.date);d.setHours(12,0,0,0);return d;} const s=new Date(e.savedAt);return s.toISOString().split('T')[0]===e.date?s:(()=>{const d=new Date(e.date);d.setHours(12,0,0,0);return d;})(); })();
       const hrsAgo = (Date.now() - eDate.getTime()) / 3600000;
       if (hrsAgo > 48 || hrsAgo < 0) return false;
       const durMin = parseFloat(e.duration) || 60;
@@ -2413,13 +2434,21 @@ async function saveHRV(){
   const v=parseFloat(document.getElementById('hrv-in').value);
   const dateEl=document.getElementById('hrv-date');
   const date=dateEl?.value||td();
-  // Remove existing entry for same date if any
   D.hrv=D.hrv.filter(h=>h.date!==date);
   D.hrv.push({date,value:v});
   D.hrv.sort((a,b)=>a.date.localeCompare(b.date));
+  // Tallenna myös uni jos kirjattu
+  const sleepEl=document.getElementById('hrv-sleep-in');
+  const sleepV=sleepEl?parseFloat(sleepEl.value)||7.5:null;
+  if(sleepV&&sleepV>0){
+    if(!D.sleeps)D.sleeps=[];
+    D.sleeps=D.sleeps.filter(s=>s.date!==date);
+    D.sleeps.push({date,value:sleepV});
+    D.sleeps.sort((a,b)=>a.date.localeCompare(b.date));
+  }
   await cSave();
-  snk('💓 HRV '+v+' kirjattu ('+date+')');
-  if(dateEl) dateEl.value=td(); // reset to today
+  snk('💓 HRV '+v+' ms'+(sleepV?' + 😴 uni '+sleepV+'h':'')+' kirjattu');
+  if(dateEl) dateEl.value=td();
   rdAnalysis();
 }
 
@@ -2602,7 +2631,25 @@ function renderGraph(containerId,actual,expected,color,yLabel,invert=false,yFmt=
   const yLabels=Array.from({length:ySteps+1},(_,i)=>{const v=minV+(maxV-minV)*i/ySteps;return{v,y:invert?pad.t+((v-minV)/(maxV-minV))*cH:pad.t+((maxV-v)/(maxV-minV))*cH};});
 
   // Test week markers
-  const testMarkers=TEST_WEEKS.filter(w=>w<=48).map(w=>`<line x1="${px(w)}" y1="${pad.t}" x2="${px(w)}" y2="${pad.t+cH}" stroke="#22c55e" stroke-width="1" stroke-dasharray="2,3" opacity=".4"/>`).join('');
+  // Laske testi-viikot dynaamisesti blokkihistoriasta
+  const testWeeksDyn = (() => {
+    const result = [];
+    let absW = 0;
+    const hist = D.blockHistory||[];
+    if(hist.length===0){
+      // Nykyinen blokki
+      const cfg = getBlockConfig();
+      result.push(blockStartAbsWeek() + cfg.len - 1);
+    } else {
+      hist.forEach(b => {
+        const cfg = BLOCK_CONFIGS[b.goal]||BLOCK_CONFIGS['400m_speed'];
+        absW += cfg.len;
+        result.push(absW);
+      });
+    }
+    return result;
+  })();
+  const testMarkers=testWeeksDyn.filter(w=>w<=48).map(w=>`<line x1="${px(w)}" y1="${pad.t}" x2="${px(w)}" y2="${pad.t+cH}" stroke="#22c55e" stroke-width="1" stroke-dasharray="2,3" opacity=".4"/>`).join('');
 
   el.innerHTML=`<svg width="100%" viewBox="0 0 ${W} ${H}" style="overflow:visible">
     ${yLabels.map(yl=>`<line x1="${pad.l}" y1="${yl.y}" x2="${pad.l+cW}" y2="${yl.y}" stroke="var(--bd)" stroke-width="1"/>
@@ -2829,7 +2876,14 @@ function renderTestCal(){
   if(!el)return;
   const w=wks();
   const startDate=new Date(D.settings.startDate);
-  el.innerHTML=TEST_WEEKS.map(tw=>{
+  // Testi-viikot dynaamisesti
+  const exTestWks = (() => {
+    const result = []; let absW = 0;
+    (D.blockHistory||[]).forEach(b => { const cfg = BLOCK_CONFIGS[b.goal]||BLOCK_CONFIGS['400m_speed']; absW += cfg.len; result.push(absW); });
+    if(result.length===0) result.push(blockStartAbsWeek()+getBlockConfig().len-1);
+    return result;
+  })();
+  el.innerHTML=exTestWks.map(tw=>{
     const testDate=new Date(startDate);testDate.setDate(testDate.getDate()+(tw-1)*7+5);// Saturday of test week
     const ds=testDate.toISOString().split('T')[0];
     const d=new Date(ds);
@@ -2909,12 +2963,27 @@ function suggest(ex, scheme){
       return { weight: w2, dir:'first', e1RM: base1RM, pctMod: currentScheme.pctMod,
         text:`Aloitus: ${w2}kg`, basis: basisStr, readiness:ready };
     }
+    // POWER_FIXED: palautetaan ohje vaikka ei historiaa
+    if (POWER_FIXED.includes(ex.id)) {
+      const powerNote = ex.id.includes('medball') ? '4–5 kg pallo — räjähtävä heitto'
+        : ex.id.includes('box_jump')||ex.id.includes('broad_jump') ? 'Kehonpaino — maksimaalinen ponnistus'
+        : ex.id.includes('trap_bar') ? 'Trap bar — nopea räjähtävä veto'
+        : ex.id.includes('hurdle') ? 'Aidat — nopea rytmi, minimaali kontaktiaika'
+        : 'Kehonpaino / väline — laadullinen suoritus';
+      return { weight:0, dir:'same', text:powerNote, basis:'power_fixed', readiness:ready };
+    }
     return null;
   }
 
-  // Räjähtävät tekniikkaharjoitteet: ei progressiota kg:ssa
+  // Räjähtävät tekniikkaharjoitteet: ei progressiota kg:ssa (kun historiaa on)
   if (POWER_FIXED.includes(ex.id)) {
-    return { weight:0, dir:'same', text:'4–5 kg pallo — ei painoprogressiota', basis:'tekniikkaharjoite', readiness:ready };
+    // POWER_FIXED: eri liikkeillä eri ohje
+    const powerNote = ex.id.includes('medball') ? '4–5 kg pallo — räjähtävä heitto'
+      : ex.id.includes('box_jump') || ex.id.includes('broad_jump') ? 'Oman kehon paino — maksimaalinen ponnistus'
+      : ex.id.includes('trap_bar') ? 'Trap bar — nopea, räjähtävä veto ylös'
+      : ex.id.includes('hurdle') ? 'Aidat — nopea rytmi, minimaali kontaktiaika'
+      : 'Kehonpaino / väline — laadullinen suoritus';
+    return { weight:0, dir:'same', text:powerNote, basis:'power_fixed', readiness:ready };
   }
 
   // Deload
@@ -2992,6 +3061,15 @@ function suggest(ex, scheme){
     }
 
     if (acwr.zone === 'high' && dir === 'up') { w2 = maxW; dir = 'same'; reasons.push(`ACWR ${acwr.ratio}`); }
+
+    // Per-set painoehdotukset (tässä kohdassa allSets on määritelty)
+    setSuggestions = Array.from({length: currentScheme.sets||4}, function(_, i) {
+      var prevW = allSets[i] ? (allSets[i].weight || maxW) : maxW;
+      var prevFail = allSets[i] ? allSets[i].success === false : false;
+      if (dir === 'down') return Math.round(prevW * 0.95 / 2.5) * 2.5;
+      if (dir === 'up' && !prevFail) return Math.round((prevW + (currentScheme.step||2.5)) / 2.5) * 2.5;
+      return prevW;
+    });
   }
 
   const arrow = {up:'↑', down:'↓', same:'→', plateau:'⟳', mesocycle:'🔄', first:'★'}[dir] || '→';
@@ -3000,7 +3078,8 @@ function suggest(ex, scheme){
     weight: Math.round(w2/2.5)*2.5, dir, readiness:ready, acwr, trend, e1RM,
     text: `${arrow} ${Math.round(w2/2.5)*2.5}kg`,
     basis: basis + e1RMInfo,
-    detail: reasons.join(', ')
+    detail: reasons.join(', '),
+    setSuggestions: setSuggestions
   };
 }
 
@@ -3665,7 +3744,14 @@ function buildWorkoutView(force) {
           : Math.round(rmVal * pctAdj / 2.5) * 2.5)             // oma rmKey: suoraan pctMod
       : 60;
 
-    wvSets[i] = Array.from({length: effectiveSets}, () => ({ weight: sw, reps: effectiveReps, success: null }));
+    // Per-set painoehdotukset: jos suggest() palautti setSuggestions, käytä niitä
+    const perSetW = sug && sug.setSuggestions && sug.setSuggestions.length >= effectiveSets
+      ? sug.setSuggestions
+      : null;
+    wvSets[i] = Array.from({length: effectiveSets}, (_, si) => ({
+      weight: (perSetW ? (perSetW[si] || sw) : sw),
+      reps: effectiveReps, success: null
+    }));
     // Speed bench: ylikirjoita paino ja toistot faasipohjainen
     if (ex._speedW) {
       const sr = ex._speedR || 3;
@@ -5872,7 +5958,7 @@ function _doOpenWorkout(type, key, label) {
       <div style="flex:1;overflow-y:auto;padding:13px" id="wm-body">
         <div style="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end;margin-bottom:11px">
           <div><label class="fl">Päivämäärä</label><input type="date" class="fi" id="r-dt-m" value="${td()}" oninput="appState.run.date=this.value"></div>
-          <div><label class="fl">Uni (h)</label><div class="niw" style="width:105px"><button class="nb" onclick="adjSleep('run',-0.5)">−</button><input type="number" class="nd" id="r-sl-m" value="7.5" step="0.5" min="3" max="12" oninput="appState.run.sleep=parseFloat(this.value)||7.5" style="font-size:13px"><button class="nb" onclick="adjSleep('run',0.5)">+</button></div></div>
+          <!-- Uni luetaan automaattisesti sleeps[]-datasta — ei kysytä erikseen -->
         </div>
         <div id="wm-run-content"></div>
         <div class="fg"><label class="fl">Kokonaismatka (km)</label><div class="niw"><button class="nb" onclick="adjRunDist(-0.5)">−</button><input type="number" class="nd" id="r-di-m" value="${appState.run.dist}" step="0.5" min="0" max="40" oninput="appState.run.dist=parseFloat(this.value)||5"><button class="nb" onclick="adjRunDist(0.5)">+</button></div></div>
@@ -6281,8 +6367,7 @@ function rdDash() {
     const lastDoneMs = {};
     D.sessions.forEach(s => {
       const rk = sessionToKey(s);
-      const ms = s.savedAt ? new Date(s.savedAt).getTime()
-        : (() => { const d=new Date(s.date); d.setHours(12,0,0,0); return d.getTime(); })();
+      const ms = sessionDateTime(s).getTime()
       if(!lastDoneMs[rk] || ms > lastDoneMs[rk]) lastDoneMs[rk] = ms;
     });
 
@@ -6406,14 +6491,14 @@ function rdDash() {
       D.sessions.filter(s => s.type === 'voima').forEach(s => {
         const trained = (s.exercises||[]).some(ex => mg.exIds.includes(ex.id));
         if (trained) {
-          const t = s.savedAt ? new Date(s.savedAt).getTime() : (() => { const d=new Date(s.date); d.setHours(12,0,0,0); return d.getTime(); })();
+          const t = sessionDateTime(s).getTime();
           if (t > lastMs) lastMs = t;
         }
       });
       // Juoksusessiot kuormittavat jalkoja, pakaroita ja corea
       if (mg.includeRunning) {
         D.sessions.filter(s => s.type === 'juoksu').forEach(s => {
-          const t = s.savedAt ? new Date(s.savedAt).getTime() : (() => { const d=new Date(s.date); d.setHours(12,0,0,0); return d.getTime(); })();
+          const t = sessionDateTime(s).getTime();
           if (t > lastMs) lastMs = t;
         });
       }
@@ -6966,12 +7051,28 @@ function getRunWarmupHtml(sessionType) {
     // ── KIIHDYTYKSET ──
     {name:'Kiihdytys @70%', detail:'3×30m — rauhallinen lähtö, kasvata 20m asti, ei täyttä tehoa vielä', color:'var(--gn)'},
     {name:'Kiihdytys @85%', detail:'2×30m — lähes täysi teho, hermosto herää', color:'var(--gn)'},
+  ] : sessionType === 'tempo' || sessionType === 'kilpailuvauhti' || sessionType === 'lt_toleranssi' ? [
+    // Tempo/kisavauhti: täysi neuromuskulaarinen aktivointi — sama pohja kuin intervallit
+    // Rationale: hermosto aktivoidaan samalla tavalla riippumatta intensiteetistä
+    {name:'Nilkka-aktivointi', detail:'2×20m — pyörittele nilkkaa joka askeleella, kanta maahan, varpaat ylös', color:'var(--mu)'},
+    {name:'A-skip — polvennostovienti', detail:'2×20m — polvi 90° ylös, varpaassa nousua, rytmikäs ja pystyasento', color:'var(--mu)'},
+    {name:'B-skip — takaheitto', detail:'2×20m — polvi ylös → suorista sääri eteen ennen laskua', color:'var(--mu)'},
+    {name:'C-skip — pakara-aktivointi', detail:'2×20m — polvi ylös → potkaisu taaksepäin pakaraan', color:'var(--mu)'},
+    // ── LOIKAT ──
+    {name:'Sivuttaisloikat (tasajalka)', detail:'2×10m kumpaankin suuntaan — jäykkä nilkka, nopea maakontakti', color:'var(--yw)'},
+    {name:'Vuorojalkaloikat eteenpäin', detail:'2×30m — vaihda jalkaa joka loikalla, pitkä askel, ylös-eteenpäin', color:'var(--yw)'},
+    {name:'Yksijalkaloikat (pentathlonloikka)', detail:'2×5 loikkaa/jalka — yhdellä jalalla eteenpäin, jouseva nilkka, säilytä rytmi', color:'var(--ac)'},
+    {name:'Portaaloikat — frekvenssi', detail:'2×ylös — askel kerrallaan mahdollisimman nopeasti, polvet ylös', color:'var(--or)'},
+    {name:'Portaaloikat — voima', detail:'2×ylös — kaksi porrasta kerrallaan, voimakas ponnistus', color:'var(--or)'},
+    // ── KIIHDYTYKSET (kevyemmät kuin intervalleissa) ──
+    {name:'Kiihdytys @60%', detail:'2×30m — kevyt, herättele keho, ei täyttä tehoa', color:'var(--gn)'},
+    {name:'Kiihdytys @75%', detail:'1×40m — lähestytään tempovauhtia', color:'var(--gn)'},
   ] : [
+    // Aerobinen Zone 2 — kevyt aktivointi riittää
     {name:'Nilkka-aktivointi', detail:'2×20m — pyörittele nilkkaa, pystyasento', color:'var(--mu)'},
-    {name:'A-skip — polvennostovienti', detail:'2×20m — polvi 90°, rytmikäs', color:'var(--mu)'},
-    {name:'Vuorojalkaloikat', detail:'2×30m — vaihda jalkaa, pitkä ja ilmava askel', color:'var(--yw)'},
-    {name:'Yksijalkaloikat', detail:'2×5 loikkaa/jalka — yhdellä jalalla eteenpäin, jouseva nilkka', color:'var(--ac)'},
-    {name:'Kiihdytys @60-70%', detail:'2×30m — kevyt, tuntemus kehossa', color:'var(--gn)'},
+    {name:'A-skip', detail:'2×20m — polvi 90°, rytmikäs', color:'var(--mu)'},
+    {name:'Vuorojalkaloikat', detail:'2×30m — pitkä ja ilmava askel', color:'var(--yw)'},
+    {name:'Kevyt kiihdytys @50-60%', detail:'2×30m — keho herää, ei rasitusta', color:'var(--gn)'},
   ];
   return '<div style="background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.12);border-radius:10px;padding:12px;margin-bottom:12px">'
     + '<div style="font-family:Bebas Neue,sans-serif;font-size:13px;letter-spacing:1px;color:var(--mu);margin-bottom:8px">🔥 LÄMMITTELY (10–15 min)</div>'
